@@ -11,15 +11,23 @@
     "serve": "serve dist -l ${WEB_PORT:=8000}"
   },
   "dependencies": {
+    "@radix-ui/react-avatar": "^1.1.0",
+    "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@tanstack/react-router": "^1.49.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.429.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "serve": "^14.2.3"
+    "serve": "^14.2.3",
+    "tailwind-merge": "^2.5.2",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
     "@tanstack/router-devtools": "^1.49.2",
     "@tanstack/router-plugin": "^1.49.3",
+    "@types/node": "^22.5.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react-swc": "^3.5.0",

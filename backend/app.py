@@ -1,17 +1,21 @@
 import numpy as np
 import pandas as pd
 import altair as alt
+import json
 import datetime as datetime
+
 from flask import request, jsonify, send_file, redirect
-from config import app, db
+from config import app, db, mail
+from flask_mail import Mail, Message
 from models import Admin , User, Participant, Volunteer, Course, Wellbeing, Event, Reviews, takes
+
 
 @app.route("/", methods=['GET'])
 def main():
     # return redirect("/seed_DB")
     return jsonify({"message": "test"})
 
-@app.route("/send_mail", methods=['GET'])
+@app.route("/send_mail", methods=['POST'])
 def index():
 
     # json_data = """ {
@@ -123,6 +127,79 @@ def seed_DB():
     finally:
         db.session.close()
     return jsonify({"message": "exited"})
+
+@app.route('/events', methods=['POST'])
+def create_event():
+    data = request.get_json()
+    event = Event(event_name=data['name'], event_name=data['name'],)
+    event = Event(
+        event_name=data['eventName'],
+        event_date=datetime.strptime(data['eventDate'], '%Y-%m-%d'),
+        event_location=data['eventLocation'],
+        event_description=data['eventDescription'],
+        number_of_participants_needed=data['numberOfParticipantsNeeded'],
+        number_of_volunteers_needed=data['numberOfVolunteersNeeded'],
+        event_type=data['eventType']
+    )
+    db.session.add(event)
+    db.session.commit()
+    return jsonify(event.to_json()), 201
+
+@app.route('/events', methods=['GET'])
+def get_all_events():
+    events = Event.query.all()
+    event_list = [event.to_json() for event in events]
+    return jsonify(event_list), 200
+
+@app.route('/events/<int:event_id>', methods=['GET'])
+def get_event(event_id):
+    event = Event.query.get(event_id)
+    if not event:
+        return jsonify({'message': 'Event not found'}), 404
+
+    return jsonify(event.to_json()), 200
+
+@app.route('/events/<int:event_id>', methods=['PUT'])
+def update_event(event_id):
+    event = Event.query.get(event_id)
+    if not event:
+        return jsonify({'message': 'Event not found'}), 404
+
+    data = request.get_json()
+    if 'eventName' in data:
+        event.event_name = data['event_name']
+    if 'eventDate' in data:
+        event.event_date = datetime.strptime(data['event_date'], '%Y-%m-%d %H:%M:%S')
+    if 'eventLocation' in data:
+        event.event_location = data['event_location']
+    if 'eventDescription' in data:
+        event.event_description = data['event_description']
+    if 'numberOfParticipants' in data:
+        event.number_of_participants = data['numberOfParticipants']
+    if 'numberOfVolunteers' in data:
+        event.number_of_volunteers = data['numberOfVolunteers']
+    if 'numberOfParticipantsNeeded' in data:
+        event.number_of_participants_needed = data['numberOfParticipantsNeeded']
+    if 'numberOfVolunteersNeeded' in data:
+        event.number_of_volunteers_needed = data['numberOfVolunteersNeeded']
+    if 'eventType' in data:
+        event.event_type = data['eventType']
+
+    db.session.commit()
+
+    return jsonify(event.to_json()), 200
+
+@app.route('/events/<int:event_id>', methods=['DELETE'])
+def delete_event(event_id):
+    event = Event.query.get(event_id)
+    if not event:
+        return jsonify({'message': 'Event not found'}), 404
+
+    db.session.delete(event)
+    db.session.commit()
+
+    return jsonify({'message': 'Event deleted'}), 200
+
 
 if __name__ == "__main__":
     with app.app_context():

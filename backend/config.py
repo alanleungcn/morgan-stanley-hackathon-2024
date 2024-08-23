@@ -27,5 +27,5 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///mydatabase.db"
 app.config["AQLADCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
-migrate = Migrate(app)
+migrate = Migrate(app,db)
 CORS(app)

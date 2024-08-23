@@ -30,7 +30,7 @@ def admin_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-@app.route('/login')
+@app.route('/login', methods=['POST'])
 def login():
     # json_data = """ {
     # "username": "aidan215",
@@ -249,7 +249,48 @@ def delete_event(event_id):
 
     return jsonify({'message': 'Event deleted'}), 200
 
+@app.route('/courses', methods=['POST'])
+@admin_required
+def create_course():
+    data = request.get_json()
 
+    new_course = Course(
+        course_name=data.get('courseName'),
+        course_description=data.get('courseDescription'),
+        course_type=data.get('courseType'),
+        course_url=data.get('courseUrl')
+    )
+
+    db.session.add(new_course)
+    db.session.commit()
+    return jsonify({"message": "Course created successfully"}), 201
+
+@app.route('/courses', methods=['GET'])
+def get_courses():
+    courses = Course.query.all()
+    courses_json = [course.to_json() for course in courses]
+    return jsonify(courses_json), 200
+
+@app.route('/reviews', methods=['POST'])
+def create_review():
+    data = request.get_json()
+
+    new_review = Reviews(
+        review_feedback=data.get('reviewFeedback'),
+        review_rating=data.get('reviewRating'),
+        event_id=data.get('eventId'),
+        user_id=data.get('userId')
+    )
+
+    db.session.add(new_review)
+    db.session.commit()
+    return jsonify({"message": "Review created successfully"}), 201
+
+@app.route('/reviews', methods=['GET'])
+def get_reviews():
+    reviews = Reviews.query.all()
+    reviews_json = [review.to_json() for review in reviews]
+    return jsonify(reviews_json), 200
 
 
 if __name__ == "__main__":

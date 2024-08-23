@@ -20,12 +20,18 @@ export const Route = createRootRoute({
       <div className="h-16 bg-primary flex justify-between items-center px-2">
         <img src="/zubin.svg" className="w-16 h-16" />
 
-        <div>
-          <Link to="/" className="[&.active]:font-bold">
+        <div className="flex justify-start w-full gap-8 mx-16">
+          <Link to="/" className="[&.active]:underline">
             Home
           </Link>
-          <Link to="/events" className="[&.active]:font-bold">
+          <Link to="/events" className="[&.active]:underline">
             Events
+          </Link>
+          <Link to="/trainings" className="[&.active]:underline">
+            Trainings
+          </Link>
+          <Link to="/admin/manage-events" className="[&.active]:underline">
+            Manage Events
           </Link>
         </div>
 

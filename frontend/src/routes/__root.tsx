@@ -1,6 +1,7 @@
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import React from "react";
 // import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import "../index.css";
 
 const TanStackRouterDevtools = import.meta.env.PROD
   ? () => null // Render nothing in production
@@ -20,9 +21,9 @@ export const Route = createRootRoute({
         <Link to="/" className="[&.active]:font-bold">
           Home
         </Link>{" "}
-        <Link to="/about" className="[&.active]:font-bold">
-          About
-        </Link>
+        <Link to="/events" className="[&.active]:font-bold">
+          Events
+        </Link>{" "}
       </div>
       <hr />
       <Outlet />

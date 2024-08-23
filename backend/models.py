@@ -4,24 +4,27 @@ from sqlalchemy import Enum
 import enum
 
 # Database models
-class Admin(db.Model):
-    admin_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+# class Admin(db.Model):
+#     admin_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     username = db.Column(db.String(100), unique=True, nullable=False)
+#     password = db.Column(db.String(100), nullable=False)
     
-    def to_json(self):
-        return {
-            "adminId": self.admin_id,
-            "username": self.username,
-            "password": self.password
-        }
-  
+#     def to_json(self):
+#         return {
+#             "adminId": self.admin_id,
+#             "username": self.username,
+#             "password": self.password
+#         }
+
 @declarative_mixin       
 class UserMixin:
     __table_args__ = {"extend_existing": True}
     
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
+
     # @declared_attr
     # def wellbeings(cls):
     #     return db.relationship("Wellbeing", backref="user_wellbeings", lazy=True)
@@ -38,9 +41,12 @@ class User(UserMixin, db.Model):
     
     def to_json(self):
         return {
-            "userId": self.user_id
+            "userId": self.user_id,
+            "username": self.username,
+            "password": self.password,
+            "isAdmin": self.is_admin
         }
-        
+
 # # Many-to-many relationship
 user_event_joins = db.Table(
     "user_event_joins",

@@ -1,3 +1,4 @@
+from functools import wraps
 import numpy as np
 import pandas as pd
 import altair as alt
@@ -7,13 +8,54 @@ import datetime as datetime
 from flask import request, jsonify, send_file, redirect
 from config import app, db, mail
 from flask_mail import Mail, Message
-from models import Admin , User, Participant, Volunteer, Course, Wellbeing, Event, Reviews, takes,EventType
+from flask_login import LoginManager, login_user, login_required, current_user, logout_user
+from models import User, Participant, Volunteer, Course, Wellbeing, Event, Reviews, takes,EventType
 
+login_manager = LoginManager(app)
 
 @app.route("/", methods=['GET'])
 def main():
     # return redirect("/seed_DB")
     return jsonify({"message": "test"})
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated or not current_user.is_admin:
+            return jsonify({"message": "Unauthorized"}), 401
+        return f(*args, **kwargs)
+    return decorated_function
+
+@app.route('/login')
+def login():
+    # json_data = """ {
+    # "username": "aidan215",
+    # "password": "password"
+    # } 
+    # """
+
+    json_data = request.get_json()
+    data = json.loads(json_data)
+    
+    username = data['username']
+    password = data['password']
+    user = User.query.filter_by(username=username, password=password).first()
+
+    if user:
+        login_user(user)
+        return jsonify({"message": "Login successful"}), 200
+    else:
+        return jsonify({"message": "Invalid credentials"}), 401
+
+@app.route('/logout', methods=['GET'])
+@login_required
+def logout():
+    logout_user()
+    return jsonify({"message": "Logged out successfully"}), 200
 
 @app.route("/send_mail", methods=['POST'])
 def index():
@@ -47,8 +89,11 @@ def index():
 
 @app.route("/seed_DB", methods=['POST'])
 def seed_DB():
-    admin1 = Admin(username="admin", password="admin")
-    
+    # admin1 = Admin(username="admin", password="admin")
+    user1 = User(
+        username = "aidan215",
+        password="password"
+    )
     participant1 = Participant(
         username="aidan215",
         password="password", 
@@ -111,7 +156,8 @@ def seed_DB():
         db.drop_all()
         db.create_all()
         
-        db.session.add(admin1)
+        # db.session.add(admin1)
+        db.session.add(user1)
         db.session.add(participant1)
         db.session.add(Event1)
         db.session.add(Volunteer1)
@@ -131,7 +177,6 @@ def seed_DB():
 @app.route('/events', methods=['POST'])
 def create_event():
     data = request.get_json()
-    event = Event(event_name=data['name'], event_name=data['name'],)
     event = Event(
         event_name=data['eventName'],
         event_date=datetime.strptime(data['eventDate'], '%Y-%m-%d'),
@@ -203,6 +248,8 @@ def delete_event(event_id):
     db.session.commit()
 
     return jsonify({'message': 'Event deleted'}), 200
+
+
 
 
 if __name__ == "__main__":

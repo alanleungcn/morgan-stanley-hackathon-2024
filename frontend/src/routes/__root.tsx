@@ -3,6 +3,7 @@ import React from "react";
 import "../index.css";
 import { Toaster } from "@/components/ui/toaster";
 import NavUser from "@/components/nav-user";
+import AiChat from "@/components/AiChat/AiChat";
 
 const TanStackRouterDevtools = import.meta.env.PROD
   ? () => null // Render nothing in production
@@ -42,7 +43,7 @@ export const Route = createRootRoute({
       <Outlet />
 
       <Toaster />
-
+      <AiChat />
       <TanStackRouterDevtools />
     </>
   ),

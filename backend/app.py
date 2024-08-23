@@ -139,7 +139,7 @@ def create_event():
         event_description=data['eventDescription'],
         number_of_participants_needed=data['numberOfParticipantsNeeded'],
         number_of_volunteers_needed=data['numberOfVolunteersNeeded'],
-        event_type=data['eventType']
+        event_type = EventType(data['event_type'])
     )
     db.session.add(event)
     db.session.commit()
@@ -182,8 +182,12 @@ def update_event(event_id):
         event.number_of_participants_needed = data['numberOfParticipantsNeeded']
     if 'numberOfVolunteersNeeded' in data:
         event.number_of_volunteers_needed = data['numberOfVolunteersNeeded']
-    if 'eventType' in data:
-        event.event_type = data['eventType']
+    if 'event_type' in data:
+        event_type_str = data['event_type']
+        if event_type_str in [e.value for e in EventType]:
+            event.event_type = EventType(event_type_str)
+        else:
+            return jsonify({'message': 'Invalid event type'}), 400
 
     db.session.commit()
 

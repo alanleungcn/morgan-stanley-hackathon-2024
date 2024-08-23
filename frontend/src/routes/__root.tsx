@@ -3,6 +3,7 @@ import React from "react";
 import "../index.css";
 import NavAvatar from "@/components/nav-avatar";
 import { Toaster } from "@/components/ui/toaster";
+import { Button } from "@/components/ui/button";
 
 const TanStackRouterDevtools = import.meta.env.PROD
   ? () => null // Render nothing in production
@@ -36,7 +37,11 @@ export const Route = createRootRoute({
           </Link>
         </div>
 
-        <NavAvatar />
+        <div className="flex gap-2">
+          <Button>Login</Button>
+          <Button>Register</Button>
+          <NavAvatar />
+        </div>
       </div>
 
       <Outlet />

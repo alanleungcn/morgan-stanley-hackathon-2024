@@ -11,12 +11,15 @@
     "serve": "serve dist -l ${WEB_PORT:=8000}"
   },
   "dependencies": {
+    "@tanstack/react-router": "^1.49.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "serve": "^14.2.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
+    "@tanstack/router-devtools": "^1.49.2",
+    "@tanstack/router-plugin": "^1.49.3",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react-swc": "^3.5.0",

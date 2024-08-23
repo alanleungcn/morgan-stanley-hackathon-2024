@@ -1,5 +1,7 @@
 from config import db
 from sqlalchemy.orm import declared_attr, declarative_mixin
+from sqlalchemy import Enum
+import enum
 
 # Database models
 class Admin(db.Model):
@@ -74,7 +76,13 @@ class takes(db.Model):
             "progress": self.progress,
             "completed": self.completed
         }
-        
+class EventType(enum.Enum):
+    SOCIAL_GATHERING = "Social Gathering"
+    COUNSELLING = "Counselling"
+    TRAINING = "Training"
+    WORKSHOP = "Workshop"
+    OTHER = "Other"
+
 class Event(db.Model):
     __tablename__ = "event"
     event_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -86,7 +94,7 @@ class Event(db.Model):
     number_of_volunteers = db.Column(db.Integer, nullable=False)
     number_of_participants_needed = db.Column(db.Integer, nullable=False)
     number_of_volunteers_needed = db.Column(db.Integer, nullable=False)
-    event_type = db.Column(db.String(100), nullable=False)
+    event_type = db.Column(Enum(EventType), nullable=False)
     
     reviews = db.relationship("Reviews", backref="event", lazy=True)
     

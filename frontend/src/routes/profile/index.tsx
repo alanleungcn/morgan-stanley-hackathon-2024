@@ -1,18 +1,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  Cake,
-  CalendarIcon,
-  KeyRound,
-  Mail,
-  Pencil,
-  Phone,
-} from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { Label } from "@/components/ui/label";
 export const Route = createFileRoute("/profile/")({
   component: Profile,
 });
@@ -20,7 +11,6 @@ export const Route = createFileRoute("/profile/")({
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -41,8 +31,9 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 
 const FormSchema = z.object({
-  phone: z.string(),
-  // .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
+  phone: z
+    .string()
+    .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
   name: z.string(),
   email: z.string(),
   birthday: z.date(),

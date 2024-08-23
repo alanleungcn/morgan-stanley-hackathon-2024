@@ -23,4 +23,30 @@ dist-ssr
 *.sln
 *.sw?
 
+# pyenv
+.python-version
+
+# virtual environments
 .env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# mypy
+.mypy_cache/
+.__pycache__/
+
+# flask stuff
+instance/
+.webassets-cache
+
+# backend db
+local_settings.py
+db.sqlite3
+
+# IDE
+.vscode
+backend/__pycache__/config.cpython-312.pyc

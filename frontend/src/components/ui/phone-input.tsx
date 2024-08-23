@@ -52,6 +52,7 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
            *
            * @param {E164Number | undefined} value - The entered value
            */
+          // @ts-expect-error Property 'onChange' does not exist on type 'IntrinsicAttributes & PhoneInputProps & { children?: ReactNode; }'.
           onChange={(value) => onChange?.(value || "")}
           {...props}
         />

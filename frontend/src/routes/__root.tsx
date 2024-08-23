@@ -1,8 +1,9 @@
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import React from "react";
 import "../index.css";
-import NavAvatar from "@/components/nav-avatar";
 import { Toaster } from "@/components/ui/toaster";
+import NavUser from "@/components/nav-user";
+import AiChat from "@/components/AiChat/AiChat";
 
 const TanStackRouterDevtools = import.meta.env.PROD
   ? () => null // Render nothing in production
@@ -36,13 +37,13 @@ export const Route = createRootRoute({
           </Link>
         </div>
 
-        <NavAvatar />
+        <NavUser />
       </div>
 
       <Outlet />
 
       <Toaster />
-
+      <AiChat />
       <TanStackRouterDevtools />
     </>
   ),

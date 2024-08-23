@@ -7,7 +7,7 @@ import datetime as datetime
 from flask import request, jsonify, send_file, redirect
 from config import app, db, mail
 from flask_mail import Mail, Message
-from models import Admin , User, Participant, Volunteer, Course, Wellbeing, Event, Reviews, takes
+from models import Admin , User, Participant, Volunteer, Course, Wellbeing, Event, Reviews, takes,EventType
 
 
 @app.route("/", methods=['GET'])
@@ -57,7 +57,7 @@ def seed_DB():
         date_of_birth = datetime.datetime(2000, 1, 1),
         phone_number="12345678",
         number_of_participated_events=10,
-        preferred_event_type = "Social Gathering",
+        preferred_event_type = EventType.SOCIAL_GATHERING.value,
         
     ) # Plz dont spam me!
     
@@ -68,7 +68,7 @@ def seed_DB():
         event_description = "A casual coffee chat",
         number_of_participants_needed=10,
         number_of_volunteers_needed=2,
-        event_type = "Social Gathering",
+        event_type = EventType.SOCIAL_GATHERING,
     )
     
     participant1.events.append(Event1)
@@ -81,7 +81,7 @@ def seed_DB():
         date_of_birth = datetime.datetime(2000, 1, 1),
         phone_number="12345678",
         number_of_volunteered_events=5,
-        preferred_event_type = "Social Gathering",
+        preferred_event_type = EventType.SOCIAL_GATHERING.value,
         
     )
     

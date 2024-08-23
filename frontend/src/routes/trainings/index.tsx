@@ -1,9 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { TrainingList } from "@/components/training-list";
 
 export const Route = createFileRoute("/trainings/")({
   component: Training,
 });
 
 function Training() {
-  return <div>Training</div>;
+  return (
+    <div className="p-8">
+      <TrainingList />
+    </div>
+  );
 }

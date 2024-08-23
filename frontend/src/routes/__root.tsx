@@ -2,6 +2,7 @@ import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import React from "react";
 import "../index.css";
 import NavAvatar from "@/components/nav-avatar";
+import { Toaster } from "@/components/ui/toaster";
 
 const TanStackRouterDevtools = import.meta.env.PROD
   ? () => null // Render nothing in production
@@ -17,7 +18,7 @@ const TanStackRouterDevtools = import.meta.env.PROD
 export const Route = createRootRoute({
   component: () => (
     <>
-      <div className="h-16 bg-primary flex justify-between items-center px-2">
+      <div className="h-16 bg-primary flex justify-between items-center px-6">
         <img src="/zubin.svg" className="w-16 h-16" />
 
         <div className="flex justify-start w-full gap-8 mx-16">
@@ -39,6 +40,8 @@ export const Route = createRootRoute({
       </div>
 
       <Outlet />
+
+      <Toaster />
 
       <TanStackRouterDevtools />
     </>

@@ -1,0 +1,14 @@
+name: morgan-stanley-hackathon-2024
+
+services:
+  frontend:
+    build: frontend
+    networks:
+      - internal
+    ports:
+      - 8000:8000
+    environment:
+      - WEB_PORT=8000
+
+networks:
+  internal:

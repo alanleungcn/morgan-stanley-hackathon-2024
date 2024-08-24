@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
+import { add, format } from "date-fns";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,12 +22,17 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
+import { Textarea } from "@/components/ui/textarea";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 const eventSchema = z.object({
   eventName: z.string(),
   eventDate: z.date(),
-  location: z.string(),
-  capacity: z.preprocess((val) => Number(val), z.number()),
+  eventLocation: z.string(),
+  eventDescription: z.string(),
+  numberOfParticipantsNeeded: z.preprocess((v) => Number(v), z.number()),
+  numberOfVolunteersNeeded: z.preprocess((v) => Number(v), z.number()),
+  eventType: z.enum(["<PENDING_MEETING>"]),
 });
 
 export const Route = createFileRoute("/admin/manage-events")({
@@ -38,10 +43,17 @@ function AddEvent() {
   const form = useForm<z.infer<typeof eventSchema>>({
     resolver: zodResolver(eventSchema),
     defaultValues: {
-      eventName: "Event Name",
-      eventDate: new Date("2000-01-01"),
-      location: "location",
-      capacity: 0,
+      eventName: "",
+      eventDate: add(new Date(), { weeks: 1 }),
+      eventLocation: `Zubin's Family Centre
+Shop 201
+Austin MTR Station
+Kowloon
+Hong Kong`,
+      eventDescription: "",
+      numberOfParticipantsNeeded: 1,
+      eventType: "<PENDING_MEETING>",
+      numberOfVolunteersNeeded: 1,
     },
   });
 
@@ -58,11 +70,13 @@ function AddEvent() {
 
   return (
     <div className="flex justify-center">
-      <div className="p-8 max-w-lg w-full">
+      <div className="p-8 max-w-[1000px] w-full flex flex-col gap-12">
+        <h1 className="text-4xl font-bold">Event Creation</h1>
+
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-8"
           >
             <FormField
               name="eventName"
@@ -71,7 +85,7 @@ function AddEvent() {
                 <FormItem className="flex flex-col items-start w-full">
                   <FormLabel>Event Name</FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value ?? ""} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -90,7 +104,7 @@ function AddEvent() {
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "w-[240px] pl-3 text-left font-normal",
+                            "w-full pl-3 text-left font-normal",
                             !field.value && "text-muted-foreground",
                           )}
                         >
@@ -108,9 +122,6 @@ function AddEvent() {
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
                         initialFocus
                       />
                     </PopoverContent>
@@ -121,13 +132,13 @@ function AddEvent() {
             />
 
             <FormField
-              name="location"
+              name="eventDescription"
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex flex-col items-start w-full">
-                  <FormLabel>Location</FormLabel>
+                  <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value ?? ""} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -135,16 +146,44 @@ function AddEvent() {
             />
 
             <FormField
-              name="capacity"
+              name="numberOfParticipantsNeeded"
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex flex-col items-start w-full">
-                  <FormLabel>Number of Participants</FormLabel>
+                  <FormLabel>Max. No. of Participants</FormLabel>
                   <FormControl>
-                    <Input
-                      type="number"
+                    <Input {...field} type="number" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="numberOfVolunteersNeeded"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="flex flex-col items-start w-full">
+                  <FormLabel>Max. No. of Volunteers</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="number" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="eventLocation"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="flex flex-col items-start w-full">
+                  <FormLabel>Location</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Tell us a little bit about yourself"
+                      // className="resize-none"
                       {...field}
-                      value={field.value ?? "1"}
                     />
                   </FormControl>
                   <FormMessage />
@@ -152,7 +191,30 @@ function AddEvent() {
               )}
             />
 
-            <Button type="submit">Save</Button>
+            <FormField
+              name="eventType"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="flex flex-col items-start w-full">
+                  <FormLabel>Event Type</FormLabel>
+                  <FormControl>
+                    <ToggleGroup
+                      type="single"
+                      onValueChange={(e) => field.onChange(e)}
+                    >
+                      <ToggleGroupItem value="a">AAAAA</ToggleGroupItem>
+                      <ToggleGroupItem value="b">BBBBB</ToggleGroupItem>
+                      <ToggleGroupItem value="c">CCCCC</ToggleGroupItem>
+                    </ToggleGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button type="submit" className="sm:col-span-2">
+              Save
+            </Button>
           </form>
         </Form>
       </div>

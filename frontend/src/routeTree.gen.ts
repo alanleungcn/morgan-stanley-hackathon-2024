@@ -15,9 +15,9 @@ import { Route as IndexImport } from './routes/index'
 import { Route as TrainingsIndexImport } from './routes/trainings/index'
 import { Route as ProfileIndexImport } from './routes/profile/index'
 import { Route as EventsIndexImport } from './routes/events/index'
+import { Route as AdminIndexImport } from './routes/admin/index'
 import { Route as AuthRegisterImport } from './routes/auth/register'
 import { Route as AuthLoginImport } from './routes/auth/login'
-import { Route as AdminManageEventsImport } from './routes/admin/manage-events'
 
 // Create/Update Routes
 
@@ -41,6 +41,11 @@ const EventsIndexRoute = EventsIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AdminIndexRoute = AdminIndexImport.update({
+  path: '/admin/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AuthRegisterRoute = AuthRegisterImport.update({
   path: '/auth/register',
   getParentRoute: () => rootRoute,
@@ -48,11 +53,6 @@ const AuthRegisterRoute = AuthRegisterImport.update({
 
 const AuthLoginRoute = AuthLoginImport.update({
   path: '/auth/login',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const AdminManageEventsRoute = AdminManageEventsImport.update({
-  path: '/admin/manage-events',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -67,13 +67,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/admin/manage-events': {
-      id: '/admin/manage-events'
-      path: '/admin/manage-events'
-      fullPath: '/admin/manage-events'
-      preLoaderRoute: typeof AdminManageEventsImport
-      parentRoute: typeof rootRoute
-    }
     '/auth/login': {
       id: '/auth/login'
       path: '/auth/login'
@@ -86,6 +79,13 @@ declare module '@tanstack/react-router' {
       path: '/auth/register'
       fullPath: '/auth/register'
       preLoaderRoute: typeof AuthRegisterImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminIndexImport
       parentRoute: typeof rootRoute
     }
     '/events/': {
@@ -116,9 +116,9 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
-  AdminManageEventsRoute,
   AuthLoginRoute,
   AuthRegisterRoute,
+  AdminIndexRoute,
   EventsIndexRoute,
   ProfileIndexRoute,
   TrainingsIndexRoute,
@@ -133,9 +133,9 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/admin/manage-events",
         "/auth/login",
         "/auth/register",
+        "/admin/",
         "/events/",
         "/profile/",
         "/trainings/"
@@ -144,14 +144,14 @@ export const routeTree = rootRoute.addChildren({
     "/": {
       "filePath": "index.tsx"
     },
-    "/admin/manage-events": {
-      "filePath": "admin/manage-events.tsx"
-    },
     "/auth/login": {
       "filePath": "auth/login.tsx"
     },
     "/auth/register": {
       "filePath": "auth/register.tsx"
+    },
+    "/admin/": {
+      "filePath": "admin/index.tsx"
     },
     "/events/": {
       "filePath": "events/index.tsx"

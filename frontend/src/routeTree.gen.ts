@@ -17,6 +17,7 @@ import { Route as TrainingsIndexImport } from './routes/trainings/index'
 import { Route as LeaderboardIndexImport } from './routes/leaderboard/index'
 import { Route as EventsIndexImport } from './routes/events/index'
 import { Route as AdminIndexImport } from './routes/admin/index'
+import { Route as EventsEventDetailsImport } from './routes/events/eventDetails'
 import { Route as AuthRegisterImport } from './routes/auth/register'
 import { Route as AuthLoginImport } from './routes/auth/login'
 
@@ -49,6 +50,11 @@ const EventsIndexRoute = EventsIndexImport.update({
 
 const AdminIndexRoute = AdminIndexImport.update({
   path: '/admin/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EventsEventDetailsRoute = EventsEventDetailsImport.update({
+  path: '/events/eventDetails',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -85,6 +91,13 @@ declare module '@tanstack/react-router' {
       path: '/auth/register'
       fullPath: '/auth/register'
       preLoaderRoute: typeof AuthRegisterImport
+      parentRoute: typeof rootRoute
+    }
+    '/events/eventDetails': {
+      id: '/events/eventDetails'
+      path: '/events/eventDetails'
+      fullPath: '/events/eventDetails'
+      preLoaderRoute: typeof EventsEventDetailsImport
       parentRoute: typeof rootRoute
     }
     '/admin/': {
@@ -131,6 +144,7 @@ export const routeTree = rootRoute.addChildren({
   IndexRoute,
   AuthLoginRoute,
   AuthRegisterRoute,
+  EventsEventDetailsRoute,
   AdminIndexRoute,
   EventsIndexRoute,
   LeaderboardIndexRoute,
@@ -149,6 +163,7 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/auth/login",
         "/auth/register",
+        "/events/eventDetails",
         "/admin/",
         "/events/",
         "/leaderboard/",
@@ -164,6 +179,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/auth/register": {
       "filePath": "auth/register.tsx"
+    },
+    "/events/eventDetails": {
+      "filePath": "events/eventDetails.tsx"
     },
     "/admin/": {
       "filePath": "admin/index.tsx"

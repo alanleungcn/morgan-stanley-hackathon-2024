@@ -29,3 +29,4 @@ tzdata==2024.1
 Werkzeug==3.0.4
 Flask_mail==0.10.0 
 python-dotenv==1.0.1
+flask_login==0.6.3

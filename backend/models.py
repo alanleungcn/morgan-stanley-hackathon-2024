@@ -1,25 +1,30 @@
 from config import db
 from sqlalchemy.orm import declared_attr, declarative_mixin
+from sqlalchemy import Enum
+import enum
 
 # Database models
-class Admin(db.Model):
-    admin_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+# class Admin(db.Model):
+#     admin_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     username = db.Column(db.String(100), unique=True, nullable=False)
+#     password = db.Column(db.String(100), nullable=False)
     
-    def to_json(self):
-        return {
-            "adminId": self.admin_id,
-            "username": self.username,
-            "password": self.password
-        }
-  
+#     def to_json(self):
+#         return {
+#             "adminId": self.admin_id,
+#             "username": self.username,
+#             "password": self.password
+#         }
+
 @declarative_mixin       
 class UserMixin:
     __table_args__ = {"extend_existing": True}
     
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
+
     # @declared_attr
     # def wellbeings(cls):
     #     return db.relationship("Wellbeing", backref="user_wellbeings", lazy=True)
@@ -36,9 +41,12 @@ class User(UserMixin, db.Model):
     
     def to_json(self):
         return {
-            "userId": self.user_id
+            "userId": self.user_id,
+            "username": self.username,
+            "password": self.password,
+            "isAdmin": self.is_admin
         }
-        
+
 # # Many-to-many relationship
 user_event_joins = db.Table(
     "user_event_joins",
@@ -74,7 +82,13 @@ class takes(db.Model):
             "progress": self.progress,
             "completed": self.completed
         }
-        
+class EventType(enum.Enum):
+    SOCIAL_GATHERING = "Social Gathering"
+    COUNSELLING = "Counselling"
+    TRAINING = "Training"
+    WORKSHOP = "Workshop"
+    OTHER = "Other"
+
 class Event(db.Model):
     __tablename__ = "event"
     event_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -86,7 +100,7 @@ class Event(db.Model):
     number_of_volunteers = db.Column(db.Integer, nullable=False)
     number_of_participants_needed = db.Column(db.Integer, nullable=False)
     number_of_volunteers_needed = db.Column(db.Integer, nullable=False)
-    event_type = db.Column(db.String(100), nullable=False)
+    event_type = db.Column(Enum(EventType), nullable=False)
     
     reviews = db.relationship("Reviews", backref="event", lazy=True)
     

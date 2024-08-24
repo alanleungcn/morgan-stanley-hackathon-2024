@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Node.js related
+package-lock.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -49,20 +52,5 @@ db.sqlite3
 
 # IDE
 .vscode
-backend/__pycache__/config.cpython-312.pyc
-backend/__pycache__/app.cpython-311.pyc
-backend/__pycache__/app.cpython-312.pyc
-backend/__pycache__/config.cpython-311.pyc
-backend/__pycache__/models.cpython-312.pyc
-backend/migrations/alembic.ini
-backend/migrations/env.py
-backend/migrations/script.py.mako
-backend/migrations/__pycache__/env.cpython-312.pyc
-backend/migrations/versions/29a002fd4f09_update_db_models.py
-backend/migrations/versions/51c6a98f34bf_update_db_models.py
-backend/migrations/versions/bcdb03fff4be_update_db_models.py
-backend/migrations/versions/d1be7b790a6b_update_db_models.py
-backend/migrations/versions/__pycache__/29a002fd4f09_update_db_models.cpython-312.pyc
-backend/migrations/versions/__pycache__/51c6a98f34bf_update_db_models.cpython-312.pyc
-backend/migrations/versions/__pycache__/bcdb03fff4be_update_db_models.cpython-312.pyc
-backend/migrations/versions/__pycache__/d1be7b790a6b_update_db_models.cpython-312.pyc
+backend/__pycache__
+backend/migrations

@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "@tanstack/react-router";
-import { CalendarDays, LogOut, User } from "lucide-react";
+import { CalendarDays, Cog, LogOut } from "lucide-react";
 import { buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
 
@@ -40,10 +40,10 @@ export default function NavUser() {
           <DropdownMenuLabel>Name</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <Link to="/profile">
+            <Link to="/user">
               <div className="flex gap-2 items-center">
-                <User size={16} />
-                Profile
+                <Cog size={16} />
+                Settings
               </div>
             </Link>
           </DropdownMenuItem>

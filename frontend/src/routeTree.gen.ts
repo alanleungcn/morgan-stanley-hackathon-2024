@@ -12,8 +12,8 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as UserIndexImport } from './routes/user/index'
 import { Route as TrainingsIndexImport } from './routes/trainings/index'
-import { Route as ProfileIndexImport } from './routes/profile/index'
 import { Route as EventsIndexImport } from './routes/events/index'
 import { Route as AdminIndexImport } from './routes/admin/index'
 import { Route as AuthRegisterImport } from './routes/auth/register'
@@ -26,13 +26,13 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const TrainingsIndexRoute = TrainingsIndexImport.update({
-  path: '/trainings/',
+const UserIndexRoute = UserIndexImport.update({
+  path: '/user/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProfileIndexRoute = ProfileIndexImport.update({
-  path: '/profile/',
+const TrainingsIndexRoute = TrainingsIndexImport.update({
+  path: '/trainings/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -95,18 +95,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsIndexImport
       parentRoute: typeof rootRoute
     }
-    '/profile/': {
-      id: '/profile/'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileIndexImport
-      parentRoute: typeof rootRoute
-    }
     '/trainings/': {
       id: '/trainings/'
       path: '/trainings'
       fullPath: '/trainings'
       preLoaderRoute: typeof TrainingsIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/user/': {
+      id: '/user/'
+      path: '/user'
+      fullPath: '/user'
+      preLoaderRoute: typeof UserIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -120,8 +120,8 @@ export const routeTree = rootRoute.addChildren({
   AuthRegisterRoute,
   AdminIndexRoute,
   EventsIndexRoute,
-  ProfileIndexRoute,
   TrainingsIndexRoute,
+  UserIndexRoute,
 })
 
 /* prettier-ignore-end */
@@ -137,8 +137,8 @@ export const routeTree = rootRoute.addChildren({
         "/auth/register",
         "/admin/",
         "/events/",
-        "/profile/",
-        "/trainings/"
+        "/trainings/",
+        "/user/"
       ]
     },
     "/": {
@@ -156,11 +156,11 @@ export const routeTree = rootRoute.addChildren({
     "/events/": {
       "filePath": "events/index.tsx"
     },
-    "/profile/": {
-      "filePath": "profile/index.tsx"
-    },
     "/trainings/": {
       "filePath": "trainings/index.tsx"
+    },
+    "/user/": {
+      "filePath": "user/index.tsx"
     }
   }
 }

@@ -1,12 +1,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { createFileRoute } from "@tanstack/react-router";
+
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-export const Route = createFileRoute("/profile/")({
-  component: Profile,
-});
 
 import {
   Form,
@@ -40,7 +37,7 @@ const FormSchema = z.object({
   password: z.string().optional(),
 });
 
-function Profile() {
+export const Profile = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -189,4 +186,4 @@ function Profile() {
       </div>
     </div>
   );
-}
+};

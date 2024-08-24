@@ -60,15 +60,15 @@ def logout():
 @app.route("/send_mail", methods=['POST'])
 def index():
 
-    # json_data = """ {
-    # "subject": "Announcement Test",
-    # "body": "This is a test body message",
-    # "recipients": [ 
-    #     {"email":"justforhongkong1@gmail.com"}, 
-    #     {"email":"mustafaabylkhanuli@gmail.com"}
-    # ]}
-    # """
-    # data = json_data
+    json_data = """ {
+    "subject": "Announcement Test",
+    "body": "This is a test body message",
+    "recipients": [ 
+        {"email":"justforhongkong1@gmail.com"}, 
+        {"email":"mustafaabylkhanuli@gmail.com"}
+    ]}
+    """
+    data = json_data
     
     json_data = request.get_json()
     data = json.loads(json_data)

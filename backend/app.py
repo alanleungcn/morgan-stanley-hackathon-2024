@@ -381,6 +381,61 @@ def get_reviews():
     reviews_json = [review.to_json() for review in reviews]
     return jsonify(reviews_json), 200
 
+@app.route('/getReviewCharts', methods=['GET'])
+def getReviewsChart():
+    df = pd.read_excel('./datas/Event_review.xlsx', header=0, parse_dates=['event_date'], date_format="%d/%m/%Y")
+    
+    # remove duplicates
+    df = df.drop_duplicates()
+
+    chart = alt.Chart(df).mark_bar().encode(
+        x = alt.X("rating:N", title="Ratings"),
+        y = alt.Y("count(rating)", title="Number of rating"),
+        color = alt.Color("rating"),
+        column = alt.Column("event_type:N", title="Event Types"),
+    )
+    
+    chart.save('chart.json')
+    
+    return send_file('chart.json', mimetype='application/json')
+
+@app.route('/getEventChart/<int:event_id>', methods=['GET'])
+def getEventChart(event_id):
+    event = Event.query.get(event_id)
+    if not event:
+        return jsonify({'message': 'Event not found'}), 404
+    df = pd.DataFrame([row.__dict__ for row in event])
+    
+    chart = alt.Chart(df).mark_bar().encode(
+        x = alt.X("rating:N", title="Ratings"),
+        y = alt.Y("count(rating)", title="Number of rating"),
+        color = alt.Color("rating"),
+        column = alt.Column("event_type:N", title="Event Types"),
+    )
+    
+    chart.save('chart.json')
+    
+    return send_file('chart.json', mimetype='application/json')
+    
+    
+@app.route('/getWellbeingCharts', methods=['GET'])
+def getWellnessChart():
+    df = pd.read_excel('./datas/Wellbeing.xlsx', header=0, parse_dates=['date'], date_format="%d/%m/%Y")
+    
+    chart_base = alt.Chart(df).encode(
+        x=alt.X('date:T', title='Date'),
+        y=alt.Y('score:Q', title='Score'),
+        color = alt.Color('user_id:N', title='User Name'),
+    )
+    
+    chart = chart_base.mark_line() + chart_base.mark_circle(filled=True , size=100)
+    chart = chart.facet(
+        column = 'user_id:N',
+        columns = 3
+    )
+    chart.save('chart.json')
+    
+    return send_file('chart.json', mimetype='application/json')
 
 if __name__ == "__main__":
     with app.app_context():

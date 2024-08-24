@@ -22,7 +22,7 @@ export const Hero = () => {
             before:z-[-5]
     "
     >
-      <div className="px-8 lg:px-16 text-start space-y-6">
+      <div className="px-8 lg:px-24 text-start space-y-6">
         <main className="text-4xl md:text-6xl font-bold">
           <h1 className="inline">
             <span className="inline bg-gradient-to-r from-[#E4D402] to-[#FDF14E] text-transparent bg-clip-text">

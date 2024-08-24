@@ -8,10 +8,11 @@ import random
 
 
 from flask import request, jsonify, send_file, redirect
-from config import app, db, mail
+from config import app, db, mail,photos,patch_request_class
 from flask_mail import Mail, Message
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from models import User, Participant, Volunteer, Course, Wellbeing, Event, Reviews, takes,EventType
+
 from faker import Faker
 
 login_manager = LoginManager(app)
@@ -120,7 +121,8 @@ def seed_DB():
         for _ in range(50):
             user = User(
                 username=fake.user_name(),
-                password="password"
+                password="password",
+                avatar_url=fake.image_url()
             )
             users.append(user)
             db.session.add(user)
@@ -156,6 +158,7 @@ def seed_DB():
                 number_of_participants_needed=random.randint(5, 20),
                 number_of_volunteers_needed=random.randint(1, 5),
                 event_type=random.choice(list(EventType)),
+                event_image_url=fake.image_url()
             )
             events.append(event)
             db.session.add(event)
@@ -237,7 +240,8 @@ def create_event():
         event_description=data['eventDescription'],
         number_of_participants_needed=data['numberOfParticipantsNeeded'],
         number_of_volunteers_needed=data['numberOfVolunteersNeeded'],
-        event_type = EventType(data['eventType'])
+        event_type = EventType(data['eventType']),
+        event_image_url = data['eventImageUrl']
     )
     db.session.add(event)
     db.session.commit()
@@ -248,6 +252,8 @@ def get_all_events():
     events = Event.query.all()
     event_list = [event.to_json() for event in events]
     return jsonify(event_list), 200
+
+
 
 @app.route('/events/<int:event_id>', methods=['GET'])
 def get_event(event_id):

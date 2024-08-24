@@ -26,6 +26,7 @@ class UserMixin:
     username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
+    avatar_url = db.Column(db.String(255), nullable=True)
 
     # @declared_attr
     # def wellbeings(cls):
@@ -46,7 +47,8 @@ class User(UserMixin, db.Model):
             "userId": self.user_id,
             "username": self.username,
             "password": self.password,
-            "isAdmin": self.is_admin
+            "isAdmin": self.is_admin,
+            "avatarUrl": self.avatar_url
         }
 
 # # Many-to-many relationship
@@ -104,10 +106,11 @@ class Event(db.Model):
     number_of_participants_needed = db.Column(db.Integer, nullable=False)
     number_of_volunteers_needed = db.Column(db.Integer, nullable=False)
     event_type = db.Column(Enum(EventType), nullable=False)
+    event_image_url = db.Column(db.String(255), nullable=True)
     
     reviews = db.relationship("Reviews", backref="event", lazy=True)
     
-    def __init__(self,event_start_date, event_end_date,event_name, event_location, event_description, number_of_participants_needed, number_of_volunteers_needed, event_type):
+    def __init__(self,event_start_date, event_end_date,event_name, event_location, event_description, number_of_participants_needed, number_of_volunteers_needed, event_type, event_image_url):
         self.event_name = event_name
         self.event_start_date = datetime.strptime(event_start_date, '%Y-%m-%d %H:%M:%S')
         self.event_end_date = datetime.strptime(event_end_date, '%Y-%m-%d %H:%M:%S')
@@ -118,6 +121,7 @@ class Event(db.Model):
         self.number_of_participants_needed = number_of_participants_needed
         self.number_of_volunteers_needed = number_of_volunteers_needed
         self.event_type = event_type
+        self.event_image_url = event_image_url
         
     def to_json(self):
         return {
@@ -131,7 +135,8 @@ class Event(db.Model):
             "numberOfVolunteers": self.number_of_volunteers,
             "numberOfParticipantsNeeded": self.number_of_participants_needed,
             "numberOfVolunteersNeeded": self.number_of_volunteers_needed,
-            "eventType": self.event_type.value
+            "eventType": self.event_type.value,
+            "eventImageUrl": self.event_image_url
         }
         
 class Participant(UserMixin, db.Model):

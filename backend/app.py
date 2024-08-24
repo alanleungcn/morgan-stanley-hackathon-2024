@@ -129,8 +129,8 @@ def seed_DB():
 
         db.session.commit()  # Commit users to get their IDs
 
-        # Create 50 participants
-        for _ in range(50):
+        # Create 35 participants
+        for _ in range(35):
             participant = Participant(
                 username=fake.user_name(),
                 password="password",
@@ -144,15 +144,14 @@ def seed_DB():
             participants.append(participant)
             db.session.add(participant)
 
-        # Create 50 events
-        for _ in range(50):
-            event_start_date = fake.date_time_this_year()
-            event_end_date = fake.date_time_between_dates(datetime_start=event_start_date)
-
+        # Create 25 events
+        for _ in range(25):
+            event_start = fake.date_time_this_year()
+            event_end = fake.date_time_between_dates(datetime_start=event_start)
             event = Event(
                 event_name=fake.catch_phrase(),
-                event_start_date=event_start_date,
-                event_end_date = event_end_date,
+                event_start_date=event_start.strftime('%Y-%m-%d %H:%M:%S'),
+                event_end_date=event_end.strftime('%Y-%m-%d %H:%M:%S'),  
                 event_location=fake.address(),
                 event_description=fake.text(),
                 number_of_participants_needed=random.randint(5, 20),
@@ -163,9 +162,9 @@ def seed_DB():
             events.append(event)
             db.session.add(event)
 
-        # Create 50 volunteers
-        for _ in range(50):
-            volunteer = Volunteer(
+        # Create 15 volunteers
+        for _ in range(15):
+            volunteer = Volunteer (
                 username=fake.user_name(),
                 password="password",
                 email=fake.email(),
@@ -178,8 +177,8 @@ def seed_DB():
             volunteers.append(volunteer)
             db.session.add(volunteer)
 
-        # Create 50 courses
-        for _ in range(50):
+        # Create 20 courses
+        for _ in range(20):
             course = Course(
                 course_name=fake.catch_phrase(),
                 course_description=fake.text(),
@@ -191,8 +190,8 @@ def seed_DB():
 
         db.session.commit()  # Commit participants, events, volunteers, and courses to get their IDs
 
-        # Create 50 reviews
-        for _ in range(50):
+            # Create 50 reviews
+        for _ in range(100):
             event_id = random.choice([event.event_id for event in events])
             user_id = random.choice([user.user_id for user in users if not user.is_admin])
     
@@ -247,11 +246,35 @@ def create_event():
     db.session.commit()
     return jsonify(event.to_json()), 201
 
-@app.route('/events', methods=['GET'])
-def get_all_events():
-    events = Event.query.all()
-    event_list = [event.to_json() for event in events]
-    return jsonify(event_list), 200
+@app.route('/search_events', methods=['GET'])
+def search_events():
+    try:
+        # Using Search Parameters
+        event_name = request.args.get('eventName')
+        event_start_date = request.args.get('eventStartDate')
+        event_end_date = request.args.get('eventEndDate')
+        event_type = request.args.get('eventType')
+
+        query = db.session.query(Event)
+
+        if event_name:
+            query = query.filter(Event.event_name.ilike(f'%{event_name}%'))
+        if event_start_date:
+            query = query.filter(Event.event_start_date >= event_start_date)
+        if event_end_date:
+            query = query.filter(Event.event_end_date <= event_end_date)
+        if event_type:
+            query = query.filter(Event.event_type == EventType(event_type))
+
+        events = query.all()
+        # Convert events to JSON
+        events_json = [event.to_json() for event in events]
+
+        return jsonify(events_json), 200
+    except Exception as e:
+        return jsonify({"message": str(e)}), 400
+    finally:
+        db.session.close()
 
 
 
@@ -316,7 +339,7 @@ def get_event_types():
     return jsonify(event_types), 200
 
 @app.route('/courses', methods=['POST'])
-@admin_required
+#@admin_required
 def create_course():
     data = request.get_json()
 

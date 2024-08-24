@@ -3,7 +3,7 @@ import { Profile } from "@/components/user/profile";
 import { Wellbeing } from "@/components/user/wellbeing";
 import { Myevents } from "@/components/user/myevents";
 import { Progress } from "@/components/user/progress";
-import { Volunteered } from "@/components/user/volunteered";
+import { Volunteered } from "@/components/user/volunteer";
 
 import { cn } from "@/lib/utils";
 import { createFileRoute } from "@tanstack/react-router";
@@ -11,7 +11,6 @@ import {
   BarChart,
   Calendar,
   HandHelping,
-  HeartHandshake,
   LucideIcon,
   User2,
 } from "lucide-react";

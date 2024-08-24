@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 import { createFileRoute } from "@tanstack/react-router";
 import { BarChart, Calendar, HandHelping, HeartHandshake, LucideIcon, User2 } from "lucide-react";
 import { useState } from "react";
-// import { uptime } from "process";
 
 export const Route = createFileRoute("/user/")({
   component: User,

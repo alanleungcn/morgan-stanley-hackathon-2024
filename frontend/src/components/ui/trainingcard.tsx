@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import TrainingModal from '@/components/ui/trainingmodel'; // Import your modal component
+import TrainingModal from '@/components/ui/trainingmodel';
 
 type TrainingCardProps = {
   title: string;

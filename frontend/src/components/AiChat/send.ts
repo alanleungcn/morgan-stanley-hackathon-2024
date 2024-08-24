@@ -9,7 +9,30 @@ export const send: StreamSend = async (
   prompt: string,
   observer: StreamingAdapterObserver,
 ) => {
+  const template: string = `
+  You are Ai Asisstant of Zubin Foundation Company. You are responsible for answering to the FAQ and helping to users. Provide information 
+  and give recommendation about the events if users askes about them. 
+
+  Events:\n
+  "
+  1. Event information: \n
+    Title: Billy Concert\n
+    Discription: \n
+    Date: Today\n
+  2. Event information: \n
+    Title: Health Gathering\n
+    Discription: \n
+    Date: after 2 days\n
+  3. Event information: \n
+    Title: Information Day\n
+    Discription: \n
+    Date: Tommorow \n  
+  " \n
+  ${prompt}
+  `;
+  prompt = template;
   const body = { prompt };
+
   const response = await fetch(demoProxyServerUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Calendar, Clock, UsersRound } from "lucide-react";
+import { Calendar, Clock, Contact, UsersRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Event } from "@/api/event/use-events";
 import { isSameDay } from "date-fns";
@@ -22,87 +22,57 @@ type Props = {
 
 export default function EventCard({
   event,
-  layout,
+  // layout,
   className,
   buttonText,
   buttonAction,
 }: Props) {
-  return layout === "grid" ? (
-    <Card className={cn(className)}>
-      <CardHeader className="p-0">
-        <img src={event.imageURL} className="h-48 object-cover" />
-        <CardTitle className="p-6">{event.eventName}</CardTitle>
-        {/* <CardDescription>Card Description</CardDescription> */}
-      </CardHeader>
-      <CardContent>
-        <p className="text-ellipsis overflow-hidden">
-          {event.eventDescription}
-        </p>
-      </CardContent>
-      <CardFooter>
-        <div className="flex w-full justify-between items-end flex-col lg:flex-row gap-4">
-          <div className="flex flex-col">
-            {isSameDay(event.eventStartDate, event.eventEndDate) ? (
-              <div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  {formatDateWithWeekday(event.eventStartDate)}
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4" />
-                  {formatTime(event.eventStartDate)} -{" "}
-                  {formatTime(event.eventEndDate)}
-                </div>
-              </div>
-            ) : (
-              <div>multi-day event</div>
-            )}
-            <div className="flex gap-2 items-center">
-              <UsersRound className="w-4 h-4" />
-              {event.numberOfParticipants} / {event.numberOfParticipantsNeeded}{" "}
-              participants
-            </div>
-          </div>
-          <div className="w-full lg:w-32">
-            <Button className="w-full lg:w-32" onClick={buttonAction}>
-              {buttonText}
-            </Button>
-          </div>
-        </div>
-      </CardFooter>
-    </Card>
-  ) : (
+  return (
     <Card className={cn(className, "flex flex-row")}>
-      <CardHeader className="p-0 flex-row">
-        <img src={event.imageURL} className="w-64 object-cover" />
+      <CardHeader className="p-0 w-1/3 overflow-hidden">
+        <img src={event.imageURL} className="w-full h-full object-contain" />
       </CardHeader>
-      <div className="">
-        <CardTitle className="p-6">{event.eventName}</CardTitle>
-        <CardContent>{event.eventDescription}</CardContent>
-        <CardFooter>
-          <div className="flex w-full justify-between items-end flex-col lg:flex-row gap-4">
+      <div className="w-2/3">
+        <CardTitle className="p-4 sm:p-6 text-sm sm:text-xl">
+          {event.eventName}
+        </CardTitle>
+        <CardContent className="p-4 pt-0 text-sm sm:text-base">
+          {event.eventDescription}
+        </CardContent>
+        <CardFooter className="px-4">
+          <div className="flex w-full justify-between items-start flex-col lg:flex-row gap-4">
             <div className="flex flex-col">
               {isSameDay(event.eventStartDate, event.eventEndDate) ? (
                 <div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 text-sm">
                     <Calendar className="h-4 w-4" />
                     {formatDateWithWeekday(event.eventStartDate)}
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 text-sm">
                     <Clock className="h-4 w-4" />
                     {formatTime(event.eventStartDate)} -{" "}
                     {formatTime(event.eventEndDate)}
                   </div>
                 </div>
               ) : (
-                <div>multi-day event</div>
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  {formatDateWithWeekday(event.eventStartDate)} -{" "}
+                  {formatDateWithWeekday(event.eventEndDate)}
+                </div>
               )}
-              <div className="flex gap-2 items-center">
+
+              <div className="flex gap-2 items-center text-sm">
                 <UsersRound className="w-4 h-4" />
                 {event.numberOfParticipants} /{" "}
                 {event.numberOfParticipantsNeeded} participants
+              </div>
+
+              <div className="flex gap-2 items-center text-sm">
+                <Contact className="w-4 h-4" />
+                {event.numberOfVolunteers} / {event.numberOfVolunteersNeeded}{" "}
+                volunteers
               </div>
             </div>
             <div className="w-full lg:w-32">

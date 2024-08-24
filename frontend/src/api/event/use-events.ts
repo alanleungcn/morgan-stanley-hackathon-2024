@@ -28,7 +28,7 @@ export function useEvents() {
         eventName:
           "Opportunity x The Zubin Foundation Sub-degree & Undergraduate Scholarships",
         eventStartDate: new Date(),
-        eventEndDate: add(new Date(), { hours: 3 }),
+        eventEndDate: add(new Date(), { hours: 1 }),
         eventLocation: "Hong Kong",
         eventDescription: "some description",
         numberOfParticipants: 50,

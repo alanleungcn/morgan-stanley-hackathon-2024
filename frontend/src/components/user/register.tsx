@@ -7,22 +7,29 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Terminal } from "lucide-react";
+import { Calendar, Clock, Terminal } from "lucide-react";
+import { Event } from "@/api/event/use-events";
+import { isSameDay } from "date-fns";
+import { formatDateWithWeekday, formatTime } from "@/utils/date";
 
-export function Register({ event, onRegister }) {
+interface Props {
+  event: Event;
+  onRegister: (role: string) => void;
+}
+
+export function Register({ event, onRegister }: Props) {
   const [selectedRole, setSelectedRole] = useState("");
   const [step, setStep] = useState(1);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [confirmedRole, setConfirmedRole] = useState("");
 
   const isFull =
-    event.number_of_participants >= event.number_of_participants_needed &&
-    event.number_of_volunteers >= event.number_of_volunteers_needed;
+    event.numberOfParticipants >= event.numberOfParticipantsNeeded &&
+    event.numberOfVolunteers >= event.numberOfVolunteersNeeded;
 
   const handleNext = () => {
     if (selectedRole) {
@@ -103,11 +110,30 @@ export function Register({ event, onRegister }) {
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
-                    <p className="text-lg">{`Event: ${event.event_name}`}</p>
-                    <p className="text-lg">{`Date: ${new Date(
-                      event.event_date,
-                    ).toLocaleDateString()}`}</p>
-                    <p className="text-lg">{`Location: ${event.event_location}`}</p>
+                    <p className="text-lg">{`Event: ${event.eventName}`}</p>
+
+                    {isSameDay(event.eventStartDate, event.eventEndDate) ? (
+                      <div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Calendar className="h-4 w-4" />
+                          {formatDateWithWeekday(event.eventStartDate)}
+                        </div>
+
+                        <div className="flex items-center gap-2 text-sm">
+                          <Clock className="h-4 w-4" />
+                          {formatTime(event.eventStartDate)} -{" "}
+                          {formatTime(event.eventEndDate)}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4" />
+                        {formatDateWithWeekday(event.eventStartDate)} -{" "}
+                        {formatDateWithWeekday(event.eventEndDate)}
+                      </div>
+                    )}
+
+                    <p className="text-lg">{`Location: ${event.eventLocation}`}</p>
                     <p className="text-lg">{`Role: ${selectedRole}`}</p>
                   </div>
                   <DialogFooter>

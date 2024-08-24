@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { useEvents } from "@/api/event/use-events";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import EventCard from "./event-card";
+import { useRouter } from "@tanstack/react-router";
 
 type Filter = "all" | "today" | "weekend";
 
@@ -29,8 +30,10 @@ export const EventsList = () => {
 
   const [layout, setLayout] = useState<"grid" | "list">("list");
 
+  const router = useRouter();
+
   return (
-    <div className="flex flex-col gap-8 container">
+    <div className="flex flex-col gap-8 p-4">
       <div className="flex gap-4">
         <Input type="email" placeholder="Search" />
 
@@ -67,7 +70,7 @@ export const EventsList = () => {
               variant="ghost"
               className={cn(
                 filter === f && "border-b-4 rounded-none border-primary",
-                "capitalize px-12",
+                "capitalize px-4",
               )}
               onClick={() => setFilter(f as Filter)}
             >
@@ -79,7 +82,7 @@ export const EventsList = () => {
 
       <div
         className={cn(
-          "grid grid-cols-2 gap-4 md:grid-cols-3",
+          "grid grid-cols-1 sm:grid-cols-2 gap-4 md:grid-cols-3",
           layout === "list" && "!grid-cols-1",
         )}
       >
@@ -87,7 +90,9 @@ export const EventsList = () => {
           return (
             <EventCard
               event={e}
-              buttonAction={() => {}}
+              buttonAction={() =>
+                router.navigate({ to: `/events/event-details/${e.eventId}` })
+              }
               buttonText="Details"
               layout={layout}
             />

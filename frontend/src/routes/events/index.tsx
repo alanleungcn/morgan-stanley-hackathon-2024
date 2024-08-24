@@ -8,7 +8,7 @@ export const Route = createFileRoute("/events/")({
 function Events() {
   return (
     <div className="flex justify-center">
-      <div className="p-8 md:max-w-[1280px]">
+      <div className="md:max-w-[960px]">
         <EventsList />
       </div>
     </div>

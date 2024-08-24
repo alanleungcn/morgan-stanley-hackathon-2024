@@ -7,13 +7,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { CalendarDays, Cog, LogOut } from "lucide-react";
+import { buttonVariants } from "./ui/button";
 
 export default function NavUser() {
   return (
     <div className="flex gap-2 mr-4">
-      {/* <Link
+      <Link
         to="/auth/login"
         className={cn("!text-black", buttonVariants({ variant: "link" }))}
       >
@@ -25,7 +27,7 @@ export default function NavUser() {
         className={cn("!text-black", buttonVariants({ variant: "link" }))}
       >
         Register
-      </Link> */}
+      </Link>
 
       <DropdownMenu>
         <DropdownMenuTrigger>

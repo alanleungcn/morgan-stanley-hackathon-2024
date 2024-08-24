@@ -17,9 +17,9 @@ import { Route as TrainingsIndexImport } from './routes/trainings/index'
 import { Route as LeaderboardIndexImport } from './routes/leaderboard/index'
 import { Route as EventsIndexImport } from './routes/events/index'
 import { Route as AdminIndexImport } from './routes/admin/index'
-import { Route as EventsEventDetailsImport } from './routes/events/eventDetails'
 import { Route as AuthRegisterImport } from './routes/auth/register'
 import { Route as AuthLoginImport } from './routes/auth/login'
+import { Route as EventsEventDetailsEventIdImport } from './routes/events/event-details.$event-id'
 
 // Create/Update Routes
 
@@ -53,11 +53,6 @@ const AdminIndexRoute = AdminIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const EventsEventDetailsRoute = EventsEventDetailsImport.update({
-  path: '/events/eventDetails',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const AuthRegisterRoute = AuthRegisterImport.update({
   path: '/auth/register',
   getParentRoute: () => rootRoute,
@@ -65,6 +60,11 @@ const AuthRegisterRoute = AuthRegisterImport.update({
 
 const AuthLoginRoute = AuthLoginImport.update({
   path: '/auth/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EventsEventDetailsEventIdRoute = EventsEventDetailsEventIdImport.update({
+  path: '/events/event-details/$event-id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -91,13 +91,6 @@ declare module '@tanstack/react-router' {
       path: '/auth/register'
       fullPath: '/auth/register'
       preLoaderRoute: typeof AuthRegisterImport
-      parentRoute: typeof rootRoute
-    }
-    '/events/eventDetails': {
-      id: '/events/eventDetails'
-      path: '/events/eventDetails'
-      fullPath: '/events/eventDetails'
-      preLoaderRoute: typeof EventsEventDetailsImport
       parentRoute: typeof rootRoute
     }
     '/admin/': {
@@ -135,6 +128,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserIndexImport
       parentRoute: typeof rootRoute
     }
+    '/events/event-details/$event-id': {
+      id: '/events/event-details/$event-id'
+      path: '/events/event-details/$event-id'
+      fullPath: '/events/event-details/$event-id'
+      preLoaderRoute: typeof EventsEventDetailsEventIdImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -144,12 +144,12 @@ export const routeTree = rootRoute.addChildren({
   IndexRoute,
   AuthLoginRoute,
   AuthRegisterRoute,
-  EventsEventDetailsRoute,
   AdminIndexRoute,
   EventsIndexRoute,
   LeaderboardIndexRoute,
   TrainingsIndexRoute,
   UserIndexRoute,
+  EventsEventDetailsEventIdRoute,
 })
 
 /* prettier-ignore-end */
@@ -163,12 +163,12 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/auth/login",
         "/auth/register",
-        "/events/eventDetails",
         "/admin/",
         "/events/",
         "/leaderboard/",
         "/trainings/",
-        "/user/"
+        "/user/",
+        "/events/event-details/$event-id"
       ]
     },
     "/": {
@@ -179,9 +179,6 @@ export const routeTree = rootRoute.addChildren({
     },
     "/auth/register": {
       "filePath": "auth/register.tsx"
-    },
-    "/events/eventDetails": {
-      "filePath": "events/eventDetails.tsx"
     },
     "/admin/": {
       "filePath": "admin/index.tsx"
@@ -197,6 +194,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/user/": {
       "filePath": "user/index.tsx"
+    },
+    "/events/event-details/$event-id": {
+      "filePath": "events/event-details.$event-id.tsx"
     }
   }
 }

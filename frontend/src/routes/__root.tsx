@@ -59,6 +59,9 @@ function Root() {
           <Link to="/admin" className="[&.active]:underline">
             Admin Portal
           </Link>
+          <Link to="/leaderboard" className="[&.active]:underline">
+            Leaderboard
+          </Link>
         </div>
 
         <NavUser />

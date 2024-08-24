@@ -56,8 +56,8 @@ function Root() {
           <Link to="/trainings" className="[&.active]:underline">
             Trainings
           </Link>
-          <Link to="/admin/manage-events" className="[&.active]:underline">
-            Manage Events
+          <Link to="/admin" className="[&.active]:underline">
+            Admin Portal
           </Link>
         </div>
 

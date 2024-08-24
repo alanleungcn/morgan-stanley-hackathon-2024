@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { CalendarIcon } from "lucide-react";
 import { add, format } from "date-fns";
 import { Input } from "@/components/ui/input";
@@ -35,18 +34,14 @@ const eventSchema = z.object({
   eventType: z.enum(["<PENDING_MEETING>"]),
 });
 
-export const Route = createFileRoute("/admin/manage-events")({
-  component: AddEvent,
-});
-
-function AddEvent() {
+export const CreateEvent = () => {
   const form = useForm<z.infer<typeof eventSchema>>({
     resolver: zodResolver(eventSchema),
     defaultValues: {
       eventName: "",
       eventDate: add(new Date(), { weeks: 1 }),
       eventLocation: `Zubin's Family Centre
-Shop 201
+Shop 201G
 Austin MTR Station
 Kowloon
 Hong Kong`,
@@ -220,4 +215,4 @@ Hong Kong`,
       </div>
     </div>
   );
-}
+};

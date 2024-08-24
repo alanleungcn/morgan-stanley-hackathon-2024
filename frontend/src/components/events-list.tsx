@@ -30,7 +30,7 @@ export const EventsList = () => {
   const [layout, setLayout] = useState<"grid" | "list">("list");
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 container">
       <div className="flex gap-4">
         <Input type="email" placeholder="Search" />
 

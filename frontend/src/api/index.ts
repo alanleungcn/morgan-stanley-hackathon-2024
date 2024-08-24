@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const apiClient = axios.create({
-  baseURL: `${import.meta.env.VITE_BACCKEND_BASE_URL}`,
+  baseURL: `${import.meta.env.VITE_BACKEND_BASE_URL}`,
 });
 
 export const API_METHODS = {

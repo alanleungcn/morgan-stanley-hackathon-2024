@@ -1,53 +1,53 @@
 import {
   BriefcaseBusiness,
-  GraduationCap,
-  InspectionPanel,
+  Dices,
+  HandHeart,
   PartyPopper,
-  Siren,
+  PencilRuler,
 } from "lucide-react";
 import { Button } from "./ui/button";
 
 export const EventTags = () => {
   return (
-    <div className="container flex justify-around max-w-[1200px]">
+    <div className="flex overflow-x-scroll scrollbar-hide sm:justify-center pl-4 gap-8 sm:gap-x-16 gap-y-2">
       <Button
-        className="rounded-full flex flex-col w-28 h-28 gap-1"
-        variant="outline"
+        variant="ghost"
+        className="flex flex-col w-16 h-16 sm:w-24 sm:h-24 gap-2"
       >
-        <InspectionPanel size={32} />
-        <p className="">Mental</p>
+        <PartyPopper className="w-6 h-6 sm:w-8 sm:h-8" />
+        <p className="text-xs sm:text-sm">Gathering</p>
       </Button>
 
       <Button
-        className="rounded-full flex flex-col w-28 h-28 gap-1"
-        variant="outline"
+        variant="ghost"
+        className="flex flex-col w-16 h-16 sm:w-24 sm:h-24 gap-2"
       >
-        <PartyPopper size={32} />
-        <p className="">Gathering</p>
+        <HandHeart className="w-6 h-6 sm:w-8 sm:h-8" />
+        <p className="text-xs sm:text-sm">Counselling</p>
       </Button>
 
       <Button
-        className="rounded-full flex flex-col w-28 h-28 gap-1"
-        variant="outline"
+        variant="ghost"
+        className="flex flex-col w-16 h-16 sm:w-24 sm:h-24 gap-2"
       >
-        <BriefcaseBusiness size={32} />
-        <p className="">Internship</p>
+        <BriefcaseBusiness className="w-6 h-6 sm:w-8 sm:h-8" />
+        <p className="text-xs sm:text-sm">Career</p>
       </Button>
 
       <Button
-        className="rounded-full flex flex-col w-28 h-28 gap-1"
-        variant="outline"
+        variant="ghost"
+        className="flex flex-col w-16 h-16 sm:w-24 sm:h-24 gap-2"
       >
-        <GraduationCap size={32} />
-        <p className="">Education</p>
+        <PencilRuler className="w-6 h-6 sm:w-8 sm:h-8" />
+        <p className="text-xs sm:text-sm">Workshop</p>
       </Button>
 
       <Button
-        className="rounded-full flex flex-col w-28 h-28 gap-1"
-        variant="outline"
+        variant="ghost"
+        className="flex flex-col w-16 h-16 sm:w-24 sm:h-24 gap-2"
       >
-        <Siren size={32} />
-        <p className="">Emergency</p>
+        <Dices className="w-6 h-6 sm:w-8 sm:h-8" />
+        <p className="text-xs sm:text-sm">Others</p>
       </Button>
     </div>
   );

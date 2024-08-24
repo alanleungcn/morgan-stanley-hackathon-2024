@@ -9,12 +9,10 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-4">
       <Hero />
       <EventTags />
-      <div className="container">
-        <EventsList />
-      </div>
+      <EventsList />
     </div>
   );
 }

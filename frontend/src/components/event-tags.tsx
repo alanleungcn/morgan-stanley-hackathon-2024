@@ -9,44 +9,44 @@ import { Button } from "./ui/button";
 
 export const EventTags = () => {
   return (
-    <div className="flex overflow-x-scroll scrollbar-hide sm:justify-center pl-4 gap-8 sm:gap-x-16 gap-y-2">
+    <div className="scrollbar-hide flex gap-8 gap-y-2 overflow-x-scroll pl-4 sm:justify-center sm:gap-x-16">
       <Button
         variant="ghost"
-        className="flex flex-col w-16 h-16 sm:w-24 sm:h-24 gap-2"
+        className="flex h-16 w-16 flex-col gap-2 sm:h-24 sm:w-24"
       >
-        <PartyPopper className="w-6 h-6 sm:w-8 sm:h-8" />
+        <PartyPopper className="h-6 w-6 sm:h-8 sm:w-8" />
         <p className="text-xs sm:text-sm">Gathering</p>
       </Button>
 
       <Button
         variant="ghost"
-        className="flex flex-col w-16 h-16 sm:w-24 sm:h-24 gap-2"
+        className="flex h-16 w-16 flex-col gap-2 sm:h-24 sm:w-24"
       >
-        <HandHeart className="w-6 h-6 sm:w-8 sm:h-8" />
+        <HandHeart className="h-6 w-6 sm:h-8 sm:w-8" />
         <p className="text-xs sm:text-sm">Counselling</p>
       </Button>
 
       <Button
         variant="ghost"
-        className="flex flex-col w-16 h-16 sm:w-24 sm:h-24 gap-2"
+        className="flex h-16 w-16 flex-col gap-2 sm:h-24 sm:w-24"
       >
-        <BriefcaseBusiness className="w-6 h-6 sm:w-8 sm:h-8" />
+        <BriefcaseBusiness className="h-6 w-6 sm:h-8 sm:w-8" />
         <p className="text-xs sm:text-sm">Career</p>
       </Button>
 
       <Button
         variant="ghost"
-        className="flex flex-col w-16 h-16 sm:w-24 sm:h-24 gap-2"
+        className="flex h-16 w-16 flex-col gap-2 sm:h-24 sm:w-24"
       >
-        <PencilRuler className="w-6 h-6 sm:w-8 sm:h-8" />
+        <PencilRuler className="h-6 w-6 sm:h-8 sm:w-8" />
         <p className="text-xs sm:text-sm">Workshop</p>
       </Button>
 
       <Button
         variant="ghost"
-        className="flex flex-col w-16 h-16 sm:w-24 sm:h-24 gap-2"
+        className="flex h-16 w-16 flex-col gap-2 sm:h-24 sm:w-24"
       >
-        <Dices className="w-6 h-6 sm:w-8 sm:h-8" />
+        <Dices className="h-6 w-6 sm:h-8 sm:w-8" />
         <p className="text-xs sm:text-sm">Others</p>
       </Button>
     </div>

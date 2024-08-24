@@ -1,10 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 
+import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
@@ -14,18 +15,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { PhoneInput } from "@/components/ui/phone-input";
-import { toast } from "@/components/ui/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { isValidPhoneNumber } from "react-phone-number-input";
-import { z } from "zod";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { isValidPhoneNumber } from "react-phone-number-input";
+import { z } from "zod";
 
 const FormSchema = z.object({
   phone: z
@@ -62,15 +62,15 @@ export const Profile = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="p-8 max-w-[800px]">
+      <div className="max-w-[800px] p-8">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-8"
           >
-            <div className="flex gap-16 items-center">
+            <div className="flex items-center gap-16">
               {/* Avatar */}
-              <Avatar className="w-32 h-32">
+              <Avatar className="h-32 w-32">
                 <AvatarImage src="" alt="" />
                 <AvatarFallback>AA</AvatarFallback>
               </Avatar>
@@ -80,7 +80,7 @@ export const Profile = () => {
                 name="name"
                 control={form.control}
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-start w-full">
+                  <FormItem className="flex w-full flex-col items-start">
                     <FormLabel className="text-left">Name</FormLabel>
                     <FormControl className="w-full">
                       <Input {...field} />
@@ -96,7 +96,7 @@ export const Profile = () => {
                 name="email"
                 control={form.control}
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-start w-full">
+                  <FormItem className="flex w-full flex-col items-start">
                     <FormLabel className="text-left">Email</FormLabel>
                     <FormControl className="w-full">
                       <Input {...field} />
@@ -170,7 +170,7 @@ export const Profile = () => {
                 name="password"
                 control={form.control}
                 render={({ field }) => (
-                  <FormItem className="flex flex-col items-start w-full">
+                  <FormItem className="flex w-full flex-col items-start">
                     <FormLabel className="text-left">Change Password</FormLabel>
                     <FormControl className="w-full">
                       <Input type="password" {...field} />

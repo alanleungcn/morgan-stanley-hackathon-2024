@@ -72,21 +72,21 @@ function Admin() {
 
   return (
     <div className="flex justify-center">
-      <div className="p-8 flex flex-col gap-12 w-72">
+      <div className="flex w-72 flex-col gap-12 p-8">
         <h1 className="text-4xl font-bold">Admin Portal</h1>
 
         <div className="flex flex-col gap-2">
           {tabs.map((t: TabItem) => (
             <div
               className={cn(
-                "w-64 flex flex-col overflow-y-auto",
+                "flex w-64 flex-col overflow-y-auto",
                 tab === t.tab && "border-l-4 border-primary",
               )}
             >
               <Button
                 variant="ghost"
                 className={cn(
-                  "w-full truncate gap-4 !justify-start",
+                  "w-full !justify-start gap-4 truncate",
                   tab === t.tab && "bg-secondary/50",
                 )}
                 onClick={() => setTab(t.tab)}

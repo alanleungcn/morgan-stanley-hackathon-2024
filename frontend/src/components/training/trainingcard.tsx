@@ -1,13 +1,13 @@
-import { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import TrainingModal from '@/components/training/trainingmodel'
+import TrainingModal from "@/components/training/trainingmodel";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
 
 type TrainingCardProps = {
-  title: string
-  description: string
-  videoSrc: string
-  tags: string[]
-}
+  title: string;
+  description: string;
+  videoSrc: string;
+  tags: string[];
+};
 
 export const TrainingCard = ({
   title,
@@ -15,46 +15,46 @@ export const TrainingCard = ({
   videoSrc,
   tags,
 }: TrainingCardProps) => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCardClick = () => {
-    setIsModalOpen(true)
-  }
+    setIsModalOpen(true);
+  };
 
   const handleModalClose = () => {
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
 
   return (
     <>
       <Card
-        className='flex flex-col overflow-hidden transition-shadow duration-300 bg-white rounded-lg shadow-lg cursor-pointer lg:flex-row hover:shadow-xl'
+        className="flex cursor-pointer flex-col overflow-hidden rounded-lg bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl lg:flex-row"
         onClick={handleCardClick}
       >
-        <CardHeader className='p-0 rounded-t-lg lg:w-1/3 lg:rounded-t-none lg:rounded-l-lg'>
+        <CardHeader className="rounded-t-lg p-0 lg:w-1/3 lg:rounded-l-lg lg:rounded-t-none">
           <iframe
             src={videoSrc}
-            className='object-cover w-full h-48 rounded-t-lg lg:h-full lg:rounded-t-none lg:rounded-l-lg'
+            className="h-48 w-full rounded-t-lg object-cover lg:h-full lg:rounded-l-lg lg:rounded-t-none"
             title={title}
             allowFullScreen
-            loading='lazy'
+            loading="lazy"
           />
         </CardHeader>
-        <div className='flex flex-col lg:w-2/3'>
-          <CardHeader className='p-4 bg-gray-100 rounded-t-lg lg:rounded-t-none lg:rounded-r-lg'>
-            <CardTitle className='text-xl font-semibold text-gray-800'>
+        <div className="flex flex-col lg:w-2/3">
+          <CardHeader className="rounded-t-lg bg-gray-100 p-4 lg:rounded-r-lg lg:rounded-t-none">
+            <CardTitle className="text-xl font-semibold text-gray-800">
               {title}
             </CardTitle>
           </CardHeader>
-          <CardContent className='flex-1 p-4'>
-            <p className='h-24 overflow-hidden text-gray-700 text-ellipsis'>
+          <CardContent className="flex-1 p-4">
+            <p className="h-24 overflow-hidden text-ellipsis text-gray-700">
               {description}
             </p>
-            <div className='flex flex-wrap gap-2 mt-4'>
+            <div className="mt-4 flex flex-wrap gap-2">
               {tags.map((tag, index) => (
                 <span
                   key={index}
-                  className='px-3 py-1 text-yellow-800 bg-yellow-200 rounded-full'
+                  className="rounded-full bg-yellow-200 px-3 py-1 text-yellow-800"
                 >
                   {tag}
                 </span>
@@ -73,5 +73,5 @@ export const TrainingCard = ({
         tags={tags}
       />
     </>
-  )
-}
+  );
+};

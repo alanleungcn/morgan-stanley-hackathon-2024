@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Profile } from "@/components/user/profile";
-import { Wellbeing } from "@/components/user/wellbeing";
 import { Myevents } from "@/components/user/myevents";
+import { Profile } from "@/components/user/profile";
 import { Progress } from "@/components/user/progress";
 import { Volunteered } from "@/components/user/volunteer";
 
@@ -67,21 +66,21 @@ function User() {
 
   return (
     <div className="flex justify-center">
-      <div className="flex flex-col gap-12 p-8 w-72">
+      <div className="flex w-72 flex-col gap-12 p-8">
         <h1 className="text-4xl font-bold">Settings</h1>
 
         <div className="flex flex-col gap-2">
           {tabs.map((t: TabItem) => (
             <div
               className={cn(
-                "w-64 flex flex-col overflow-y-auto",
+                "flex w-64 flex-col overflow-y-auto",
                 tab === t.tab && "border-l-4 border-primary",
               )}
             >
               <Button
                 variant="ghost"
                 className={cn(
-                  "w-full truncate gap-4 !justify-start",
+                  "w-full !justify-start gap-4 truncate",
                   tab === t.tab && "bg-secondary/50",
                 )}
                 onClick={() => setTab(t.tab)}

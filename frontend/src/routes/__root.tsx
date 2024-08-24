@@ -1,16 +1,16 @@
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 // import React, { useEffect, useState } from "react";
+import NavUser from "@/components/nav-user";
+import { Toaster } from "@/components/ui/toaster";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import "../index.css";
-import { Toaster } from "@/components/ui/toaster";
-import NavUser from "@/components/nav-user";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import AiChat from "@/components/AiChat/AiChat";
 import MobileNav from "@/components/mobile-nav";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Menu } from "lucide-react";
 
 // const TanStackRouterDevtools = import.meta.env.PROD
 //   ? () => null // Render nothing in production
@@ -49,9 +49,9 @@ function Root() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="h-16 bg-primary flex justify-between items-center">
-        <Link to="/" className="hidden sm:block w-16 h-16 ml-4 flex-shrink-0">
-          <img src="/zubin.svg" className="w-16 h-16" />
+      <div className="flex h-16 items-center justify-between bg-primary">
+        <Link to="/" className="ml-4 hidden h-16 w-16 flex-shrink-0 sm:block">
+          <img src="/zubin.svg" className="h-16 w-16" />
         </Link>
 
         <div className="block sm:hidden">
@@ -64,11 +64,11 @@ function Root() {
           </Button>
         </div>
 
-        <Link to="/" className="block sm:hidden w-16 h-16 ml-4 flex-shrink-0">
-          <img src="/zubin.svg" className="w-16 h-16" />
+        <Link to="/" className="ml-4 block h-16 w-16 flex-shrink-0 sm:hidden">
+          <img src="/zubin.svg" className="h-16 w-16" />
         </Link>
 
-        <div className="hidden justify-start w-full gap-2 sm:flex ml-8">
+        <div className="ml-8 hidden w-full justify-start gap-2 sm:flex">
           <Link
             to="/"
             className={cn(buttonVariants({ variant: "link" }), "text-black")}

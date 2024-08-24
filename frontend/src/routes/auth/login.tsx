@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 import {
   Form,
@@ -12,12 +12,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { PhoneInput } from "@/components/ui/phone-input";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { z } from "zod";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/auth/login")({
   component: Login,
@@ -57,8 +57,8 @@ function Login() {
   }
 
   return (
-    <div className="flex items-center flex-col">
-      <div className="p-8 w-[90%] lg:w-1/3 max-w-[800px] flex flex-col gap-8 shadow-lg rounded-md my-16">
+    <div className="flex flex-col items-center">
+      <div className="my-16 flex w-[90%] max-w-[800px] flex-col gap-8 rounded-md p-8 shadow-lg lg:w-1/3">
         <h1 className="text-4xl font-bold">Login</h1>
 
         <Tabs defaultValue="member" className="w-full">
@@ -81,7 +81,7 @@ function Login() {
               name="email"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start w-full">
+                <FormItem className="flex w-full flex-col items-start">
                   <FormLabel className="text-left">Email</FormLabel>
                   <FormControl className="w-full">
                     <Input {...field} />
@@ -123,7 +123,7 @@ function Login() {
               name="password"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start w-full">
+                <FormItem className="flex w-full flex-col items-start">
                   <FormLabel className="text-left">Password</FormLabel>
                   <FormControl className="w-full">
                     <Input type="password" {...field} />

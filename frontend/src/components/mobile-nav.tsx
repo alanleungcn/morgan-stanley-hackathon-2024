@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Button, buttonVariants } from "./ui/button";
+import { Link, useLocation } from "@tanstack/react-router";
 import {
   Calendar,
   Crown,
@@ -10,7 +10,7 @@ import {
   LucideIcon,
   X,
 } from "lucide-react";
-import { Link, useLocation } from "@tanstack/react-router";
+import { Button, buttonVariants } from "./ui/button";
 import { Separator } from "./ui/separator";
 
 type Props = {
@@ -60,19 +60,19 @@ export default function MobileNav({ open, setOpen }: Props) {
   return (
     <aside
       className={cn(
-        "fixed top-0 left-0 z-20 h-screen -translate-x-0 transition-[width] ease-in-out duration-300",
+        "fixed left-0 top-0 z-20 h-screen -translate-x-0 transition-[width] duration-300 ease-in-out",
         open ? "w-72" : "w-0",
       )}
     >
-      <div className="h-full flex flex-col gap-8 overflow-y-auto shadow-2xl rounded-tr-lg rounded-br-lg bg-background">
-        <div className="w-full flex items-center justify-between pt-4 px-4">
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-            <img src="/zubin.svg" className="w-16 h-16" />
+      <div className="flex h-full flex-col gap-8 overflow-y-auto rounded-br-lg rounded-tr-lg bg-background shadow-2xl">
+        <div className="flex w-full items-center justify-between px-4 pt-4">
+          <Link href="/" className="flex flex-shrink-0 items-center gap-2">
+            <img src="/zubin.svg" className="h-16 w-16" />
             {/* <div className="text-xs font-bold">The Zubin Foundation</div> */}
           </Link>
 
           <Button variant="ghost" size="icon" onClick={setOpen}>
-            <X className="w-5 h-5" />
+            <X className="h-5 w-5" />
           </Button>
         </div>
 
@@ -81,7 +81,7 @@ export default function MobileNav({ open, setOpen }: Props) {
             {routes.map((r) => (
               <div
                 className={cn(
-                  "w-full flex flex-col overflow-y-auto h-12",
+                  "flex h-12 w-full flex-col overflow-y-auto",
                   r.route === pathname && "border-l-8 border-primary",
                 )}
               >
@@ -89,12 +89,12 @@ export default function MobileNav({ open, setOpen }: Props) {
                   to={r.route}
                   className={cn(
                     buttonVariants({ variant: "ghost" }),
-                    "w-full truncate gap-4 !justify-start h-full",
+                    "h-full w-full !justify-start gap-4 truncate",
                     // tab === t.tab && "bg-secondary/50",
                   )}
                   // onClick={() => setTab(t.tab)}
                 >
-                  {<r.icon className="w-5 h-5" />}
+                  {<r.icon className="h-5 w-5" />}
                   {r.label}
                 </Link>
               </div>
@@ -104,15 +104,15 @@ export default function MobileNav({ open, setOpen }: Props) {
           <Separator className="my-4" />
 
           <div className="p-2">
-            <div className={cn("w-full flex flex-col overflow-y-auto h-12")}>
+            <div className={cn("flex h-12 w-full flex-col overflow-y-auto")}>
               <Link
                 to="/auth/login"
                 className={cn(
                   buttonVariants({ variant: "outline" }),
-                  "w-full truncate gap-4 !justify-start h-full",
+                  "h-full w-full !justify-start gap-4 truncate",
                 )}
               >
-                <LogIn className="w-5 h-5" />
+                <LogIn className="h-5 w-5" />
                 Login
               </Link>
             </div>

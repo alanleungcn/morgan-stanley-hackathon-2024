@@ -1,31 +1,15 @@
+import { cn } from "@/lib/utils";
+import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { buttonVariants } from "./ui/button";
-import { Link } from "@tanstack/react-router";
-import { cn } from "@/lib/utils";
 
 export const Hero = () => {
   return (
-    <section
-      className="grid lg:grid-cols-2 py-12 sm:py-16 gap-10
-            bg-cover
-            bg-[url('/hero.png')]
-            relative
-            z-10
-            before:content-['']
-            before:absolute
-            before:inset-0
-            before:block
-            before:bg-gradient-to-r
-            before:from-black
-            before:to-white
-            before:opacity-80
-            before:z-[-5]
-    "
-    >
-      <div className="px-8 lg:px-24 text-start space-y-6">
-        <main className="text-4xl md:text-6xl font-bold">
+    <section className="relative z-10 grid gap-10 bg-[url('/hero.png')] bg-cover py-12 before:absolute before:inset-0 before:z-[-5] before:block before:bg-gradient-to-r before:from-black before:to-white before:opacity-80 before:content-[''] sm:py-16 lg:grid-cols-2">
+      <div className="space-y-6 px-8 text-start lg:px-24">
+        <main className="text-4xl font-bold md:text-6xl">
           <h1 className="inline">
-            <span className="inline bg-gradient-to-r from-[#E4D402] to-[#FDF14E] text-transparent bg-clip-text">
+            <span className="inline bg-gradient-to-r from-[#E4D402] to-[#FDF14E] bg-clip-text text-transparent">
               The Zubin Foundation
             </span>
           </h1>
@@ -36,7 +20,7 @@ export const Hero = () => {
         <Link
           to="/events"
           className={cn(
-            "w-full md:w-1/3 gap-2",
+            "w-full gap-2 md:w-1/3",
             buttonVariants({ variant: "default", size: "lg" }),
           )}
         >

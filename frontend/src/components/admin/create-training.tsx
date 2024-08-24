@@ -1,4 +1,3 @@
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -8,6 +7,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -44,19 +44,19 @@ export const CreateTraining = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="p-8 max-w-[1000px] w-full flex flex-col gap-12">
+      <div className="flex w-full max-w-[1000px] flex-col gap-12 p-8">
         <h1 className="text-3xl font-bold">Create Training</h1>
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-8"
+            className="grid grid-cols-1 gap-8 sm:grid-cols-2"
           >
             <FormField
               name="trainingName"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start w-full">
+                <FormItem className="flex w-full flex-col items-start">
                   <FormLabel>Training Name</FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -70,7 +70,7 @@ export const CreateTraining = () => {
               name="trainingDescription"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start w-full">
+                <FormItem className="flex w-full flex-col items-start">
                   <FormLabel>Training Description</FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -84,7 +84,7 @@ export const CreateTraining = () => {
               name="trainingType"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start w-full">
+                <FormItem className="flex w-full flex-col items-start">
                   <FormLabel>Training Type</FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -98,7 +98,7 @@ export const CreateTraining = () => {
               name="trainingURL"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start w-full">
+                <FormItem className="flex w-full flex-col items-start">
                   <FormLabel>Video URL</FormLabel>
                   <FormControl>
                     <Input {...field} />

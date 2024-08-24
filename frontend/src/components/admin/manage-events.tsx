@@ -1,10 +1,10 @@
 import { LayoutGrid, LayoutList } from "lucide-react";
 
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useEvents } from "@/api/event/use-events";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useState } from "react";
 import EventCard from "../event-card";
 import { Input } from "../ui/input";
-import { useState } from "react";
 
 export const ManageEvents = () => {
   const { data } = useEvents();
@@ -13,7 +13,7 @@ export const ManageEvents = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="p-8 max-w-[1000px] w-full flex flex-col gap-8">
+      <div className="flex w-full max-w-[1000px] flex-col gap-8 p-8">
         <h1 className="text-2xl font-bold">Manage Events</h1>
         <div className="flex gap-8">
           <Input placeholder="Search" />

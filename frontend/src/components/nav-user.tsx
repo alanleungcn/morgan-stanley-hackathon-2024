@@ -14,7 +14,7 @@ import { buttonVariants } from "./ui/button";
 
 export default function NavUser() {
   return (
-    <div className="flex gap-2 mr-4">
+    <div className="mr-4 flex gap-2">
       <Link
         to="/auth/login"
         className={cn("!text-black", buttonVariants({ variant: "link" }))}

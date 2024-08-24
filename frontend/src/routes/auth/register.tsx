@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
+import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
@@ -12,20 +13,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { PhoneInput } from "@/components/ui/phone-input";
-import { toast } from "@/components/ui/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { isValidPhoneNumber } from "react-phone-number-input";
-import { z } from "zod";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { isValidPhoneNumber } from "react-phone-number-input";
+import { z } from "zod";
 
 export const Route = createFileRoute("/auth/register")({
   component: Register,
@@ -65,8 +65,8 @@ function Register() {
   }
 
   return (
-    <div className="flex items-center flex-col">
-      <div className="p-8 w-1/3 max-w-[800px] flex flex-col gap-8 shadow-lg rounded-md my-16">
+    <div className="flex flex-col items-center">
+      <div className="my-16 flex w-1/3 max-w-[800px] flex-col gap-8 rounded-md p-8 shadow-lg">
         <h1 className="text-4xl font-bold">Registration</h1>
 
         <Form {...form}>
@@ -78,7 +78,7 @@ function Register() {
               name="name"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start w-full">
+                <FormItem className="flex w-full flex-col items-start">
                   <FormLabel className="text-left">Name</FormLabel>
                   <FormControl className="w-full">
                     <Input {...field} />
@@ -92,7 +92,7 @@ function Register() {
               name="email"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start w-full">
+                <FormItem className="flex w-full flex-col items-start">
                   <FormLabel className="text-left">Email</FormLabel>
                   <FormControl className="w-full">
                     <Input {...field} />
@@ -166,7 +166,7 @@ function Register() {
               name="password"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start w-full">
+                <FormItem className="flex w-full flex-col items-start">
                   <FormLabel className="text-left">Password</FormLabel>
                   <FormControl className="w-full">
                     <Input type="password" {...field} />

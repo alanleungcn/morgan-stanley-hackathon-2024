@@ -92,7 +92,7 @@ Hong Kong`,
               name="eventDate"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Date of birth</FormLabel>
+                  <FormLabel>Date of the event</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>

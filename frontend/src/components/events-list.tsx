@@ -20,6 +20,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/api";
+import { Link } from "@tanstack/react-router";
 
 type Filter = "all" | "today" | "weekend";
 
@@ -94,7 +95,9 @@ export const EventsList = () => {
                     </div>
                   </div>
                   <div className="w-full lg:w-32">
-                    <Button className="w-full lg:w-32">Register</Button>
+                    <Link to="/events/eventDetails" className="w-full lg:w-32">
+                      <Button className="w-full lg:w-32">Register</Button>
+                    </Link>
                   </div>
                 </div>
               </CardFooter>

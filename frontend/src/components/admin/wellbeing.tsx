@@ -1,14 +1,14 @@
 import { Star } from "lucide-react";
 import {
-  BarChart,
   Bar,
+  BarChart,
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  Legend,
-  PieChart,
-  Pie,
-  Cell,
 } from "recharts";
 
 const barData = [
@@ -74,11 +74,11 @@ const COLORS = [
 export const Wellbeing = () => {
   return (
     <div className="flex justify-center">
-      <div className="p-8 max-w-[1000px] w-full flex flex-col gap-5">
+      <div className="flex w-full max-w-[1000px] flex-col gap-5 p-8">
         <h1 className="text-4xl font-bold">Wellbeing Statistics</h1>
         <div className="grid grid-cols-2 gap-8">
-          <div className="bg-white p-6 shadow rounded-lg">
-            <h2 className="text-lg font-semibold mb-4">
+          <div className="rounded-lg bg-white p-6 shadow">
+            <h2 className="mb-4 text-lg font-semibold">
               Positive Vs Negative Feedbacks
             </h2>
             <BarChart width={300} height={200} data={barData}>
@@ -90,8 +90,8 @@ export const Wellbeing = () => {
               <Bar dataKey="Negative" fill="#BD1F2D" />
             </BarChart>
           </div>
-          <div className="bg-white p-6 shadow rounded-lg">
-            <h2 className="text-lg font-semibold mb-4 text-center">Members</h2>
+          <div className="rounded-lg bg-white p-6 shadow">
+            <h2 className="mb-4 text-center text-lg font-semibold">Members</h2>
             <PieChart width={300} height={200} className="">
               <Pie
                 data={pieData}
@@ -113,8 +113,8 @@ export const Wellbeing = () => {
             </PieChart>
           </div>
         </div>
-        <div className="bg-white p-6 shadow rounded-lg">
-          <div className="flex justify-between items-center mb-4">
+        <div className="rounded-lg bg-white p-6 shadow">
+          <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-semibold">Reviews </h2>
             <a href="#" className="text-blue-600 hover:underline">
               View all
@@ -123,17 +123,17 @@ export const Wellbeing = () => {
           <table className="w-full text-left">
             <thead className="">
               <tr>
-                <th className="py-2 px-4">Name</th>
-                <th className="py-2 px-4">Rating</th>
-                <th className="py-2 px-4">Comment</th>
-                <th className="py-2 px-4">Date</th>
+                <th className="px-4 py-2">Name</th>
+                <th className="px-4 py-2">Rating</th>
+                <th className="px-4 py-2">Comment</th>
+                <th className="px-4 py-2">Date</th>
               </tr>
             </thead>
             <tbody className="">
               {reviewData.map((entry, index) => (
                 <tr className="border-t">
-                  <td className="py-2 px-4">{entry.name}</td>
-                  <td className="py-2 px-4 text-blue-600 hover:underline">
+                  <td className="px-4 py-2">{entry.name}</td>
+                  <td className="px-4 py-2 text-blue-600 hover:underline">
                     {/* {entry.rating} */}
                     <div className="flex">
                       {Array(entry.rating)
@@ -157,8 +157,8 @@ export const Wellbeing = () => {
                       <Star fill="yellow" className="text-yellow-500 mr-2" /> */}
                     </div>
                   </td>
-                  <td className="py-2 px-4"> {entry.comment}</td>
-                  <td className="py-2 px-4">{entry.date}</td>
+                  <td className="px-4 py-2"> {entry.comment}</td>
+                  <td className="px-4 py-2">{entry.date}</td>
                 </tr>
               ))}
               {/* Add more rows as needed */}

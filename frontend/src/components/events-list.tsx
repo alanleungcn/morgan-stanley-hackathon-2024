@@ -1,6 +1,7 @@
-import { LayoutGrid, LayoutList } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LayoutGrid, LayoutList } from "lucide-react";
 
+import { useEvents } from "@/api/event/use-events";
 import {
   Select,
   SelectContent,
@@ -8,13 +9,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "./ui/input";
-import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { useEvents } from "@/api/event/use-events";
-import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
-import EventCard from "./event-card";
 import { useRouter } from "@tanstack/react-router";
+import { useState } from "react";
+import EventCard from "./event-card";
+import { Input } from "./ui/input";
+import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 
 type Filter = "all" | "today" | "weekend";
 
@@ -69,8 +69,8 @@ export const EventsList = () => {
             <Button
               variant="ghost"
               className={cn(
-                filter === f && "border-b-4 rounded-none border-primary",
-                "capitalize px-4",
+                filter === f && "rounded-none border-b-4 border-primary",
+                "px-4 capitalize",
               )}
               onClick={() => setFilter(f as Filter)}
             >
@@ -82,7 +82,7 @@ export const EventsList = () => {
 
       <div
         className={cn(
-          "grid grid-cols-1 sm:grid-cols-2 gap-4 md:grid-cols-3",
+          "grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3",
           layout === "list" && "!grid-cols-1",
         )}
       >

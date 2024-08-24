@@ -1,7 +1,5 @@
-import { CalendarIcon } from "lucide-react";
-import { add, format } from "date-fns";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
@@ -10,19 +8,21 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { toast } from "@/components/ui/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { toast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { add, format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const eventSchema = z.object({
   eventName: z.string(),
@@ -65,19 +65,19 @@ Hong Kong`,
 
   return (
     <div className="flex justify-center">
-      <div className="p-8 max-w-[1000px] w-full flex flex-col gap-12">
+      <div className="flex w-full max-w-[1000px] flex-col gap-12 p-8">
         <h1 className="text-4xl font-bold">Event Creation</h1>
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-8"
+            className="grid grid-cols-1 gap-8 sm:grid-cols-2"
           >
             <FormField
               name="eventName"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start w-full">
+                <FormItem className="flex w-full flex-col items-start">
                   <FormLabel>Event Name</FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -130,7 +130,7 @@ Hong Kong`,
               name="eventDescription"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start w-full">
+                <FormItem className="flex w-full flex-col items-start">
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -144,7 +144,7 @@ Hong Kong`,
               name="numberOfParticipantsNeeded"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start w-full">
+                <FormItem className="flex w-full flex-col items-start">
                   <FormLabel>Max. No. of Participants</FormLabel>
                   <FormControl>
                     <Input {...field} type="number" />
@@ -158,7 +158,7 @@ Hong Kong`,
               name="numberOfVolunteersNeeded"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start w-full">
+                <FormItem className="flex w-full flex-col items-start">
                   <FormLabel>Max. No. of Volunteers</FormLabel>
                   <FormControl>
                     <Input {...field} type="number" />
@@ -172,7 +172,7 @@ Hong Kong`,
               name="eventLocation"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start w-full">
+                <FormItem className="flex w-full flex-col items-start">
                   <FormLabel>Location</FormLabel>
                   <FormControl>
                     <Textarea
@@ -190,7 +190,7 @@ Hong Kong`,
               name="eventType"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex flex-col items-start w-full">
+                <FormItem className="flex w-full flex-col items-start">
                   <FormLabel>Event Type</FormLabel>
                   <FormControl>
                     <ToggleGroup

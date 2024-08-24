@@ -1,3 +1,5 @@
+import { Event } from "@/api/event/use-events";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -5,12 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Calendar, Clock, Contact, UsersRound } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Event } from "@/api/event/use-events";
-import { isSameDay } from "date-fns";
-import { formatDateWithWeekday, formatTime } from "@/utils/date";
 import { cn } from "@/lib/utils";
+import { formatDateWithWeekday, formatTime } from "@/utils/date";
+import { isSameDay } from "date-fns";
+import { Calendar, Clock, Contact, UsersRound } from "lucide-react";
 
 type Props = {
   event: Event;
@@ -29,18 +29,18 @@ export default function EventCard({
 }: Props) {
   return (
     <Card className={cn(className, "flex flex-row")}>
-      <CardHeader className="p-0 w-1/3 overflow-hidden">
-        <img src={event.imageURL} className="w-full h-full object-contain" />
+      <CardHeader className="w-1/3 overflow-hidden p-0">
+        <img src={event.imageURL} className="h-full w-full object-contain" />
       </CardHeader>
       <div className="w-2/3">
-        <CardTitle className="p-4 sm:p-6 text-sm sm:text-xl">
+        <CardTitle className="p-4 text-sm sm:p-6 sm:text-xl">
           {event.eventName}
         </CardTitle>
         <CardContent className="p-4 pt-0 text-sm sm:text-base">
           {event.eventDescription}
         </CardContent>
         <CardFooter className="px-4">
-          <div className="flex w-full justify-between items-start flex-col lg:flex-row gap-4">
+          <div className="flex w-full flex-col items-start justify-between gap-4 lg:flex-row">
             <div className="flex flex-col">
               {isSameDay(event.eventStartDate, event.eventEndDate) ? (
                 <div>
@@ -63,14 +63,14 @@ export default function EventCard({
                 </div>
               )}
 
-              <div className="flex gap-2 items-center text-sm">
-                <UsersRound className="w-4 h-4" />
+              <div className="flex items-center gap-2 text-sm">
+                <UsersRound className="h-4 w-4" />
                 {event.numberOfParticipants} /{" "}
                 {event.numberOfParticipantsNeeded} participants
               </div>
 
-              <div className="flex gap-2 items-center text-sm">
-                <Contact className="w-4 h-4" />
+              <div className="flex items-center gap-2 text-sm">
+                <Contact className="h-4 w-4" />
                 {event.numberOfVolunteers} / {event.numberOfVolunteersNeeded}{" "}
                 volunteers
               </div>

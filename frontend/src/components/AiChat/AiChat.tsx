@@ -1,54 +1,34 @@
-import * as Popover from "@radix-ui/react-popover";
 import { AiChat, useAsStreamAdapter } from "@nlux/react";
-import { send } from "./send";
-import { personas } from "./personas";
-
 import "@nlux/themes/nova.css";
-
+import { MessageSquareText } from "lucide-react";
+import { Button } from "../ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { personas } from "./personas";
+import { send } from "./send";
 import "./theme-variables.css";
 
 export default function NavAvatar() {
   const adapter = useAsStreamAdapter(send, []);
   return (
-    <Popover.Root>
-      <Popover.Trigger asChild>
-        <div className="fixed bottom-4 right-4 cursor-pointer">
-          <button className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
-            <svg
-              className="h-9 w-9 text-black-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-              />
-            </svg>
-          </button>
-        </div>
-      </Popover.Trigger>
-      <Popover.Portal>
-        <Popover.Content className="PopoverContent fixed z-40" sideOffset={5}>
-          <div className="fixed z-40 bottom-[50px] right-4 w-[500px] border-black border-2 border-solid rounded-[20px] h-[550px]">
-            {/* Dummy container content can be added here */}
-            <AiChat
-              displayOptions={{
-                // themeId: "MyBrandName",
-                colorScheme: "light",
-              }}
-              personaOptions={personas}
-              adapter={adapter}
-            />
-          </div>
-          <Popover.Close className="PopoverClose" aria-label="Close">
-            {/* <div className="flex top-0 left-0">X</div> */}
-          </Popover.Close>
-          {/* <Popover.Arrow className="PopoverArrow" /> */}
-        </Popover.Content>
-      </Popover.Portal>
-    </Popover.Root>
+    <Popover>
+      <PopoverTrigger className="fixed bottom-4 right-4">
+        <Button size="icon" className="h-12 w-12 rounded-full">
+          <MessageSquareText />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent
+        sideOffset={8}
+        collisionPadding={8}
+        className="w-9/10 h-96 max-w-96"
+      >
+        <AiChat
+          displayOptions={{
+            colorScheme: "light",
+          }}
+          personaOptions={personas}
+          adapter={adapter}
+        />
+      </PopoverContent>
+    </Popover>
   );
 }

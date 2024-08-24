@@ -1,8 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { Card } from "@/components/ui/card";
+import { createFileRoute } from "@tanstack/react-router";
 
-import { Register } from "@/components/user/register";
 import { useEventDetails } from "@/api/event/use-event-details";
+import { Register } from "@/components/user/register";
 
 // interface Event {
 //   event_id: number;
@@ -53,21 +53,21 @@ function EventDetails() {
   // };
 
   return event ? (
-    <div className="container mx-auto px-24 py-4 space-y-8 pb-24">
+    <div className="container mx-auto space-y-8 px-24 py-4 pb-24">
       <div className="flex">
         <div className="w-1/2 pr-4">
           <Card className="overflow-hidden">
             <img
               src="/event-poster-1.jpg"
               alt={event.eventName}
-              className="w-full h-auto max-h-96 object-contain"
+              className="h-auto max-h-96 w-full object-contain"
             />
           </Card>
         </div>
-        <div className="w-1/2 pl-4 space-y-12">
+        <div className="w-1/2 space-y-12 pl-4">
           <h1 className="text-4xl font-bold">{event.eventName}</h1>
           <div>
-            <h2 className="text-2xl font-semibold flex items-center">
+            <h2 className="flex items-center text-2xl font-semibold">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"

@@ -1,20 +1,20 @@
-import { useState } from "react";
+import { Event } from "@/api/event/use-events";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Calendar, Clock, Terminal } from "lucide-react";
-import { Event } from "@/api/event/use-events";
-import { isSameDay } from "date-fns";
 import { formatDateWithWeekday, formatTime } from "@/utils/date";
+import { isSameDay } from "date-fns";
+import { Calendar, Clock, Terminal } from "lucide-react";
+import { useState } from "react";
 
 interface Props {
   event: Event;
@@ -46,7 +46,7 @@ export function Register({ event, onRegister }: Props) {
   };
 
   return (
-    <div className="flex justify-center mt-8">
+    <div className="mt-8 flex justify-center">
       {isFull ? (
         <Alert>
           <Terminal className="h-4 w-4" />
@@ -56,7 +56,7 @@ export function Register({ event, onRegister }: Props) {
       ) : (
         <>
           <Button
-            className="px-4 py-2 bg-blue-500 text-white rounded"
+            className="rounded bg-blue-500 px-4 py-2 text-white"
             onClick={() => setDialogOpen(true)}
           >
             {confirmedRole
@@ -85,7 +85,7 @@ export function Register({ event, onRegister }: Props) {
                           Register as Participant
                         </Label>
                       </div>
-                      <div className="flex items-center space-x-2 mt-2">
+                      <div className="mt-2 flex items-center space-x-2">
                         <RadioGroupItem
                           value="volunteer"
                           id="volunteer"

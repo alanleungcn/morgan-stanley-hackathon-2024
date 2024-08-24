@@ -1,9 +1,9 @@
 import * as Avatar from "@radix-ui/react-avatar";
 // import { Star } from 'phosphor-react'; // You can use any icon library you prefer
-import { Star } from "lucide-react";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Star } from "lucide-react";
+import { useState } from "react";
 import { LeaderboardItem } from "./leaderboard-item";
 type Filter = "Participants" | "Volunteers";
 
@@ -69,15 +69,15 @@ export const LeaderboardList = () => {
   ];
 
   return (
-    <div className="bg-gray-100 p-4 rounded-lg w-full">
+    <div className="w-full rounded-lg bg-gray-100 p-4">
       <div className="flex pb-10">
         {["Participants", "Volunteers"].map((f) => {
           return (
             <Button
               variant="ghost"
               className={cn(
-                filter === f && "border-b-4 rounded-none border-primary",
-                "capitalize px-12",
+                filter === f && "rounded-none border-b-4 border-primary",
+                "px-12 capitalize",
               )}
               onClick={() => setFilter(f as Filter)}
             >
@@ -86,7 +86,7 @@ export const LeaderboardList = () => {
           );
         })}
       </div>
-      <h2 className="text-lg font-bold border-b  pb-2 mb-2">LEADERBOARD</h2>
+      <h2 className="mb-2 border-b pb-2 text-lg font-bold">LEADERBOARD</h2>
       <ul>
         {filter === "Participants" ? (
           <LeaderboardItem data={participantData} />
@@ -94,16 +94,16 @@ export const LeaderboardList = () => {
           volunteerData.map((user, index) => (
             <li
               key={index}
-              className="flex items-center justify-between bg-white p-4 mb-2 rounded-lg shadow-sm border-[#FDED1B] border"
+              className="mb-2 flex items-center justify-between rounded-lg border border-[#FDED1B] bg-white p-4 shadow-sm"
             >
-              <div className="flex items-center  ">
-                <span className="text-xl font-bold mr-4">{index + 1}</span>
-                <Avatar.Root className="w-10 h-10 rounded-full overflow-hidden bg-gray-200">
+              <div className="flex items-center">
+                <span className="mr-4 text-xl font-bold">{index + 1}</span>
+                <Avatar.Root className="h-10 w-10 overflow-hidden rounded-full bg-gray-200">
                   {user.imageUrl ? (
                     <Avatar.Image src={user.imageUrl} alt={user.name} />
                   ) : (
                     <Avatar.Fallback>
-                      <span className="flex items-center justify-center w-full h-full text-xl font-bold">
+                      <span className="flex h-full w-full items-center justify-center text-xl font-bold">
                         {user.name.charAt(0)}
                       </span>
                     </Avatar.Fallback>
@@ -114,7 +114,7 @@ export const LeaderboardList = () => {
                 </div>
               </div>
               <div className="flex items-center">
-                <Star fill="yellow" className="text-yellow-500 mr-2" />
+                <Star fill="yellow" className="mr-2 text-yellow-500" />
                 <span className="font-bold">{user.events} events</span>
               </div>
             </li>

@@ -4,12 +4,15 @@ import pandas as pd
 import altair as alt
 import json
 import datetime as datetime
+import random
+
 
 from flask import request, jsonify, send_file, redirect
 from config import app, db, mail
 from flask_mail import Mail, Message
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from models import User, Participant, Volunteer, Course, Wellbeing, Event, Reviews, takes,EventType
+from faker import Faker
 
 login_manager = LoginManager(app)
 
@@ -39,10 +42,10 @@ def login():
     # """
 
     json_data = request.get_json()
-    data = json.loads(json_data)
+    #data = json.loads(json_data)
     
-    username = data['username']
-    password = data['password']
+    username = json_data['username']
+    password = json_data['password']
     user = User.query.filter_by(username=username, password=password).first()
 
     if user:
@@ -87,89 +90,125 @@ def index():
 
     return "Email sent successfully!"
 
+
+fake = Faker()
+
 @app.route("/seed_DB", methods=['POST'])
 def seed_DB():
-    # admin1 = Admin(username="admin", password="admin")
-    user1 = User(
-        username = "aidan215",
-        password="password"
-    )
-    participant1 = Participant(
-        username="aidan215",
-        password="password", 
-        email="aidan21@connect.hku.hk",
-        name = "Aidan",
-        date_of_birth = datetime.datetime(2000, 1, 1),
-        phone_number="12345678",
-        number_of_participated_events=10,
-        preferred_event_type = EventType.SOCIAL_GATHERING.value,
-        
-    ) # Plz dont spam me!
-    
-    Event1 = Event(
-        event_name = "Coffee Chat",
-        event_date = datetime.datetime(2021, 5, 1),
-        event_location = "Starbucks",
-        event_description = "A casual coffee chat",
-        number_of_participants_needed=10,
-        number_of_volunteers_needed=2,
-        event_type = EventType.SOCIAL_GATHERING,
-    )
-    
-    participant1.events.append(Event1)
-    
-    Volunteer1 = Volunteer(
-        username="volunteer1",
-        password="password",
-        email="volunteer1@gmail.com",
-        name = "Volunteer",
-        date_of_birth = datetime.datetime(2000, 1, 1),
-        phone_number="12345678",
-        number_of_volunteered_events=5,
-        preferred_event_type = EventType.SOCIAL_GATHERING.value,
-        
-    )
-    
-    Course1 = Course(
-        course_name = "social event planning",
-        course_description = "learn how to plan social events",
-        course_type = "Social Gathering",
-        course_url = "https://www.google.com",
-    )
-    
-    Volunteer1.courses.append(Course1)
-    Volunteer1.events.append(Event1)
-    
-    Reviews1 = Reviews(
-        review_rating = 5,
-        review_feedback = "Great event!",
-        event_id = 1,
-        user_id = 1 # need to query this user_id from the db of who submit the form
-    )
-    
-    Wellbeing1 = Wellbeing(
-        wellbeing_score = 5,
-        user_id = 1 # need to query this user_id from the db of who submit the form
-    )
-    
     try:
         db.drop_all()
         db.create_all()
-        
-        # db.session.add(admin1)
-        db.session.add(user1)
-        db.session.add(participant1)
-        db.session.add(Event1)
-        db.session.add(Volunteer1)
-        db.session.add(Course1)
-        db.session.add(Reviews1)
-        db.session.add(Wellbeing1)
-        
+
+        users = []
+        participants = []
+        events = []
+        volunteers = []
+        courses = []
+        reviews = []
+        wellbeings = []
+
+        # Create 50 users
+
+        admin = User(
+            username="admin",
+            password="admin_password",
+            is_admin=True
+        )
+        users.append(admin)
+        db.session.add(admin)
+
+        for _ in range(50):
+            user = User(
+                username=fake.user_name(),
+                password="password"
+            )
+            users.append(user)
+            db.session.add(user)
+
+        db.session.commit()  # Commit users to get their IDs
+
+        # Create 50 participants
+        for _ in range(50):
+            participant = Participant(
+                username=fake.user_name(),
+                password="password",
+                email=fake.email(),
+                name=fake.name(),
+                date_of_birth=fake.date_of_birth(),
+                phone_number=fake.phone_number(),
+                number_of_participated_events=random.randint(1, 20),
+                preferred_event_type=random.choice([e.value for e in EventType]),
+            )
+            participants.append(participant)
+            db.session.add(participant)
+
+        # Create 50 events
+        for _ in range(50):
+            event = Event(
+                event_name=fake.catch_phrase(),
+                event_date=fake.date_time_this_year(),
+                event_location=fake.address(),
+                event_description=fake.text(),
+                number_of_participants_needed=random.randint(5, 20),
+                number_of_volunteers_needed=random.randint(1, 5),
+                event_type=random.choice(list(EventType)),
+            )
+            events.append(event)
+            db.session.add(event)
+
+        # Create 50 volunteers
+        for _ in range(50):
+            volunteer = Volunteer(
+                username=fake.user_name(),
+                password="password",
+                email=fake.email(),
+                name=fake.name(),
+                date_of_birth=fake.date_of_birth(),
+                phone_number=fake.phone_number(),
+                number_of_volunteered_events=random.randint(1, 20),
+                preferred_event_type=random.choice([e.value for e in EventType]),
+            )
+            volunteers.append(volunteer)
+            db.session.add(volunteer)
+
+        # Create 50 courses
+        for _ in range(50):
+            course = Course(
+                course_name=fake.catch_phrase(),
+                course_description=fake.text(),
+                course_type="Social Gathering",
+                course_url=fake.url(),
+            )
+            courses.append(course)
+            db.session.add(course)
+
+        db.session.commit()  # Commit participants, events, volunteers, and courses to get their IDs
+
+        # Create 50 reviews
+        for _ in range(50):
+            review = Reviews(
+                review_rating=random.randint(1, 5),
+                review_feedback=random.choice(["Good event", "Average event", "Could be organized better"]),
+                event_id=random.choice([event.event_id for event in events]),
+                user_id=random.choice([user.user_id for user in users if not user.is_admin])
+            )
+            reviews.append(review)
+            db.session.add(review)
+
+        # Create 50 wellbeings
+        for _ in range(50):
+            wellbeing = Wellbeing(
+                wellbeing_score=random.randint(1, 10),
+                user_id=random.choice([user.user_id for user in users if not user.is_admin])
+            )
+            wellbeings.append(wellbeing)
+            db.session.add(wellbeing)
+
         db.session.commit()
         return jsonify({"message": "success"})
     except Exception as e:
         db.session.rollback()
-        return jsonify({"message": str(e)}),400
+        return jsonify({"message": str(e)}), 400
     finally:
         db.session.close()
     return jsonify({"message": "exited"})

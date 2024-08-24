@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Users } from "lucide-react";
+import { LayoutGrid, LayoutList } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -18,24 +11,29 @@ import {
 import { Input } from "./ui/input";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { apiClient } from "@/api";
+import { useEvents } from "@/api/event/use-events";
+import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
+import EventCard from "./event-card";
 
 type Filter = "all" | "today" | "weekend";
 
 export const EventsList = () => {
   const [filter, setFilter] = useState<Filter>("all");
 
-  const { data, isSuccess } = useQuery({
-    queryKey: ["root"],
-    queryFn: () => apiClient.get("/").then((res) => res.data),
-  });
+  // const { data, isSuccess } = useQuery({
+  //   queryKey: ["root"],
+  //   queryFn: () => apiClient.get("/").then((res) => res.data),
+  // });
+
+  const { data } = useEvents();
+
+  const [layout, setLayout] = useState<"grid" | "list">("list");
 
   return (
     <div className="flex flex-col gap-8">
-      {isSuccess ? "asdfsfsdf" : "false"}
-      {JSON.stringify(data)}
       <div className="flex gap-4">
+        <Input type="email" placeholder="Search" />
+
         <Select>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Event Type" />
@@ -46,7 +44,20 @@ export const EventsList = () => {
             <SelectItem value="...">...</SelectItem>
           </SelectContent>
         </Select>
-        <Input type="email" placeholder="Search" />
+
+        <ToggleGroup
+          type="single"
+          value={layout}
+          // @ts-expect-error string is right
+          onValueChange={(v) => setLayout(v)}
+        >
+          <ToggleGroupItem value="list" aria-label="Toggle bold">
+            <LayoutList className="h-4 w-4" />
+          </ToggleGroupItem>
+          <ToggleGroupItem value="grid" aria-label="Toggle italic">
+            <LayoutGrid className="h-4 w-4" />
+          </ToggleGroupItem>
+        </ToggleGroup>
       </div>
 
       <div className="flex">
@@ -66,39 +77,20 @@ export const EventsList = () => {
         })}
       </div>
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-        {Array.from(Array(8)).map(() => {
+      <div
+        className={cn(
+          "grid grid-cols-2 gap-4 md:grid-cols-3",
+          layout === "list" && "!grid-cols-1",
+        )}
+      >
+        {data?.map((e) => {
           return (
-            <Card className="">
-              <CardHeader className="p-0">
-                <img src="/event-poster-1.jpg" className="h-48 object-cover" />
-                <CardTitle className="p-6">Big Impact Workshop</CardTitle>
-                {/* <CardDescription>Card Description</CardDescription> */}
-              </CardHeader>
-              <CardContent>
-                <p className="h-32 text-ellipsis overflow-hidden">
-                  Join us for BioImpact 2024, hosted by the HKU iGEM Team and
-                  HKU Unicef Club! This event is packed with exciting activities
-                  and insights that will open your eyes to the possibilities in
-                  this field. ...
-                </p>
-              </CardContent>
-              <CardFooter>
-                <div className="flex w-full justify-between items-center flex-col lg:flex-row gap-4">
-                  <div className="flex flex-col">
-                    <div>25 Aug (Sun)</div>
-                    <div>11 am - 12 noon</div>
-                    <div className="flex gap-2 items-center">
-                      <Users size={16} />
-                      1/100 participants
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-32">
-                    <Button className="w-full lg:w-32">Register</Button>
-                  </div>
-                </div>
-              </CardFooter>
-            </Card>
+            <EventCard
+              event={e}
+              buttonAction={() => {}}
+              buttonText="Details"
+              layout={layout}
+            />
           );
         })}
       </div>

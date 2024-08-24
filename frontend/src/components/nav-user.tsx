@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Link } from "@tanstack/react-router";
 import { CalendarDays, LogOut, User } from "lucide-react";
-import { Button, buttonVariants } from "./ui/button";
+import { buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
 
 export default function NavUser() {

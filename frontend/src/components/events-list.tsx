@@ -18,14 +18,23 @@ import {
 import { Input } from "./ui/input";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { apiClient } from "@/api";
 
 type Filter = "all" | "today" | "weekend";
 
 export const EventsList = () => {
   const [filter, setFilter] = useState<Filter>("all");
 
+  const { data, isSuccess } = useQuery({
+    queryKey: ["root"],
+    queryFn: () => apiClient.get("/").then((res) => res.data),
+  });
+
   return (
     <div className="flex flex-col gap-8">
+      {isSuccess ? "asdfsfsdf" : "false"}
+      {JSON.stringify(data)}
       <div className="flex gap-4">
         <Select>
           <SelectTrigger className="w-[180px]">

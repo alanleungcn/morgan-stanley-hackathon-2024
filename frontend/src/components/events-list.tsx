@@ -67,6 +67,7 @@ export const EventsList = () => {
         {["all", "today", "weekend"].map((f) => {
           return (
             <Button
+              key={f}
               variant="ghost"
               className={cn(
                 filter === f && "rounded-none border-b-4 border-primary",
@@ -89,6 +90,7 @@ export const EventsList = () => {
         {data?.map((e) => {
           return (
             <EventCard
+              key={e.eventId}
               event={e}
               buttonAction={() =>
                 router.navigate({ to: `/events/event-details/${e.eventId}` })

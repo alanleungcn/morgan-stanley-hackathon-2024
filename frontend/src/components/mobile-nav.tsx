@@ -80,6 +80,7 @@ export default function MobileNav({ open, setOpen }: Props) {
           <div className="flex flex-col gap-2">
             {routes.map((r) => (
               <div
+                key={r.route}
                 className={cn(
                   "flex h-12 w-full flex-col overflow-y-auto",
                   r.route === pathname && "border-l-8 border-primary",

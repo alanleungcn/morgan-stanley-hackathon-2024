@@ -65,61 +65,58 @@ function EventDetails() {
 
   return (
     <div className="container mx-auto px-24 py-4 space-y-8 pb-24">
-      <Card className="overflow-hidden">
-        <img
-          src="/event-poster-1.jpg"
-          alt={event.event_name}
-          className="w-full h-auto max-h-96 object-contain"
-        />
-      </Card>
-      <div className="space-y-12">
-        <h1 className="text-4xl font-bold">{event.event_name}</h1>{" "}
-        {/* Larger event name */}
-        <div>
-          <h2 className="text-2xl font-semibold flex items-center">
-            {" "}
-            {/* Uniform heading size */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="#3A3247"
-              viewBox="0 0 24 24"
-              className="mr-2"
+      <div className="flex">
+        <div className="w-1/2 pr-4">
+          <Card className="overflow-hidden">
+            <img
+              src="/event-poster-1.jpg"
+              alt={event.event_name}
+              className="w-full h-auto max-h-96 object-contain"
+            />
+          </Card>
+        </div>
+        <div className="w-1/2 pl-4 space-y-12">
+          <h1 className="text-4xl font-bold">{event.event_name}</h1>
+          <div>
+            <h2 className="text-2xl font-semibold flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="#3A3247"
+                viewBox="0 0 24 24"
+                className="mr-2"
+              >
+                <path
+                  d="M17 11h2V6h-2V4h-2v2H9V4H7v2H5v13h6v-2H7v-7h10zm0 1c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4 1.8-4 4-4m-.6 5.9 2.9-2.9-.9-.9-2.1 2.1-.7-.8-.8.8z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+              Date and Time
+            </h2>
+            <p className="text-lg font-medium text-gray-700">
+              {formatDate(event.event_date)}
+            </p>
+          </div>
+          <div>
+            <h2 className="text-2xl font-semibold">Location</h2>
+            <p className="text-lg">{event.event_location}</p>
+            <a
+              href="https://www.google.com/maps"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500"
             >
-              <path
-                d="M17 11h2V6h-2V4h-2v2H9V4H7v2H5v13h6v-2H7v-7h10zm0 1c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4 1.8-4 4-4m-.6 5.9 2.9-2.9-.9-.9-2.1 2.1-.7-.8-.8.8z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-            Date and Time
-          </h2>
-          <p className="text-lg font-medium text-gray-700">
-            {formatDate(event.event_date)}
-          </p>
-        </div>
-        <div>
-          <h2 className="text-2xl font-semibold">Location</h2>{" "}
-          {/* Uniform heading size */}
-          <p className="text-lg">{event.event_location}</p>{" "}
-          {/* Consistent content size */}
-          <a
-            href="https://www.google.com/maps"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500"
-          >
-            Show map
-          </a>
-        </div>
-        <div>
-          <h2 className="text-2xl font-semibold">About this event</h2>{" "}
-          {/* Uniform heading size */}
-          <p className="text-lg">{event.event_description}</p>{" "}
-          {/* Consistent content size */}
+              Show map
+            </a>
+          </div>
+          <div>
+            <h2 className="text-2xl font-semibold">About this event</h2>
+            <p className="text-lg">{event.event_description}</p>
+          </div>
+          <Register onRegister={handleRegister} event={event} />
         </div>
       </div>
-      <Register onRegister={handleRegister} />
     </div>
   );
 }

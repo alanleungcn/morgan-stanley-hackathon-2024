@@ -1,7 +1,6 @@
 import { AiChat, useAsStreamAdapter } from "@nlux/react";
 import "@nlux/themes/nova.css";
 import { MessageSquareText } from "lucide-react";
-import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { personas } from "./personas";
 import { send } from "./send";
@@ -11,10 +10,8 @@ export default function NavAvatar() {
   const adapter = useAsStreamAdapter(send, []);
   return (
     <Popover>
-      <PopoverTrigger className="fixed bottom-4 right-4">
-        <Button size="icon" className="h-12 w-12 rounded-full">
-          <MessageSquareText />
-        </Button>
+      <PopoverTrigger className="fixed bottom-4 right-4 grid h-12 w-12 place-items-center rounded-full bg-primary shadow">
+        <MessageSquareText />
       </PopoverTrigger>
       <PopoverContent
         sideOffset={8}

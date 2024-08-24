@@ -32,17 +32,17 @@ const eventSchema = z.object({
 
 export const Route = createFileRoute("/admin/manage-events")({
   component: AddEvent,
-  defaultValues: {
-    eventName: "Event Name",
-    eventDate: new Date("2000-01-01"),
-    location: "location",
-    capacity: "0",
-  },
 });
 
 function AddEvent() {
   const form = useForm<z.infer<typeof eventSchema>>({
     resolver: zodResolver(eventSchema),
+    defaultValues: {
+      eventName: "Event Name",
+      eventDate: new Date("2000-01-01"),
+      location: "location",
+      capacity: 0,
+    },
   });
 
   function onSubmit(data: z.infer<typeof eventSchema>) {

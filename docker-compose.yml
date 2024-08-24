@@ -9,6 +9,15 @@ services:
       - 8000:8000
     environment:
       - WEB_PORT=8000
+      - VITE_BACCKEND_BASE_URL=backend:9000
+  backend:
+    build: backend
+    networks:
+      - internal
+    ports:
+      - 9000:9000
+    environment:
+      - FLASK_RUN_PORT=9000
 
 networks:
   internal:

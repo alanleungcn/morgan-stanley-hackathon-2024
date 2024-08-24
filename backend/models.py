@@ -87,11 +87,11 @@ class takes(db.Model):
             "completed": self.completed
         }
 class EventType(enum.Enum):
-    SOCIAL_GATHERING = "Social Gathering"
-    COUNSELLING = "Counselling"
-    TRAINING = "Training"
-    WORKSHOP = "Workshop"
-    OTHER = "Other"
+    SOCIAL_GATHERING = ("Social Gathering", ["chai", "storytelling", "elderly"])
+    COUNSELLING = ("Counselling", ["children", "adult", "women&girls", "jobs", "internships", "scholarships"])
+    TRAINING = ("Training", ["training"])
+    WORKSHOP = ("Workshop", ["parent", "mental health"])
+    OTHER = ("Other", ["helpline", "urgent", "limited period", "one-time"])
 
 class Event(db.Model):
     __tablename__ = "event"
@@ -248,4 +248,3 @@ class Wellbeing(db.Model):
             "wellbeingScore": self.wellbeing_score,
             "createdAt": self.created_at
         }
-

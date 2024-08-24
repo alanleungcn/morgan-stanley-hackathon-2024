@@ -8,7 +8,7 @@ import random
 
 
 from flask import request, jsonify, send_file, redirect
-from config import app, db, mail,photos,patch_request_class
+from config import app, db, mail
 from flask_mail import Mail, Message
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from models import User, Participant, Volunteer, Course, Wellbeing, Event, Reviews, takes,EventType
@@ -33,6 +33,14 @@ def admin_required(f):
             return jsonify({"message": "Unauthorized"}), 401
         return f(*args, **kwargs)
     return decorated_function
+
+def send_email(subject, body, list_of_recipients):
+    mail_message = Message(
+        subject=subject,
+        recipients = list_of_recipients,
+        sender = 'sender@gmail.com')
+    mail_message.body = body
+    mail.send(mail_message)
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -62,32 +70,15 @@ def logout():
     return jsonify({"message": "Logged out successfully"}), 200
 
 @app.route("/send_mail", methods=['POST'])
-def index():
-
-    json_data = """ {
-    "subject": "Announcement Test",
-    "body": "This is a test body message",
-    "recipients": [ 
-        {"email":"justforhongkong1@gmail.com"}, 
-        {"email":"mustafaabylkhanuli@gmail.com"}
-    ]}
-    """
-    data = json_data
+def send():
     
-    json_data = request.get_json()
-    data = json.loads(json_data)
+    data = request.get_json()
 
     recipients = []
     for item in data['recipients']:
         recipients.append(item['email']) 
 
-    mail_message = Message(
-        subject=data['subject'],
-        recipients = recipients,
-        sender = 'sender@gmail.com')
-        
-    mail_message.body = data['body']
-    mail.send(mail_message)
+    send_email(data['subject'], data['body'], recipients)
 
     return "Email sent successfully!"
 
@@ -231,8 +222,6 @@ def create_event():
     data = request.get_json()
     event = Event(
         event_name=data['eventName'],
-        # event_start_date=datetime.strptime(data['eventStartDate'], '%Y-%m-%d %H:%M:%S'),
-        # event_end_date=datetime.strptime(data['eventEndDate'], '%Y-%m-%d %H:%M:%S'),
         event_start_date=data['eventStartDate'],
         event_end_date=data['eventEndDate'],
         event_location=data['eventLocation'],
@@ -276,7 +265,19 @@ def search_events():
     finally:
         db.session.close()
 
+@app.route('/events', methods=['GET'])
+def get_all_events():
+    events = Event.query.all()
+    event_list = [event.to_json() for event in events]
+    
+    event_type_tags = {event_type.name: event_type.value[1] for event_type in EventType}
 
+    response_data = {
+        "events": event_list,
+        "event_type_tags": event_type_tags
+    }
+
+    return jsonify(response_data), 200
 
 @app.route('/events/<int:event_id>', methods=['GET'])
 def get_event(event_id):
@@ -441,4 +442,3 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
     app.run(debug=True)
-

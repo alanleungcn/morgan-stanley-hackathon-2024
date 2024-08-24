@@ -1,16 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { Profile } from "@/components/user/profile";
 import { Wellbeing } from "@/components/user/wellbeing";
+import { Myevents } from "@/components/user/myevents";
+import { Progress } from "@/components/user/progress";
+import { Volunteered } from "@/components/user/volunteered";
+
 import { cn } from "@/lib/utils";
 import { createFileRoute } from "@tanstack/react-router";
-import { HeartHandshake, LucideIcon, User2 } from "lucide-react";
+import { BarChart, Calendar, HandHelping, HeartHandshake, LucideIcon, User2 } from "lucide-react";
 import { useState } from "react";
+// import { uptime } from "process";
 
 export const Route = createFileRoute("/user/")({
   component: User,
 });
 
-type Tab = "profile" | "wellbeing";
+type Tab = "profile" | "wellbeing" | "myevents" | "progress" | "volunteered";
 
 type TabItem = {
   tab: Tab;
@@ -32,6 +37,24 @@ const tabs: TabItem[] = [
     label: "Wellbeing",
     render: Wellbeing,
   },
+  {
+    tab: "myevents",
+    icon: Calendar,
+    label: "Myevents",
+    render: Myevents,
+  },
+  {
+    tab: "progress",
+    icon: BarChart,
+    label: "Progress",
+    render: Progress,
+  },
+  {
+    tab: "volunteered",
+    icon: HandHelping,
+    label: "Volunteered",
+    render: Volunteered,
+  },
 ];
 
 function User() {
@@ -39,7 +62,7 @@ function User() {
 
   return (
     <div className="flex justify-center">
-      <div className="p-8 flex flex-col gap-12 w-72">
+      <div className="flex flex-col gap-12 p-8 w-72">
         <h1 className="text-4xl font-bold">Settings</h1>
 
         <div className="flex flex-col gap-2">

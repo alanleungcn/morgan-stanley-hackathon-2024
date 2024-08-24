@@ -41,21 +41,21 @@ export default function NavUser() {
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <Link to="/user">
-              <div className="flex gap-2 items-center">
+              <div className="flex items-center gap-2">
                 <Cog size={16} />
                 Settings
               </div>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <div className="flex gap-2 items-center">
+            <div className="flex items-center gap-2">
               <CalendarDays size={16} />
               My Events
             </div>
           </DropdownMenuItem>
           {/* <DropdownMenuItem>Volunteer Account</DropdownMenuItem> */}
           <DropdownMenuItem>
-            <div className="flex gap-2 items-center">
+            <div className="flex items-center gap-2">
               <LogOut size={16} />
               Logout
             </div>

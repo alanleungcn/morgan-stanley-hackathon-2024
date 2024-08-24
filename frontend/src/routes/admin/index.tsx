@@ -85,7 +85,10 @@ function Admin() {
             >
               <Button
                 variant="ghost"
-                className={cn("w-full truncate gap-4 !justify-start")}
+                className={cn(
+                  "w-full truncate gap-4 !justify-start",
+                  tab === t.tab && "bg-secondary/50",
+                )}
                 onClick={() => setTab(t.tab)}
               >
                 <t.icon size={20} />

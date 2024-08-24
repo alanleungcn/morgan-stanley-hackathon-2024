@@ -31,8 +31,8 @@ export default function NavAvatar() {
         </div>
       </Popover.Trigger>
       <Popover.Portal>
-        <Popover.Content className="PopoverContent" sideOffset={5}>
-          <div className="fixed bottom-[-5px] right-4 w-[500px] border-black border-2 border-solid rounded-[20px] h-[550px]">
+        <Popover.Content className="PopoverContent fixed z-40" sideOffset={5}>
+          <div className="fixed z-40 bottom-[50px] right-4 w-[500px] border-black border-2 border-solid rounded-[20px] h-[550px]">
             {/* Dummy container content can be added here */}
             <AiChat
               displayOptions={{

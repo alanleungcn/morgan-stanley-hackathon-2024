@@ -3,6 +3,8 @@ from sqlalchemy.orm import declared_attr, declarative_mixin
 from sqlalchemy import Enum
 import enum
 
+from datetime import datetime
+
 # Database models
 # class Admin(db.Model):
 #     admin_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -93,7 +95,8 @@ class Event(db.Model):
     __tablename__ = "event"
     event_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     event_name = db.Column(db.String(100), nullable=False)
-    event_date = db.Column(db.DateTime, nullable=False)
+    event_start_date = db.Column(db.DateTime, nullable=False)
+    event_end_date = db.Column(db.DateTime, nullable=False)
     event_location = db.Column(db.String(100), nullable=False)
     event_description = db.Column(db.String(100), nullable=False)
     number_of_participants = db.Column(db.Integer, nullable=False)
@@ -104,9 +107,10 @@ class Event(db.Model):
     
     reviews = db.relationship("Reviews", backref="event", lazy=True)
     
-    def __init__(self,event_date,event_name, event_location, event_description, number_of_participants_needed, number_of_volunteers_needed, event_type):
+    def __init__(self,event_start_date, event_end_date,event_name, event_location, event_description, number_of_participants_needed, number_of_volunteers_needed, event_type):
         self.event_name = event_name
-        self.event_date = event_date
+        self.event_start_date = datetime.strptime(event_start_date, '%Y-%m-%d %H:%M:%S')
+        self.event_end_date = datetime.strptime(event_end_date, '%Y-%m-%d %H:%M:%S')
         self.event_location = event_location
         self.event_description = event_description
         self.number_of_participants = 0
@@ -119,15 +123,15 @@ class Event(db.Model):
         return {
             "eventId": self.event_id,
             "eventName": self.event_name,
-            "eventDate": self.event_date,
+            "eventStartDate": str(self.event_start_date),
+            "eventEndDate": str(self.event_end_date),
             "eventLocation": self.event_location,
             "eventDescription": self.event_description,
             "numberOfParticipants": self.number_of_participants,
             "numberOfVolunteers": self.number_of_volunteers,
             "numberOfParticipantsNeeded": self.number_of_participants_needed,
             "numberOfVolunteersNeeded": self.number_of_volunteers_needed,
-            "eventType": self.event_type,
-            "reviews": self.reviews #[review.review_id for review in self.reviews]
+            "eventType": self.event_type.value
         }
         
 class Participant(UserMixin, db.Model):

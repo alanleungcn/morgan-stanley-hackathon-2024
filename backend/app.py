@@ -144,9 +144,13 @@ def seed_DB():
 
         # Create 50 events
         for _ in range(50):
+            event_start_date = fake.date_time_this_year()
+            event_end_date = fake.date_time_between_dates(datetime_start=event_start_date)
+
             event = Event(
                 event_name=fake.catch_phrase(),
-                event_date=fake.date_time_this_year(),
+                event_start_date=event_start_date,
+                event_end_date = event_end_date,
                 event_location=fake.address(),
                 event_description=fake.text(),
                 number_of_participants_needed=random.randint(5, 20),
@@ -186,14 +190,21 @@ def seed_DB():
 
         # Create 50 reviews
         for _ in range(50):
-            review = Reviews(
-                review_rating=random.randint(1, 5),
-                review_feedback=random.choice(["Good event", "Average event", "Could be organized better"]),
-                event_id=random.choice([event.event_id for event in events]),
-                user_id=random.choice([user.user_id for user in users if not user.is_admin])
-            )
-            reviews.append(review)
-            db.session.add(review)
+            event_id = random.choice([event.event_id for event in events])
+            user_id = random.choice([user.user_id for user in users if not user.is_admin])
+    
+            # Check if the review already exists
+            existing_review = Reviews.query.filter_by(event_id=event_id, user_id=user_id).first()
+    
+            if not existing_review:
+                review = Reviews(
+                    review_rating=random.randint(1, 5),
+                    review_feedback=random.choice(["Good event", "Average event", "Could be organized better"]),
+                    event_id=event_id,
+                    user_id=user_id
+                )
+                reviews.append(review)
+                db.session.add(review)
 
         # Create 50 wellbeings
         for _ in range(50):
@@ -218,12 +229,15 @@ def create_event():
     data = request.get_json()
     event = Event(
         event_name=data['eventName'],
-        event_date=datetime.strptime(data['eventDate'], '%Y-%m-%d'),
+        # event_start_date=datetime.strptime(data['eventStartDate'], '%Y-%m-%d %H:%M:%S'),
+        # event_end_date=datetime.strptime(data['eventEndDate'], '%Y-%m-%d %H:%M:%S'),
+        event_start_date=data['eventStartDate'],
+        event_end_date=data['eventEndDate'],
         event_location=data['eventLocation'],
         event_description=data['eventDescription'],
         number_of_participants_needed=data['numberOfParticipantsNeeded'],
         number_of_volunteers_needed=data['numberOfVolunteersNeeded'],
-        event_type = EventType(data['event_type'])
+        event_type = EventType(data['eventType'])
     )
     db.session.add(event)
     db.session.commit()
@@ -251,13 +265,15 @@ def update_event(event_id):
 
     data = request.get_json()
     if 'eventName' in data:
-        event.event_name = data['event_name']
-    if 'eventDate' in data:
-        event.event_date = datetime.strptime(data['event_date'], '%Y-%m-%d %H:%M:%S')
+        event.event_name = data['eventName']
+    if 'eventStartDate' in data:
+        event.event_start_date = datetime.strptime(data['eventStartDate'], '%Y-%m-%d %H:%M:%S')
+    if 'eventEndDate' in data:
+        event.event_end_date = datetime.strptime(data['eventEndDate'], '%Y-%m-%d %H:%M:%S')
     if 'eventLocation' in data:
-        event.event_location = data['event_location']
+        event.event_location = data['eventLocation']
     if 'eventDescription' in data:
-        event.event_description = data['event_description']
+        event.event_description = data['eventDescription']
     if 'numberOfParticipants' in data:
         event.number_of_participants = data['numberOfParticipants']
     if 'numberOfVolunteers' in data:
@@ -266,8 +282,8 @@ def update_event(event_id):
         event.number_of_participants_needed = data['numberOfParticipantsNeeded']
     if 'numberOfVolunteersNeeded' in data:
         event.number_of_volunteers_needed = data['numberOfVolunteersNeeded']
-    if 'event_type' in data:
-        event_type_str = data['event_type']
+    if 'eventType' in data:
+        event_type_str = data['eventType']
         if event_type_str in [e.value for e in EventType]:
             event.event_type = EventType(event_type_str)
         else:
@@ -287,6 +303,11 @@ def delete_event(event_id):
     db.session.commit()
 
     return jsonify({'message': 'Event deleted'}), 200
+
+@app.route('/event_types', methods=['GET'])
+def get_event_types():
+    event_types = [e.value for e in EventType]
+    return jsonify(event_types), 200
 
 @app.route('/courses', methods=['POST'])
 @admin_required

@@ -16,6 +16,8 @@ app.config['MAIL_USE_SSL'] = False
 
 mail = Mail(app)
 
+app.secret_key = 'your_secret_key_here'
+
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///mydatabase.db"
 
 # DB_NAME=<table_name>

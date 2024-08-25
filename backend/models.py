@@ -40,6 +40,25 @@ class User(UserMixin, db.Model):
 
     # __init__()
 
+    @property
+    def is_active(self):
+        # Assuming all users are active by default
+        return True
+
+    @property
+    def is_authenticated(self):
+        # Assuming all users are authenticated if they are logged in
+        return True
+
+    @property
+    def is_anonymous(self):
+        # Anonymous users are not logged in
+        return False
+
+    def get_id(self):
+        # Return the unique identifier for the user
+        return str(self.user_id)
+
     wellbeings = db.relationship("Wellbeing", backref="user", lazy=True)
     reviews = db.relationship("Reviews", backref="user", lazy=True)
     
@@ -50,7 +69,12 @@ class User(UserMixin, db.Model):
             "password": self.password,
             "isVolunteer": self.is_volunteer,
             "isAdmin": self.is_admin,
-            "avatarUrl": self.avatar_url
+            "avatarUrl": self.avatar_url,
+            "email": self.email,
+            "name": self.name,
+            "dateOfBirth": self.date_of_birth,
+            "phoneNumber": self.phone_number,
+            "preferredEventType": self.preferred_event_type,
         }
 
 

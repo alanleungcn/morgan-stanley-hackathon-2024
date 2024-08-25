@@ -1,9 +1,12 @@
+import { useDeleteTraining } from "@/api/training/use-delete-training";
 import { useTrainings } from "@/api/training/use-trainings";
 import { TrainingCard } from "../training/trainingcard";
+import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
 export const ManageTrainings = () => {
   const { data: trainings, isSuccess } = useTrainings();
+  const { mutate: deleteTraining } = useDeleteTraining();
 
   return (
     <div className="flex justify-center">
@@ -22,7 +25,18 @@ export const ManageTrainings = () => {
                 tags={t.tags}
                 title={t.courseName}
                 videoSrc={t.courseUrl}
-              />
+              >
+                <Button
+                  className="mt-4 w-full"
+                  variant="destructive"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteTraining(t.courseId);
+                  }}
+                >
+                  Delete
+                </Button>
+              </TrainingCard>
             ))}
         </div>
       </div>

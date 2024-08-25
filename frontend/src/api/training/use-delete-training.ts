@@ -2,23 +2,23 @@ import { apiClient } from "@/api";
 import { toast } from "@/components/ui/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function useDeleteEvent() {
+export function useDeleteTraining() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (eventId: number) => {
-      const res = await apiClient.delete(`/events/${eventId}`);
+    mutationFn: async (trainingId: number) => {
+      const res = await apiClient.delete(`/courses/${trainingId}`);
       return res.data;
     },
     onSuccess: () => {
       toast({
-        title: "Event successfully deleted",
+        title: "Training successfully deleted",
       });
-      queryClient.invalidateQueries({ queryKey: ["events"] });
+      queryClient.invalidateQueries({ queryKey: ["trainings"] });
     },
     onError: () => {
       toast({
-        title: "Event failed to be deleted",
+        title: "Training fafiled to be deleted",
       });
     },
   });

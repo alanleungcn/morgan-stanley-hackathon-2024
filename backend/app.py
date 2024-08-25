@@ -822,7 +822,7 @@ def create_course():
 
 @app.route('/courses', methods=['GET'])
 def get_courses():
-    courses = Course.query.order_by(Course.course_start_date.desc()).all()
+    courses = Course.query.order_by(Course.course_id.asc()).all()
     courses_json = [course.to_json() for course in courses]
     return jsonify(courses_json), 200
 

@@ -3,6 +3,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+import { Register, zRegister } from "@/api/types/user";
+import { useRegister } from "@/api/user/use-register";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
@@ -25,36 +27,27 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { isValidPhoneNumber } from "react-phone-number-input";
-import { z } from "zod";
 
 export const Route = createFileRoute("/auth/register")({
-  component: Register,
+  component: RegisterComponent,
 });
 
-const FormSchema = z.object({
-  phone: z
-    .string()
-    .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
-  name: z.string(),
-  email: z.string(),
-  birthday: z.date(),
-  password: z.string(),
-});
-
-function Register() {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+function RegisterComponent() {
+  const form = useForm<Register>({
+    resolver: zodResolver(zRegister),
     defaultValues: {
       name: "",
-      phone: "",
+      phoneNumber: "",
       email: "",
-      birthday: new Date(),
+      dateOfBirth: new Date(),
       password: "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  const { mutate: register } = useRegister();
+
+  function onSubmit(data: Register) {
+    register(data);
     toast({
       title: "You submitted the following values:",
       description: (
@@ -112,7 +105,7 @@ function Register() {
 
             <FormField
               control={form.control}
-              name="phone"
+              name="phoneNumber"
               render={({ field }) => (
                 <FormItem className="flex flex-col items-start">
                   <FormLabel className="text-left">Phone Number</FormLabel>
@@ -130,7 +123,7 @@ function Register() {
 
             <FormField
               control={form.control}
-              name="birthday"
+              name="dateOfBirth"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Date of birth</FormLabel>

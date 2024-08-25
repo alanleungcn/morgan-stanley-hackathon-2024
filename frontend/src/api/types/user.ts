@@ -30,8 +30,10 @@ export const zRegister = zUser.pick({
   phoneNumber: true,
   email: true,
   password: true,
+  name: true,
   dateOfBirth: true,
 });
 
 export type Event = z.infer<typeof zUser>;
 export type Login = z.infer<typeof zLogin>;
+export type Register = z.infer<typeof zRegister>;

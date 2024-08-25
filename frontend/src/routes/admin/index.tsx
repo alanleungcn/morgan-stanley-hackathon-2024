@@ -12,7 +12,7 @@ import {
   BookText,
   CalendarPlus,
   CalendarRange,
-  HeartHandshake,
+  ChartColumn,
   LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
@@ -32,7 +32,7 @@ type TabItem = {
   tab: Tab;
   icon: LucideIcon;
   label: string;
-  render: () => JSX.Element;
+  render: () => JSX.Element | null;
 };
 
 const tabs: TabItem[] = [
@@ -62,8 +62,8 @@ const tabs: TabItem[] = [
   },
   {
     tab: "wellbeing",
-    icon: HeartHandshake,
-    label: "Wellbeing",
+    icon: ChartColumn,
+    label: "Statistics",
     render: Wellbeing,
   },
 ];
@@ -74,7 +74,7 @@ function Admin() {
   return (
     <div className="flex flex-wrap justify-center">
       <div className="flex w-full flex-col gap-8 p-4 md:w-72">
-        <h1 className="text-4xl pt-4 font-bold">Admin Portal</h1>
+        <h1 className="pt-4 text-4xl font-bold">Admin Portal</h1>
 
         <div className="flex w-full flex-col gap-2">
           {tabs.map((t: TabItem) => (

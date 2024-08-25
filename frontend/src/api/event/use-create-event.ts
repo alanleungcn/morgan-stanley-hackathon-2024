@@ -1,4 +1,5 @@
 import { apiClient } from "@/api";
+import { toast } from "@/components/ui/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { EventConstruct } from "../types/event";
 
@@ -11,7 +12,15 @@ export function useCreateEvent() {
       return res.data;
     },
     onSuccess: () => {
+      toast({
+        title: "Event successfully created",
+      });
       queryClient.invalidateQueries({ queryKey: ["events"] });
+    },
+    onError: () => {
+      toast({
+        title: "Event creation failed",
+      });
     },
   });
 }

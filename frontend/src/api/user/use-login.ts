@@ -30,5 +30,12 @@ export function useLogin() {
       });
       navigate({ to: "/" });
     },
+    onError: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      toast({
+        title: "Login Failed",
+      });
+      navigate({ to: "/" });
+    },
   });
 }

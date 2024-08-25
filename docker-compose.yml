@@ -9,15 +9,15 @@ services:
       - 8000:8000
     environment:
       - WEB_PORT=8000
-      - VITE_BACCKEND_BASE_URL=backend:80
+      - VITE_BACCKEND_BASE_URL=backend:443
   backend:
     build: backend
     networks:
       - internal
     ports:
-      - 80:80
+      - 443:443
     environment:
-      - FLASK_RUN_PORT=80
+      - FLASK_RUN_PORT=443
     volumes:
       - ./backend/instance:/app/instance
 

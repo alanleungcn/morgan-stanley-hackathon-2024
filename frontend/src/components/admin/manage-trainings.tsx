@@ -11,7 +11,7 @@ export const ManageTrainings = () => {
   return (
     <div className="flex justify-center">
       <div className="flex w-full max-w-[1000px] flex-col gap-8 p-8">
-        <h1 className="text-2xl font-bold">Manage Events</h1>
+        <h1 className="text-2xl font-bold">Manage Trainings</h1>
         <div className="flex gap-8">
           <Input placeholder="Search" />
         </div>

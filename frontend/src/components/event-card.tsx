@@ -24,8 +24,8 @@ export default function EventCard({
   event,
   layout,
   className,
-  buttonText,
-  buttonAction,
+  // buttonText,
+  // buttonAction,
   children,
 }: Props) {
   return (
@@ -51,10 +51,10 @@ export default function EventCard({
             : "flex w-2/3 flex-col justify-between",
         )}
       >
-        <CardTitle className="p-4 text-sm sm:px-6 sm:text-xl">
+        <CardTitle className="p-4 pb-0 text-sm sm:px-6 sm:text-xl">
           {event.eventName}
         </CardTitle>
-        <CardContent className="p-4 pt-0 text-sm sm:px-6 sm:text-base">
+        <CardContent className="h-24 overflow-y-hidden text-ellipsis p-4 pt-0 text-sm sm:px-6 sm:text-base">
           {event.eventDescription}
         </CardContent>
         <CardFooter className="px-4 sm:px-6">

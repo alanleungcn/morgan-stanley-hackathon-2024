@@ -33,7 +33,7 @@ export const Nav = () => {
         Leaderboard
       </Link>
 
-      {isSuccess && user.isAdmin && (
+      {isSuccess && user && user.isAdmin && (
         <Link
           to="/admin"
           className={cn(buttonVariants({ variant: "link" }), "px-0 text-black")}

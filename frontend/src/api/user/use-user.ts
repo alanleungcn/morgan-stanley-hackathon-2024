@@ -11,5 +11,6 @@ export function useUser() {
       });
       return res.data;
     },
+    retry: false,
   });
 }

@@ -22,12 +22,14 @@ import { buttonVariants } from "./ui/button";
 import { Separator } from "./ui/separator";
 
 export default function NavUser() {
-  const { data: user } = useUser();
+  const { data: user, isSuccess, isLoading } = useUser();
   const { mutate: logout } = useLogout();
 
-  return (
+  return isLoading ? (
+    <div className="mr-4 flex gap-2">Loading...</div>
+  ) : (
     <div className="mr-4 flex gap-2">
-      {user ? (
+      {isSuccess && user ? (
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Avatar>

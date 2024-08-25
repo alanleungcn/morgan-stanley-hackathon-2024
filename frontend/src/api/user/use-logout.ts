@@ -15,7 +15,6 @@ export function useLogout() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
-      queryClient.clear();
       navigate({ to: "/" });
     },
   });

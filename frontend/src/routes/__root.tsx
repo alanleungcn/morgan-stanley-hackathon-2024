@@ -1,43 +1,43 @@
 import AiChat from "@/components/AiChat/AiChat";
 import MobileNav from "@/components/mobile-nav";
+import { Nav } from "@/components/nav";
 import NavUser from "@/components/nav-user";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Nav } from "@/components/nav";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { Menu } from "lucide-react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../index.css";
 
-// const TanStackRouterDevtools = import.meta.env.PROD
-//   ? () => null // Render nothing in production
-//   : React.lazy(() =>
-//       // Lazy load in development
-//       import("@tanstack/router-devtools").then((res) => ({
-//         default: res.TanStackRouterDevtools,
-//         // For Embedded Mode
-//         // default: res.TanStackRouterDevtoolsPanel
-//       })),
-//     );
+const TanStackRouterDevtools = import.meta.env.PROD
+  ? () => null // Render nothing in production
+  : React.lazy(() =>
+      // Lazy load in development
+      import("@tanstack/router-devtools").then((res) => ({
+        default: res.TanStackRouterDevtools,
+        // For Embedded Mode
+        // default: res.TanStackRouterDevtoolsPanel
+      })),
+    );
 
 const queryClient = new QueryClient();
 
-// const ReactQueryDevtoolsProduction = React.lazy(() =>
-//   import("@tanstack/react-query-devtools/build/modern/production.js").then(
-//     (d) => ({
-//       default: d.ReactQueryDevtools,
-//     }),
-//   ),
-// );
+const ReactQueryDevtoolsProduction = React.lazy(() =>
+  import("@tanstack/react-query-devtools/build/modern/production.js").then(
+    (d) => ({
+      default: d.ReactQueryDevtools,
+    }),
+  ),
+);
 
 export const Route = createRootRoute({
   component: Root,
 });
 
 function Root() {
-  // const [showDevtools, setShowDevtools] = useState(false);
+  const [showDevtools, setShowDevtools] = useState(false);
 
   useEffect(() => {
     // @ts-expect-error Property 'toggleDevtools' does not exist on type 'Window & typeof globalThis'.ts(2339)
@@ -78,13 +78,13 @@ function Root() {
 
       <AiChat />
 
-      {/* <TanStackRouterDevtools />
-      <ReactQueryDevtools initialIsOpen />
       {showDevtools && (
         <React.Suspense fallback={null}>
+          <ReactQueryDevtools initialIsOpen />
+          <TanStackRouterDevtools />
           <ReactQueryDevtoolsProduction />
         </React.Suspense>
-      )} */}
+      )}
     </QueryClientProvider>
   );
 }

@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { formatDateWithWeekday, formatTime } from "@/utils/date";
 import { isSameDay } from "date-fns";
-import { Calendar, Clock, Terminal } from "lucide-react";
+import { Calendar, Clock, Printer, Terminal } from "lucide-react";
 import { useState } from "react";
 
 interface Props {
@@ -56,7 +56,7 @@ export function Register({ event, onRegister }: Props) {
       ) : (
         <>
           <Button
-            className="rounded bg-blue-500 px-4 py-2 text-white"
+            className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-800"
             onClick={() => setDialogOpen(true)}
           >
             {confirmedRole
@@ -114,12 +114,12 @@ export function Register({ event, onRegister }: Props) {
 
                     {isSameDay(event.eventStartDate, event.eventEndDate) ? (
                       <div>
-                        <div className="flex items-center gap-2 text-sm">
+                        <div className="flex items-center gap-2">
                           <Calendar className="h-4 w-4" />
                           {formatDateWithWeekday(event.eventStartDate)}
                         </div>
 
-                        <div className="flex items-center gap-2 text-sm">
+                        <div className="flex items-center gap-2">
                           <Clock className="h-4 w-4" />
                           {formatTime(event.eventStartDate)} -{" "}
                           {formatTime(event.eventEndDate)}
@@ -137,7 +137,15 @@ export function Register({ event, onRegister }: Props) {
                     <p className="text-lg">{`Role: ${selectedRole}`}</p>
                   </div>
                   <DialogFooter>
-                    <Button onClick={handleConfirm}>Confirm</Button>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      onClick={() => {
+                        window.print();
+                      }}
+                    >
+                      <Printer className="h-5 w-5" />
+                    </Button>
                     <Button
                       variant="secondary"
                       onClick={() => {
@@ -147,6 +155,7 @@ export function Register({ event, onRegister }: Props) {
                     >
                       Cancel
                     </Button>
+                    <Button onClick={handleConfirm}>Confirm</Button>
                   </DialogFooter>
                 </>
               )}

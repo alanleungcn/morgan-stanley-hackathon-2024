@@ -3,6 +3,9 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { useEvents } from "@/api/event/use-events";
 import { Register } from "@/components/user/register";
+import { formatDateWithWeekday, formatTime } from "@/utils/date";
+import { isSameDay } from "date-fns";
+import { Calendar, Clock } from "lucide-react";
 
 // interface Event {
 //   event_id: number;
@@ -28,7 +31,7 @@ function EventDetails() {
   const event = events?.find((e) => e.eventId === parseInt(eventId));
 
   return event ? (
-    <div className="container mx-auto space-y-8 px-24 py-4 pb-24">
+    <div className="container mx-auto space-y-8 px-24 py-4 pb-24 pt-16">
       <div className="flex">
         <div className="w-1/2 pr-4">
           <Card className="overflow-hidden">
@@ -42,25 +45,28 @@ function EventDetails() {
         <div className="w-1/2 space-y-12 pl-4">
           <h1 className="text-4xl font-bold">{event.eventName}</h1>
           <div>
-            <h2 className="flex items-center text-2xl font-semibold">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="#3A3247"
-                viewBox="0 0 24 24"
-                className="mr-2"
-              >
-                <path
-                  d="M17 11h2V6h-2V4h-2v2H9V4H7v2H5v13h6v-2H7v-7h10zm0 1c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4 1.8-4 4-4m-.6 5.9 2.9-2.9-.9-.9-2.1 2.1-.7-.8-.8.8z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-              Date and Time
-            </h2>
+            <h2 className="mb-2 text-2xl font-semibold">Date and Time</h2>
             <p className="text-lg font-medium text-gray-700">
-              {/* {formatDate(event.eventStartDate)} */}
-              dummy date
+              {isSameDay(event.eventStartDate, event.eventEndDate) ? (
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4" />
+                    {formatDateWithWeekday(event.eventStartDate)}
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    {formatTime(event.eventStartDate)} -{" "}
+                    {formatTime(event.eventEndDate)}
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  {formatDateWithWeekday(event.eventStartDate)} -{" "}
+                  {formatDateWithWeekday(event.eventEndDate)}
+                </div>
+              )}
             </p>
           </div>
           <div>
@@ -72,7 +78,7 @@ function EventDetails() {
               rel="noopener noreferrer"
               className="text-blue-500"
             >
-              Show map
+              Open in Google Map
             </a>
           </div>
           <div>

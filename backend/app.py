@@ -238,8 +238,8 @@ def seed_DB():
         # Create 50 users
 
         admin = User(
-            email="admin@mail.ru",
-            password="admin_password",
+            email="admin@admin.com",
+            password="admin",
             is_admin=True
         )
         users.append(admin)
@@ -253,6 +253,21 @@ def seed_DB():
                      "https://w7.pngwing.com/pngs/843/694/png-transparent-avatar-female-cartoon-avatar-purple-face-black-hair-thumbnail.png",
                      "https://w7.pngwing.com/pngs/555/703/png-transparent-computer-icons-avatar-woman-user-avatar-face-heroes-service-thumbnail.png",
                      "https://w7.pngwing.com/pngs/954/328/png-transparent-computer-icons-user-profile-avatar-heroes-head-recruiter-thumbnail.png"]
+        
+
+        user = User(
+                email="user@user.com",
+                password="user",
+                name="Adam Smith",
+                avatar_url="https://img.freepik.com/premium-photo/man-with-dark-hair-goatee-poses-against-blue-circle-background_96461-13314.jpg?w=1480",
+                date_of_birth=fake.date_of_birth(),
+                phone_number=f"+852{fake.msisdn()[3:]}",
+                is_admin=False,
+                is_volunteer=False,
+                preferred_event_type=EventType.TRAINING.value
+            )
+        users.append(user)
+        db.session.add(user)
  
         for _ in range(50):
             user = User(

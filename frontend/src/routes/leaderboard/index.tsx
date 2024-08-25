@@ -9,7 +9,7 @@ export const Route = createFileRoute("/leaderboard/")({
 function Leaderboard() {
   return (
     <div className="flex justify-center">
-      <div className="w-[70%] p-8">
+      <div className="px-4 sm:w-2/3">
         <LeaderboardList />
       </div>
     </div>

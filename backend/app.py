@@ -389,7 +389,6 @@ def search_events():
         event_name = request.args.get('eventName')
         event_start_date = request.args.get('eventStartDate')
         event_end_date = request.args.get('eventEndDate')
-        event_type = request.args.get('eventType')
 
         query = db.session.query(Event)
 
@@ -399,8 +398,6 @@ def search_events():
             query = query.filter(Event.event_start_date >= event_start_date)
         if event_end_date:
             query = query.filter(Event.event_end_date <= event_end_date)
-        if event_type:
-            query = query.filter(Event.event_type == EventType(event_type))
 
         events = query.all()
         # Convert events to JSON

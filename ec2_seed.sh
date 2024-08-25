@@ -1,1 +1,1 @@
-curl -X POST localhost/seed_DB
+curl -X POST https://mshack.alanleungcn.com/seed_DB

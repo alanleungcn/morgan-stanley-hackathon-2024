@@ -115,12 +115,6 @@ def update_user_info():
     db.session.commit()
     return jsonify({"message": "User info updated successfully"}), 200
 
-
-
-
-
-
-
 @app.route('/user_info', methods=['GET'])
 @login_required
 def get_user_info():
@@ -178,6 +172,20 @@ def register():
     db.session.commit()
     
     return jsonify({"message": "User registered successfully"}), 201
+
+@app.route("/users", methods=['GET'])
+def get_users():
+    users = User.query.all()
+
+    # users = Event.query.order_by(Event.event_start_date.desc()).all()
+    users_list = [user.to_json() for user in users]
+
+    response_data = {
+        "users": users_list
+    }
+
+    return jsonify(response_data), 200
+
 
 @app.route("/register_event/<int:event_id>", methods=['POST'])
 def reg_event(event_id):
@@ -253,21 +261,6 @@ def seed_DB():
                      "https://w7.pngwing.com/pngs/843/694/png-transparent-avatar-female-cartoon-avatar-purple-face-black-hair-thumbnail.png",
                      "https://w7.pngwing.com/pngs/555/703/png-transparent-computer-icons-avatar-woman-user-avatar-face-heroes-service-thumbnail.png",
                      "https://w7.pngwing.com/pngs/954/328/png-transparent-computer-icons-user-profile-avatar-heroes-head-recruiter-thumbnail.png"]
-        
-
-        user = User(
-                email="user@user.com",
-                password="user",
-                name="Adam Smith",
-                avatar_url="https://img.freepik.com/premium-photo/man-with-dark-hair-goatee-poses-against-blue-circle-background_96461-13314.jpg?w=1480",
-                date_of_birth=fake.date_of_birth(),
-                phone_number=f"+852{fake.msisdn()[3:]}",
-                is_admin=False,
-                is_volunteer=False,
-                preferred_event_type=EventType.TRAINING.value
-            )
-        users.append(user)
-        db.session.add(user)
  
         for _ in range(50):
             user = User(

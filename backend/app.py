@@ -565,7 +565,21 @@ def getEventChart(event_id):
     
     return send_file('chart.json', mimetype='application/json')
     
+@app.route('/getEventChart_EventTypes', methods=['GET'])
+def getEventChart_EventTypes():
+    df = pd.read_excel('./datas/Event_review.xlsx', header=0, parse_dates=['event_date'], date_format="%d/%m/%Y")
     
+    # remove duplicates
+    df = df.drop_duplicates()
+    
+    chart = alt.Chart(df).mark_arc(innerRadius=50).encode(
+        color= "event_type",
+        theta="count(event_type)"
+    )
+    chart.save('chart.json')
+    
+    return send_file('chart.json', mimetype='application/json')
+
 @app.route('/getWellbeingCharts', methods=['GET'])
 def getWellnessChart():
     df = pd.read_excel('./datas/Wellbeing.xlsx', header=0, parse_dates=['date'], date_format="%d/%m/%Y")
@@ -581,6 +595,26 @@ def getWellnessChart():
         column = 'user_id:N',
         columns = 3
     )
+    chart.save('chart.json')
+    
+    return send_file('chart.json', mimetype='application/json')
+
+@app.route('/getWellbeingChartDistribution', methods=['GET'])
+def getWellnessChartDistribution():
+    df = pd.read_excel('./datas/Wellbeing.xlsx', header=0, parse_dates=['date'], date_format="%d/%m/%Y")
+    
+    base  = alt.Chart(df).encode(
+    alt.Theta("count(score)").stack(True),
+    alt.Radius("count(score)").scale(type="sqrt", zero=True, rangeMin=20),
+    color="score:N",
+    )
+
+    c1 = base.mark_arc(innerRadius=20, stroke="#fff")
+
+    c2 = base.mark_text(radiusOffset=10).encode(text="count(score):Q")
+
+    chart = c1 + c2
+    
     chart.save('chart.json')
     
     return send_file('chart.json', mimetype='application/json')

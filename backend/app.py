@@ -573,7 +573,7 @@ def getEventChart_EventTypes():
     df = df.drop_duplicates()
     
     chart = alt.Chart(df).mark_arc(innerRadius=50).encode(
-        color= "event_type",
+        color= alt.Color("event_type", scale=alt.Scale(scheme='pastel1')),
         theta="count(event_type)"
     )
     chart.save('chart.json')
@@ -606,7 +606,7 @@ def getWellnessChartDistribution():
     base  = alt.Chart(df).encode(
     alt.Theta("count(score)").stack(True),
     alt.Radius("count(score)").scale(type="sqrt", zero=True, rangeMin=20),
-    color="score:N",
+    color=alt.Color("score:N", scale=alt.Scale(scheme='lightmulti'))
     )
 
     c1 = base.mark_arc(innerRadius=20, stroke="#fff")

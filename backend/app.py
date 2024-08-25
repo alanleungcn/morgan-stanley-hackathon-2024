@@ -295,12 +295,13 @@ def seed_DB():
         
 
         # Create 20 courses
-        video_url=["https://www.youtube.com/watch?v=SlDJUL7lMCk",
-                   "https://www.youtube.com/watch?v=8AhJhFo_wXw",
-                   "https://www.youtube.com/watch?v=ZKc48CJQa4M",
-                   "https://www.youtube.com/watch?v=hhqPIwyvAI4",
-                   "https://www.youtube.com/watch?v=JBiT7Ydjro0",
-                   "https://www.youtube.com/watch?v=ZXlhyASUTWg"]
+        video_url=["https://www.youtube.com/embed/SlDJUL7lMCk?si=OImALJDDI3UkyMSw",
+                   "https://www.youtube.com/embed/ZXlhyASUTWg?si=cFnDBR1W-KKwt_SR"
+                   "https://www.youtube.com/embed/8AhJhFo_wXw?si=e0nf8tsGVhSWEz9e",
+                   "https://www.youtube.com/embed/ZKc48CJQa4M?si=PLKu0iZKhk0sU3pz",
+                   "https://www.youtube.com/embed/hhqPIwyvAI4?si=SPSY56voitFwKEwl",
+                   "https://www.youtube.com/embed/JBiT7Ydjro0?si=LAtcMMK6oE0IH7--",
+                   "https://www.youtube.com/embed/ZXlhyASUTWg?si=Oz29ulEZsn8nowvI"]
         for _ in range(20):
             course = Course(
                 course_name=fake.catch_phrase(),

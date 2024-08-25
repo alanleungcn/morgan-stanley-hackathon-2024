@@ -74,7 +74,7 @@ function Register() {
       className="grid h-[calc(100%-4rem)] w-full place-items-center"
       style={{ background }}
     >
-      <div className="my-16 flex w-1/3 max-w-[800px] flex-col gap-8 rounded-md bg-background p-8 shadow-lg">
+      <div className="my-16 flex w-[90%] max-w-[800px] flex-col gap-8 rounded-md bg-background p-8 shadow-lg lg:w-1/3">
         <h1 className="text-4xl font-bold">Registration</h1>
 
         <Form {...form}>

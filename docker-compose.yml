@@ -9,7 +9,7 @@ services:
       - 8000:8000
     environment:
       - WEB_PORT=8000
-      - VITE_BACCKEND_BASE_URL=backend:9000
+      - VITE_BACCKEND_BASE_URL=backend:80
   backend:
     build: backend
     networks:

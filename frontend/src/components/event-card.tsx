@@ -31,13 +31,13 @@ export default function EventCard({
     <Card
       className={cn(
         className,
-        layout === "grid" ? "flex h-96 flex-col" : "flex h-64 flex-row",
+        layout === "grid" ? "flex flex-col" : "flex h-64 flex-row",
       )}
     >
       <CardHeader
         className={cn(
           "overflow-hidden p-0",
-          layout === "grid" ? "h-1/3" : "w-1/3",
+          layout === "grid" ? "h-32" : "w-1/3",
         )}
       >
         <img src={event.eventImageUrl} className="h-full w-full object-cover" />

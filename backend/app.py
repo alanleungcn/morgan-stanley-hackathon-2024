@@ -146,7 +146,7 @@ def seed_DB():
 
         for _ in range(50):
             user = User(
-                email=fake.user_name(),
+                email=fake.email(),
                 password="password",
                 avatar_url=fake.image_url()
             )
@@ -165,20 +165,27 @@ def seed_DB():
 
         db.session.commit()
 
-        # Create 25 events
-        for _ in range(25):
+        # Create 2 social_gathering events
+        social_gatherings_img_urls = ["https://cdn.pixabay.com/photo/2019/06/26/00/11/cooking-4299302_1280.jpg","https://cdn.pixabay.com/photo/2022/07/02/14/07/women-7297355_1280.jpg","https://scontent-hkg4-2.xx.fbcdn.net/v/t39.30808-6/455113306_511056041296607_5189354838905605120_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=127cfc&_nc_ohc=kus8mgKAslcQ7kNvgELr0Ah&_nc_ht=scontent-hkg4-2.xx&oh=00_AYAJZKIUpC-XuHsUNNZ1i5SKQROs_-r0BcRr896wAEdoeA&oe=66CF93F9",
+                                      "https://media.istockphoto.com/id/1480315911/zh/%E7%85%A7%E7%89%87/team-building-asian-workshop-participants-in-small-group-discussion-brainstorming-during.jpg?s=2048x2048&w=is&k=20&c=paBhS8uXO444APuXKrKw-zdCgTb8oMQN9QdF5V1g1Yk="]
+        social_event_names = [
+                "Chai Gathring",
+                "Neighborhood BBQ",
+            ]
+        for _ in range(2):
             event_start = fake.date_time_this_year()
             event_end = fake.date_time_between_dates(datetime_start=event_start)
+
             event = Event(
-                event_name=fake.catch_phrase(),
+                event_name=social_event_names.pop(),
                 event_start_date=event_start.strftime('%Y-%m-%d %H:%M:%S'),
                 event_end_date=event_end.strftime('%Y-%m-%d %H:%M:%S'),  
                 event_location=fake.address(),
                 event_description=fake.text(),
                 number_of_participants_needed=random.randint(5, 20),
                 number_of_volunteers_needed=random.randint(1, 5),
-                event_type=random.choice(list(EventType)),
-                event_image_url=fake.image_url()
+                event_type=EventType.SOCIAL_GATHERING,
+                event_image_url=social_gatherings_img_urls.pop()
             )
             
             random_tag = Tag.query.order_by(func.random()).first()
@@ -187,12 +194,119 @@ def seed_DB():
             events.append(event)
             db.session.add(event)
 
+        # Create 3 counselling events
+        counseling_img_urls = ["https://another-light.com/media/post_headers/Counselling_Therapists_in_India.jpg",
+                                "https://cdn.pixabay.com/photo/2017/01/30/02/20/mental-health-2019924_1280.jpg",
+                                "https://cdn.pixabay.com/photo/2018/06/27/08/18/family-3501026_1280.jpg",
+                                ]
+        counseling_event_names = [
+            "Stress Management Seminar",
+            "Grief Counseling Session",
+            "Career Counseling Fair",
+            "Relationship Counseling Seminar",
+            ]
+        for _ in range(3):
+            event_start = fake.date_time_this_year()
+            event_end = fake.date_time_between_dates(datetime_start=event_start)
+
+            event = Event(
+                event_name=counseling_event_names.pop(),
+                event_start_date=event_start.strftime('%Y-%m-%d %H:%M:%S'),
+                event_end_date=event_end.strftime('%Y-%m-%d %H:%M:%S'),  
+                event_location=fake.address(),
+                event_description=fake.text(),
+                number_of_participants_needed=random.randint(5, 20),
+                number_of_volunteers_needed=random.randint(1, 5),
+                event_type=EventType.COUNSELLING,
+                event_image_url=counseling_img_urls.pop()
+            )
+            
+            random_tag = Tag.query.order_by(func.random()).first()
+            if random_tag:
+                event.tags.append(random_tag)
+            events.append(event)
+            db.session.add(event)
+        
+
+        # Create 2 training events
+        training_img_urls = ["https://cdn.pixabay.com/photo/2015/05/11/14/44/pencils-762555_1280.jpg",
+                             "https://cdn.pixabay.com/photo/2017/03/28/12/07/bricks-2181920_1280.jpg",
+                             "https://cdn.pixabay.com/photo/2020/04/28/18/19/draw-5105755_1280.jpg"
+                             
+                                ]
+        training_event_names = [
+            "Leadership Training Program",
+            "Effective Communication Training",
+            "Personal Finance Training",
+        ]
+        for _ in range(2):
+            event_start = fake.date_time_this_year()
+            event_end = fake.date_time_between_dates(datetime_start=event_start)
+
+            event = Event(
+                event_name=training_event_names.pop(),
+                event_start_date=event_start.strftime('%Y-%m-%d %H:%M:%S'),
+                event_end_date=event_end.strftime('%Y-%m-%d %H:%M:%S'),  
+                event_location=fake.address(),
+                event_description=fake.text(),
+                number_of_participants_needed=random.randint(5, 20),
+                number_of_volunteers_needed=random.randint(1, 5),
+                event_type=EventType.TRAINING,
+                event_image_url=training_img_urls.pop()
+            )
+            
+            random_tag = Tag.query.order_by(func.random()).first()
+            if random_tag:
+                event.tags.append(random_tag)
+            events.append(event)
+            db.session.add(event)
+        
+        # Create 2 workshop events
+        workshop_img_urls = ["https://cdn.pixabay.com/photo/2015/05/11/14/44/pencils-762555_1280.jpg",
+                             "https://cdn.pixabay.com/photo/2017/03/28/12/07/bricks-2181920_1280.jpg",
+                             "https://cdn.pixabay.com/photo/2020/04/28/18/19/draw-5105755_1280.jpg"
+                             ]
+        workshop_event_names = [
+            "Public Speaking Workshop",
+            "Leadership Training Program",
+            "Time Management Seminar",
+            "Negotiation Skills Workshop",
+        ]
+        for _ in range(2):
+            event_start = fake.date_time_this_year()
+            event_end = fake.date_time_between_dates(datetime_start=event_start)
+
+            event = Event(
+                event_name=workshop_event_names.pop(),
+                event_start_date=event_start.strftime('%Y-%m-%d %H:%M:%S'),
+                event_end_date=event_end.strftime('%Y-%m-%d %H:%M:%S'),  
+                event_location=fake.address(),
+                event_description=fake.text(),
+                number_of_participants_needed=random.randint(5, 20),
+                number_of_volunteers_needed=random.randint(1, 5),
+                event_type=EventType.WORKSHOP,
+                event_image_url=workshop_img_urls.pop()
+            )
+            
+            random_tag = Tag.query.order_by(func.random()).first()
+            if random_tag:
+                event.tags.append(random_tag)
+            events.append(event)
+            db.session.add(event)
+        
+
         # Create 20 courses
+        video_url=["https://www.youtube.com/watch?v=SlDJUL7lMCk",
+                   "https://www.youtube.com/watch?v=8AhJhFo_wXw",
+                   "https://www.youtube.com/watch?v=ZKc48CJQa4M",
+                   "https://www.youtube.com/watch?v=hhqPIwyvAI4",
+                   "https://www.youtube.com/watch?v=JBiT7Ydjro0",
+                   "https://www.youtube.com/watch?v=ZXlhyASUTWg"]
         for _ in range(20):
             course = Course(
                 course_name=fake.catch_phrase(),
                 course_description=fake.text(),
-                course_url=fake.url(),
+                course_url=random.choice(video_url),
             )
             random_tag = Tag.query.order_by(func.random()).first()
             if random_tag:
@@ -203,7 +317,7 @@ def seed_DB():
         db.session.commit()  # Commit participants, events, volunteers, and courses to get their IDs
 
             # Create 50 reviews
-        for _ in range(100):
+        for _ in range(50):
             event_id = random.choice([event.event_id for event in events])
             user_id = random.choice([user.user_id for user in users if not user.is_admin])
     
@@ -452,7 +566,7 @@ def create_event():
 
 @app.route('/events', methods=['GET'])
 def get_all_events():
-    events = Event.query.all()
+    events = Event.query.order_by(Event.event_start_date.desc()).all()
     event_list = [event.to_json() for event in events]
 
     response_data = {

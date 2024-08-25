@@ -12,7 +12,7 @@ from flask import request, jsonify, send_file, redirect
 from config import app, db, mail
 from flask_mail import Mail, Message
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
-from models import User, Participant, Volunteer, Course, Wellbeing, Event, Reviews, takes,EventType, Tag, EventTag, CourseTag
+from models import User,Course, Wellbeing, Event, Reviews, user_event,EventType, Tag, EventTag, CourseTag
 
 from faker import Faker
 
@@ -89,8 +89,8 @@ def register():
         return jsonify({"message": "Missing required fields"}), 400
     
     existing_user = User.query.filter_by(username=username).first()
-    existing_participant = Participant.query.filter_by(username=username).first()
-    if existing_user or existing_participant:
+    
+    if existing_user:
         return jsonify({"message": "Username already exists"}), 400
 
     new_user = User(
@@ -98,17 +98,7 @@ def register():
         password=password
     )
 
-    new_participant = Participant(
-        username=username,
-        password=password,
-        email=email,
-        date_of_birth=datetime.date.fromisoformat(date_of_birth),
-        phone_number=phone_number,
-        number_of_participated_events=0,
-    )
-    
     db.session.add(new_user)
-    db.session.add(new_participant)
     db.session.commit()
     
     return jsonify({"message": "User registered successfully"}), 201
@@ -136,14 +126,11 @@ def seed_DB():
         db.create_all()
 
         users = []
-        participants = []
         tags = []
         events = []
-        volunteers = []
         courses = []
         reviews = []
         wellbeings = []
-        # takes = []
 
         # Create 50 users
 
@@ -176,21 +163,6 @@ def seed_DB():
 
         db.session.commit()
 
-        # Create 35 participants
-        for _ in range(35):
-            participant = Participant(
-                username=fake.user_name(),
-                password="password",
-                email=fake.email(),
-                name=fake.name(),
-                date_of_birth=fake.date_of_birth(),
-                phone_number=fake.phone_number(),
-                number_of_participated_events=random.randint(1, 20),
-                preferred_event_type=random.choice([e.value for e in EventType]),
-            )
-            participants.append(participant)
-            db.session.add(participant)
-
         # Create 25 events
         for _ in range(25):
             event_start = fake.date_time_this_year()
@@ -212,21 +184,6 @@ def seed_DB():
                 event.tags.append(random_tag)
             events.append(event)
             db.session.add(event)
-
-        # Create 15 volunteers
-        for _ in range(15):
-            volunteer = Volunteer (
-                username=fake.user_name(),
-                password="password",
-                email=fake.email(),
-                name=fake.name(),
-                date_of_birth=fake.date_of_birth(),
-                phone_number=fake.phone_number(),
-                number_of_volunteered_events=random.randint(1, 20),
-                preferred_event_type=random.choice([e.value for e in EventType]),
-            )
-            volunteers.append(volunteer)
-            db.session.add(volunteer)
 
         # Create 20 courses
         for _ in range(20):
@@ -261,9 +218,9 @@ def seed_DB():
                 reviews.append(review)
                 db.session.add(review)
 
-        take = takes(user_id='1',course_id='1')
+        take = user_event(user_id='1',event_id='1')
         db.session.add(take)
-        db.session.add(takes(user_id='1',course_id='2'))
+        db.session.add(user_event(user_id='1',event_id='2'))
 
         # Create 50 wellbeings
         for _ in range(50):
@@ -354,7 +311,7 @@ def get_event_tags(event_id):
 @app.route('/recommended_courses/<int:user_id>/<int:event_id>', methods=['GET'])
 def get_recommended(user_id, event_id):
 
-    user_courses = takes.query.filter_by(user_id=user_id).all()
+    user_courses = user_event.query.filter_by(user_id=user_id).all()
 
     event = Event.query.get(event_id)
     if not event:

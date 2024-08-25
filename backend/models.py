@@ -25,20 +25,21 @@ class UserMixin:
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
+    is_volunteer = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
     avatar_url = db.Column(db.String(255), nullable=True)
-
-    # @declared_attr
-    # def wellbeings(cls):
-    #     return db.relationship("Wellbeing", backref="user_wellbeings", lazy=True)
-    
-    # @declared_attr
-    # def reviews(cls):
-    #     return db.relationship("Reviews", backref="user_reviews", lazy=True, uselist=False)
+    email = db.Column(db.String(100), unique=True, nullable=True)
+    name = db.Column(db.String(100), nullable=True)
+    date_of_birth = db.Column(db.DateTime, nullable=True)
+    phone_number = db.Column(db.String(100), nullable=True)
+    preferred_event_type = db.Column(db.String(100), nullable=True)
     
     
 class User(UserMixin, db.Model):
     __tablename__ = "user"
+
+    # __init__()
+
     wellbeings = db.relationship("Wellbeing", backref="user", lazy=True)
     reviews = db.relationship("Reviews", backref="user", lazy=True)
     
@@ -47,29 +48,16 @@ class User(UserMixin, db.Model):
             "userId": self.user_id,
             "username": self.username,
             "password": self.password,
+            "isVolunteer": self.is_volunteer,
             "isAdmin": self.is_admin,
             "avatarUrl": self.avatar_url
         }
 
-# # Many-to-many relationship
-user_event_joins = db.Table(
-    "user_event_joins",
-    db.Column("user_id", db.Integer, db.ForeignKey("participant.user_id")),
-    db.Column("event_id", db.Integer, db.ForeignKey("event.event_id"))
-)
 
-helps = db.Table(
-    "helps",
-    db.Column("user_id", db.Integer, db.ForeignKey("volunteer.user_id")),
-    db.Column("event_id", db.Integer, db.ForeignKey("event.event_id"))
-)
-
-class takes(db.Model):
-    __tablename__ = "takes"
-    user_id = db.Column(db.Integer, db.ForeignKey("volunteer.user_id"), primary_key=True)
-    course_id = db.Column(db.Integer, db.ForeignKey("course.course_id"), primary_key=True)
-    deadline = db.Column(db.DateTime, nullable=True)
-    progress = db.Column(db.Integer, nullable=True)
+class user_event(db.Model):
+    __tablename__ = "user_event"
+    user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), primary_key=True)
+    event_id = db.Column(db.Integer, db.ForeignKey("event.event_id"), primary_key=True)
 
     
     @property
@@ -77,14 +65,10 @@ class takes(db.Model):
         return True if self.progress == 100 else False
 
     def to_json(self):
-        self.completed = self.is_completed()
         
         return {
             "userId": self.user_id,
-            "courseId": self.course_id,
-            "deadline": self.deadline,
-            "progress": self.progress,
-            "completed": self.completed
+            "event_id": self.event_id,
         }
 
 class Tag(db.Model):
@@ -97,12 +81,6 @@ class EventTag(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('event.event_id'), primary_key=True)
     tag_id = db.Column(db.Integer, db.ForeignKey('tag.tag_id'), primary_key=True)
 
-# class EventType(enum.Enum):
-#     SOCIAL_GATHERING = ("Social Gathering", ["chai", "storytelling", "elderly"])
-#     COUNSELLING = ("Counselling", ["children", "adult", "women&girls", "jobs", "internships", "scholarships"])
-#     TRAINING = ("Training", ["training"])
-#     WORKSHOP = ("Workshop", ["parent", "mental health"])
-#     OTHER = ("Other", ["helpline", "urgent", "limited period", "one-time"])
 class EventType(enum.Enum):
     SOCIAL_GATHERING = ("Social Gathering")
     COUNSELLING = ("Counselling")
@@ -159,61 +137,61 @@ class Event(db.Model):
         }
     
         
-class Participant(UserMixin, db.Model):
-    __tablename__ = "participant"
-    username = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    name = db.Column(db.String(100), nullable=True)
-    date_of_birth = db.Column(db.DateTime, nullable=False)
-    phone_number = db.Column(db.String(100), nullable=True)
-    number_of_participated_events = db.Column(db.Integer, nullable=False)
-    preferred_event_type = db.Column(db.String(100), nullable=True)
+# class Participant(UserMixin, db.Model):
+#     __tablename__ = "participant"
+#     username = db.Column(db.String(100), unique=True, nullable=False)
+#     password = db.Column(db.String(100), nullable=False)
+#     email = db.Column(db.String(100), unique=True, nullable=False)
+#     name = db.Column(db.String(100), nullable=True)
+#     date_of_birth = db.Column(db.DateTime, nullable=False)
+#     phone_number = db.Column(db.String(100), nullable=True)
+#     number_of_participated_events = db.Column(db.Integer, nullable=False)
+#     preferred_event_type = db.Column(db.String(100), nullable=True)
     
-    events = db.relationship("Event", secondary=user_event_joins, backref="participants")
+#     events = db.relationship("Event", secondary=user_event, backref="participants")
   
-    def to_json(self):
-        return {
-            "userId": self.user_id, 
-            "username": self.username,
-            "password": self.password,
-            "email": self.email,
-            "name": self.name,
-            "dateOfBirth": self.date_of_birth,
-            "phoneNumber": self.phone_number,
-            "numberOfParticipated_events": self.number_of_participated_events,
-            "preferredEventType": self.preferred_event_type,
-            "events": self.events #[event.event_id for event in self.events]
-        }
+#     def to_json(self):
+#         return {
+#             "userId": self.user_id, 
+#             "username": self.username,
+#             "password": self.password,
+#             "email": self.email,
+#             "name": self.name,
+#             "dateOfBirth": self.date_of_birth,
+#             "phoneNumber": self.phone_number,
+#             "numberOfParticipated_events": self.number_of_participated_events,
+#             "preferredEventType": self.preferred_event_type,
+#             "events": self.events #[event.event_id for event in self.events]
+#         }
 
-class Volunteer(UserMixin, db.Model):
-    __tablename__ = "volunteer"
-    username = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    name = db.Column(db.String(100), nullable=False)
-    date_of_birth = db.Column(db.DateTime, nullable=False)
-    phone_number = db.Column(db.String(100), nullable=True)
-    number_of_volunteered_events = db.Column(db.Integer, nullable=False)
-    preferred_event_type = db.Column(db.String(100), nullable=False)
+# class Volunteer(UserMixin, db.Model):
+#     __tablename__ = "volunteer"
+#     username = db.Column(db.String(100), unique=True, nullable=False)
+#     password = db.Column(db.String(100), nullable=False)
+#     email = db.Column(db.String(100), unique=True, nullable=False)
+#     name = db.Column(db.String(100), nullable=False)
+#     date_of_birth = db.Column(db.DateTime, nullable=False)
+#     phone_number = db.Column(db.String(100), nullable=True)
+#     number_of_volunteered_events = db.Column(db.Integer, nullable=False)
+#     preferred_event_type = db.Column(db.String(100), nullable=False)
     
-    events = db.relationship("Event", secondary=helps, backref="events_volunteers")
-    courses = db.relationship("Course", secondary=takes.__table__, backref="courses_volunteers")
+#     events = db.relationship("Event", secondary=helps, backref="events_volunteers")
+#     courses = db.relationship("Course", secondary=takes.__table__, backref="courses_volunteers")
     
-    def to_json(self):
-        return {
-            "userId": self.user_id,
-            "username": self.username,
-            "password": self.password,
-            "email": self.email,
-            "name": self.name,
-            "dateOfBirth": self.date_of_birth,
-            "phoneNumber": self.phone_number,
-            "numberOfVolunteeredEvents": self.number_of_volunteered_events,
-            "preferredEventType": self.preferred_event_type,
-            "events": self.events, #[event.event_id for event in self.events],
-            "courses": self.courses #[course.course_id for course in self.courses]
-        }
+#     def to_json(self):
+#         return {
+#             "userId": self.user_id,
+#             "username": self.username,
+#             "password": self.password,
+#             "email": self.email,
+#             "name": self.name,
+#             "dateOfBirth": self.date_of_birth,
+#             "phoneNumber": self.phone_number,
+#             "numberOfVolunteeredEvents": self.number_of_volunteered_events,
+#             "preferredEventType": self.preferred_event_type,
+#             "events": self.events, #[event.event_id for event in self.events],
+#             "courses": self.courses #[course.course_id for course in self.courses]
+#         }
 
 
 class CourseTag(db.Model):

@@ -216,6 +216,10 @@ class Volunteer(UserMixin, db.Model):
         }
 
 
+class CourseTag(db.Model):
+    __tablename__ = 'course_tags'
+    course_id = db.Column(db.Integer, db.ForeignKey('course.course_id'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tag.tag_id'), primary_key=True)
 
 class Course(db.Model):
     __tablename__ = "course"
@@ -223,15 +227,15 @@ class Course(db.Model):
     course_name = db.Column(db.String(100), nullable=False)
     course_description = db.Column(db.String(100), nullable=False)
     course_url = db.Column(db.String(100), nullable=False)
-
+    tags = db.relationship('Tag', secondary='course_tags', backref='course')
     
     def to_json(self):
         return {
             "courseId": self.course_id,
             "courseName": self.course_name,
             "courseDescription": self.course_description,
-            "courseType": self.course_type,
-            "courseUrl": self.course_url
+            "courseUrl": self.course_url,
+            "tags": [tag.tag_name for tag in self.tags]
         }
 
 class Reviews(db.Model):

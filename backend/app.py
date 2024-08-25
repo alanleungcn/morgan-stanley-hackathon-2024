@@ -162,15 +162,7 @@ def seed_DB():
                 event_type=random.choice(list(EventType)),
                 event_image_url=fake.image_url()
             )
-            # num_tags = random.randint(1, 3)     
-            # ktags = sample(tags, num_tags)
             
-            # for tag_name in ktags:
-            #     tag = Tag.query.filter_by(tag_name=tag_name).first()
-            #     if tag is None:
-            #         tag = Tag(tag_name=tag_name)
-            #         db.session.add(tag)
-            #     event.tags.append(tag)
             random_tag = Tag.query.order_by(func.random()).first()
             if random_tag:
                 event.tags.append(random_tag)
@@ -197,9 +189,11 @@ def seed_DB():
             course = Course(
                 course_name=fake.catch_phrase(),
                 course_description=fake.text(),
-                course_type="Social Gathering",
                 course_url=fake.url(),
             )
+            random_tag = Tag.query.order_by(func.random()).first()
+            if random_tag:
+                course.tags.append(random_tag)
             courses.append(course)
             db.session.add(course)
 
@@ -248,7 +242,20 @@ def get_all_tags():
 
     return jsonify({"tags": tag_list}), 200
 
-@app.route('/event_tags', methods=['GET'])
+@app.route('/tags', methods=['POST'])
+def create_tag():
+    data = request.get_json()
+
+    tag_name = data['tagName']
+
+    new_tag = Tag(tag_name=tag_name)
+
+    db.session.add(new_tag)
+    db.session.commit()
+
+    return jsonify({"message": "Tag created successfully", "tag_id": new_tag.tag_id}), 201
+
+@app.route('/event_tag', methods=['GET'])
 def get_all_event_tags():
     event_tags = EventTag.query.all()
 
@@ -261,6 +268,37 @@ def get_all_event_tags():
         event_tag_list.append(event_tag_data)
 
     return jsonify({"event_tags": event_tag_list}), 200
+
+@app.route('/course_tag', methods=['GET'])
+def get_all_course_tags():
+    course_tags = CourseTag.query.all()
+
+    course_tag_list = []
+    for course_tag in course_tags:
+        course = Course.query.get(course_tag.course_id)
+        if course:
+            tag = Tag.query.get(course_tag.tag_id)
+            if tag:
+                course_tag_data = {
+                    "course_id": course_tag.course_id,
+                    "tag_id": course_tag.tag_id,
+                    "course_name": course.course_name,
+                    "tag_name": tag.tag_name
+                }
+                course_tag_list.append(course_tag_data)
+
+    return jsonify({"course_tags": course_tag_list}), 200
+
+@app.route('/course_tag/<int:course_id>', methods=['GET'])
+def get_course_tags(course_id):
+    course = Course.query.get(course_id)
+
+    if not course:
+        return jsonify({"error": "Course not found"}), 404
+
+    tags = [tag.tag_name for tag in course.tags]
+
+    return jsonify({"course_id": course_id, "course_name": course.course_name, "tags": tags}), 200
 
 @app.route('/events', methods=['POST'])
 def create_event():

@@ -352,7 +352,7 @@ def get_event_tags(event_id):
     return jsonify({"event_id": event_id, "event_name": event.event_name, "tags": tags}), 200
 
 @app.route('/recommended_courses/<int:user_id>/<int:event_id>', methods=['GET'])
-def get_volunteer_courses(user_id, event_id):
+def get_recommended(user_id, event_id):
 
     user_courses = takes.query.filter_by(user_id=user_id).all()
 
@@ -360,16 +360,15 @@ def get_volunteer_courses(user_id, event_id):
     if not event:
         return jsonify({"error": "Event not found"}), 404
 
-    event_tags = [tag.tag_id for tag in event.tags]
+    event_tags = set([tag.tag_id for tag in event.tags])
 
-    volunteer_courses = []
+    course_tags = set()
     for user_course in user_courses:
-        course_tags = CourseTag.query.filter_by(course_id=user_course.course_id).all()
-        course_tags_ids = [tag.tag_id for tag in course_tags]
-        if set(event_tags).intersection(set(course_tags_ids)):
-            volunteer_courses.append(user_course.course_id)
-
-    return jsonify({"volunteer_courses": volunteer_courses}), 200
+        course_tags_ = CourseTag.query.filter_by(course_id=user_course.course_id).all()
+        course_tags.update([tag.tag_id for tag in course_tags_])
+        
+    recommended_courses = list(event_tags - course_tags)
+    return jsonify({"recommended_courses": recommended_courses}), 200
 
 @app.route('/course_tag', methods=['POST'])
 def add_tag_to_course():

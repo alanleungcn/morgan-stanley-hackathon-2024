@@ -54,3 +54,5 @@ db.sqlite3
 .vscode
 backend/__pycache__
 backend/migrations
+
+*.pem

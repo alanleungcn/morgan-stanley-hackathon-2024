@@ -5,6 +5,7 @@ export const zTraining = z.object({
   courseName: z.string(),
   courseDescription: z.string(),
   courseUrl: z.string().url(),
+  tags: z.array(z.string()),
 });
 
-export type Event = z.infer<typeof zTraining>;
+export type Training = z.infer<typeof zTraining>;

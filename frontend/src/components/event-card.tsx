@@ -1,5 +1,4 @@
 import { Event } from "@/api/types/event";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -18,6 +17,7 @@ type Props = {
   className?: React.ComponentProps<"div">["className"];
   buttonAction: () => void;
   buttonText: string;
+  children?: React.ReactNode;
 };
 
 export default function EventCard({
@@ -26,6 +26,7 @@ export default function EventCard({
   className,
   buttonText,
   buttonAction,
+  children,
 }: Props) {
   return (
     <Card
@@ -73,7 +74,7 @@ export default function EventCard({
                   </div>
                 </div>
               ) : (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 text-sm">
                   <Calendar className="h-4 w-4" />
                   {formatDateWithWeekday(event.eventStartDate)} -{" "}
                   {formatDateWithWeekday(event.eventEndDate)}
@@ -93,9 +94,10 @@ export default function EventCard({
               </div>
             </div>
             <div className="mt-auto w-full lg:w-32">
-              <Button className="w-full lg:w-32" onClick={buttonAction}>
+              {children}
+              {/* <Button className="w-full lg:w-32" onClick={buttonAction}>
                 {buttonText}
-              </Button>
+              </Button> */}
             </div>
           </div>
         </CardFooter>

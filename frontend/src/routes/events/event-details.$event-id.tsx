@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { createFileRoute } from "@tanstack/react-router";
 
-import { useEventDetails } from "@/api/event/use-event-details";
+import { useEvents } from "@/api/event/use-events";
 import { Register } from "@/components/user/register";
 
 // interface Event {
@@ -22,35 +22,10 @@ export const Route = createFileRoute("/events/event-details/$event-id")({
 });
 
 function EventDetails() {
-  const { data: event } = useEventDetails();
+  const { "event-id": eventId } = Route.useParams();
+  const { data: events } = useEvents();
 
-  // const formatDate = (dateString: string) => {
-  //   const options: Intl.DateTimeFormatOptions = {
-  //     weekday: "long",
-  //     year: "numeric",
-  //     month: "long",
-  //     day: "numeric",
-  //     hour: "numeric",
-  //     minute: "numeric",
-  //     timeZoneName: "short",
-  //   };
-  //   return new Date(dateString).toLocaleDateString("en-US", options);
-  // };
-
-  // const handleRegister = (role: string) => {
-  //   setEvent((prevEvent) => {
-  //     if (role === "participant") {
-  //       return {
-  //         ...prevEvent,
-  //         number_of_participants: prevEvent.number_of_participants + 1,
-  //       };
-  //     }
-  //     return {
-  //       ...prevEvent,
-  //       number_of_volunteers: prevEvent.number_of_volunteers + 1,
-  //     };
-  //   });
-  // };
+  const event = events?.find((e) => e.eventId === parseInt(eventId));
 
   return event ? (
     <div className="container mx-auto space-y-8 px-24 py-4 pb-24">
@@ -58,7 +33,7 @@ function EventDetails() {
         <div className="w-1/2 pr-4">
           <Card className="overflow-hidden">
             <img
-              src="/event-poster-1.jpg"
+              src={event.eventImageUrl}
               alt={event.eventName}
               className="h-auto max-h-96 w-full object-contain"
             />

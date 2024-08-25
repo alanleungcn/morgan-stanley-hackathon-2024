@@ -95,7 +95,18 @@ export const EventsList = () => {
                 }
                 buttonText="Details"
                 layout={layout}
-              />
+              >
+                <Button
+                  className="w-full lg:w-32"
+                  onClick={() =>
+                    router.navigate({
+                      to: `/events/event-details/${e.eventId}`,
+                    })
+                  }
+                >
+                  Details
+                </Button>
+              </EventCard>
             );
           })}
       </div>

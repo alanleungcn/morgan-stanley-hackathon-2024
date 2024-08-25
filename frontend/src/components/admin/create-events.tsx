@@ -26,6 +26,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { add, max } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { badgeVariants } from "../ui/badge";
 import { TimePicker } from "../ui/time-picker";
 
 export const CreateEvent = () => {
@@ -42,7 +43,7 @@ Kowloon
 Hong Kong`,
       eventDescription: "",
       numberOfParticipantsNeeded: 1,
-      eventType: "<PENDING_MEETING>",
+      eventType: "Social Gathering",
       numberOfVolunteersNeeded: 1,
       eventImageUrl: "https://google.com",
     },
@@ -96,12 +97,21 @@ Hong Kong`,
                   <FormLabel>Event Type</FormLabel>
                   <FormControl>
                     <ToggleGroup
-                      className="flex flex-wrap"
+                      className="flex flex-wrap justify-start gap-2"
                       type="single"
                       onValueChange={(e) => field.onChange(e)}
                     >
                       {eventTags?.map((tag) => (
-                        <ToggleGroupItem value={tag} className="capitalize">
+                        <ToggleGroupItem
+                          key={tag}
+                          value={tag}
+                          // asChild
+                          className={cn(
+                            badgeVariants({ variant: "outline" }),
+                            tag == field.value &&
+                              "border-2 !border-primary !bg-primary/50",
+                          )}
+                        >
                           {tag}
                         </ToggleGroupItem>
                       ))}
@@ -303,7 +313,7 @@ Hong Kong`,
               name="eventImageUrl"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="col-span-2 flex w-full flex-col items-start">
+                <FormItem className="col-span-1 flex w-full flex-col items-start sm:col-span-2">
                   <FormLabel>Image URL</FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -313,7 +323,7 @@ Hong Kong`,
               )}
             />
 
-            <Button type="submit" className="sm:col-span-2">
+            <Button type="submit" className="col-span-1 sm:col-span-2">
               Save
             </Button>
           </form>

@@ -1,3 +1,5 @@
+import { useLogout } from "@/api/user/use-logout";
+import { useUser } from "@/api/user/use-user";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "@tanstack/react-router";
 import {
@@ -7,7 +9,9 @@ import {
   Home,
   LockKeyhole,
   LogIn,
+  LogOut,
   LucideIcon,
+  UserPlus,
   X,
 } from "lucide-react";
 import { Button, buttonVariants } from "./ui/button";
@@ -57,6 +61,11 @@ const routes: RouteItem[] = [
 export default function MobileNav({ open, setOpen }: Props) {
   // const { commitLocation: basepath } = useRouter();
   const { pathname } = useLocation();
+
+  const { data: user } = useUser();
+
+  const { mutate: logout } = useLogout();
+
   return (
     <aside
       className={cn(
@@ -105,17 +114,40 @@ export default function MobileNav({ open, setOpen }: Props) {
           <Separator className="my-4" />
 
           <div className="p-2">
-            <div className={cn("flex h-12 w-full flex-col overflow-y-auto")}>
-              <Link
-                to="/auth/login"
-                className={cn(
-                  buttonVariants({ variant: "outline" }),
-                  "h-full w-full !justify-start gap-4 truncate",
-                )}
-              >
-                <LogIn className="h-5 w-5" />
-                Login
-              </Link>
+            <div className={cn("flex w-full flex-col gap-2 overflow-y-auto")}>
+              {user ? (
+                <Button
+                  variant="ghost"
+                  className={cn("h-full w-full !justify-start gap-4 truncate")}
+                  onClick={() => logout()}
+                >
+                  <LogOut className="h-5 w-5" />
+                  Logout
+                </Button>
+              ) : (
+                <>
+                  <Link
+                    to="/auth/login"
+                    className={cn(
+                      buttonVariants({ variant: "ghost" }),
+                      "h-12 w-full !justify-start gap-4 truncate",
+                    )}
+                  >
+                    <LogIn className="h-5 w-5" />
+                    Login
+                  </Link>
+                  <Link
+                    to="/auth/register"
+                    className={cn(
+                      buttonVariants({ variant: "ghost" }),
+                      "h-12 w-full !justify-start gap-4 truncate",
+                    )}
+                  >
+                    <UserPlus className="h-5 w-5" />
+                    Register
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

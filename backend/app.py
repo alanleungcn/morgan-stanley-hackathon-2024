@@ -103,6 +103,16 @@ def get_user_info():
     }
     return jsonify(user_info), 200
 
+@app.route('/user_events', methods=['GET'])
+@login_required
+def get_user_events():
+    events = db.session.query(Event).join(UserEvent).filter(UserEvent.user_id == current_user.user_id).all()
+    events_list = [event.to_json() for event in events]
+    events_info = {
+        "id": current_user.user_id,
+        "events": events_list
+    }
+    return jsonify(events_info), 200
 
 @app.route("/register", methods=['POST'])
 def register():

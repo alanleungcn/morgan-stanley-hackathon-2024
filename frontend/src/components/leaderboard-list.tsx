@@ -35,6 +35,46 @@ export const LeaderboardList = () => {
       name: "Jewel Aw",
       events: 0,
     },
+    {
+      name: "Liam Lee",
+      events: 0,
+    },
+    {
+      name: "Aria Patel",
+      events: 0,
+    },
+    {
+      name: "Elijah Kim",
+      events: 0,
+    },
+    {
+      name: "Harper Singh",
+      events: 0,
+    },
+    {
+      name: "Ivy Chen",
+      events: 0,
+    },
+    {
+      name: "Mason Gupta",
+      events: 0,
+    },
+    {
+      name: "Zoe Das",
+      events: 0,
+    },
+    {
+      name: "Oliver Shah",
+      events: 0,
+    },
+    {
+      name: "Ava Kumar",
+      events: 0,
+    },
+    {
+      name: "Lucas Patel",
+      events: 0,
+    },
     // Add more entries as needed
   ];
   const volunteerData = [
@@ -62,6 +102,46 @@ export const LeaderboardList = () => {
     },
     {
       name: "Kuma Kukuka",
+      events: 0,
+    },
+    {
+      name: "Liam Lee",
+      events: 0,
+    },
+    {
+      name: "Aria Patel",
+      events: 0,
+    },
+    {
+      name: "Elijah Kim",
+      events: 0,
+    },
+    {
+      name: "Harper Singh",
+      events: 0,
+    },
+    {
+      name: "Ivy Chen",
+      events: 0,
+    },
+    {
+      name: "Mason Gupta",
+      events: 0,
+    },
+    {
+      name: "Zoe Das",
+      events: 0,
+    },
+    {
+      name: "Oliver Shah",
+      events: 0,
+    },
+    {
+      name: "Ava Kumar",
+      events: 0,
+    },
+    {
+      name: "Lucas Patel",
       events: 0,
     },
     // Add more entries as needed

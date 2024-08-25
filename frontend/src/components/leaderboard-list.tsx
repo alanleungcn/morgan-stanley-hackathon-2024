@@ -3,32 +3,33 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { LeaderboardItem } from "./leaderboard-item";
+import { Podium } from "./leaderboard-podium";
 type Filter = "Participants" | "Volunteers";
 
 export const LeaderboardList = () => {
   const [filter, setFilter] = useState<Filter>("Participants");
   const participantData = [
     {
-      name: "Olivier BEAU",
+      name: "Mustafa Abylkhanuly",
       events: 10,
       imageUrl: "", // Replace with actual image path
     },
     {
-      name: "Orazkhan Khaidar",
-      events: 2,
+      name: "Aidar Muratov",
+      events: 5,
     },
     {
       name: "Jewel Aw",
-      events: 0,
+      events: 3,
     },
     {
       name: "Alex Smith",
-      events: 0,
+      events: 1,
       imageUrl: "", // Replace with actual image path
     },
     {
       name: "Kate Sympson",
-      events: 0,
+      events: 1,
     },
     {
       name: "Jewel Aw",
@@ -43,7 +44,7 @@ export const LeaderboardList = () => {
       imageUrl: "", // Replace with actual image path
     },
     {
-      name: "Khabib Nurmagamedov",
+      name: "Mark Enetts",
       events: 2,
     },
     {
@@ -51,7 +52,7 @@ export const LeaderboardList = () => {
       events: 0,
     },
     {
-      name: "Olivier BEAU",
+      name: "Madi Kaiyrkhan",
       events: 0,
       imageUrl: "", // Replace with actual image path
     },
@@ -65,6 +66,10 @@ export const LeaderboardList = () => {
     },
     // Add more entries as needed
   ];
+
+  const sortedData =
+    filter === "Participants" ? [...participantData] : [...volunteerData];
+  sortedData.sort((a, b) => b.events - a.events);
 
   return (
     <div className="pt- w-full space-y-4 pt-4">
@@ -86,13 +91,9 @@ export const LeaderboardList = () => {
           );
         })}
       </div>
-
+      <Podium users={sortedData.slice(0, 3)} />
       <ul>
-        {filter === "Participants" ? (
-          <LeaderboardItem data={participantData} />
-        ) : (
-          <LeaderboardItem data={volunteerData} />
-        )}
+        <LeaderboardItem data={sortedData.slice(3)} />
       </ul>
     </div>
   );

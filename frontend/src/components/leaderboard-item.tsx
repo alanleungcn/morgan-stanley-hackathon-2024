@@ -18,7 +18,7 @@ export const LeaderboardItem: FC<LeaderboardItemProps> = ({ data }) => {
       key={index}
       className="mb-2 grid grid-cols-[28px_52px_1fr_1fr] items-center rounded-lg border bg-white p-4 shadow-sm"
     >
-      <span className="font-mono font-medium">{index + 1}</span>
+      <span className="font-mono font-medium">{index + 4}</span>
       <Avatar>
         <AvatarImage src={user.imageUrl} alt="@shadcn" />
         <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>

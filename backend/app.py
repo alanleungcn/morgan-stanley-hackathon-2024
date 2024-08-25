@@ -79,7 +79,6 @@ def register():
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
-    email = data.get('email')
 
     if not email or not password:
         return jsonify({"message": "Missing required fields"}), 400
@@ -90,10 +89,10 @@ def register():
     )
     if 'name' in data:
         new_user.name = data['name']
-    if 'date_of_birth' in data:
-        new_user.date_of_birth = datetime.date.fromisoformat(data['date_of_birth'])
-    if 'phone_number' in data:
-        new_user.phone_number = data['phone_number']  
+    if 'dateOfBirth' in data:
+        new_user.date_of_birth = datetime.datetime.fromisoformat(data['dateOfBirth'])
+    if 'phoneNumber' in data:
+        new_user.phone_number = data['phoneNumber']  
     
     existing_user = User.query.filter_by(email=email).first()
     

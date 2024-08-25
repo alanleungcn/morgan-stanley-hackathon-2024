@@ -20,7 +20,7 @@ export const Hero = () => {
         <Link
           to="/events"
           className={cn(
-            "w-full gap-2 md:w-1/3",
+            "w-full gap-2",
             buttonVariants({ variant: "default", size: "lg" }),
           )}
         >

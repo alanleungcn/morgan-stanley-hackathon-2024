@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 
+import { useUser } from "@/api/user/use-user";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
@@ -23,6 +24,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { z } from "zod";
@@ -38,16 +40,27 @@ const FormSchema = z.object({
 });
 
 export const Profile = () => {
+  const { data: user, isSuccess } = useUser();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: "Alicia W. Briseno",
-      phone: "+85262345678",
-      email: "test@test.com",
-      birthday: new Date("2000-01-01"),
+      name: "",
+      phone: "",
+      email: "",
+      birthday: new Date(),
       password: "",
     },
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      form.setValue("name", user?.name);
+      form.setValue("phone", user?.phoneNumber);
+      form.setValue("email", user?.email);
+      form.setValue("birthday", user?.dateOfBirth);
+    }
+  }, [isSuccess]);
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     toast({
@@ -60,7 +73,7 @@ export const Profile = () => {
     });
   }
 
-  return (
+  return user ? (
     <div className="flex">
       <div className="w-full p-8">
         <Form {...form}>
@@ -185,5 +198,5 @@ export const Profile = () => {
         </Form>
       </div>
     </div>
-  );
+  ) : null;
 };

@@ -34,6 +34,11 @@ export const zRegister = zUser.pick({
   dateOfBirth: true,
 });
 
+export const zUserInfo = zUser.omit({
+  password: true,
+});
+
 export type Event = z.infer<typeof zUser>;
 export type Login = z.infer<typeof zLogin>;
 export type Register = z.infer<typeof zRegister>;
+export type UserInfo = z.infer<typeof zUserInfo>;

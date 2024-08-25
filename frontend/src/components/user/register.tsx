@@ -1,4 +1,4 @@
-import { Event } from "@/api/event/use-events";
+import { Event } from "@/api/types/event";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {

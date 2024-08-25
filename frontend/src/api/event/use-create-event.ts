@@ -1,14 +1,17 @@
 import { apiClient } from "@/api";
-import { useMutationState, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { EventConstruct } from "../types/event";
 
 export function useCreateEvent() {
-  return useQuery<Event[]>({
-    queryKey: ["events"],
-    queryFn: async () => {
-      const response = await apiClient.get(`/events`);
-      return response.data;
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (event: EventConstruct) => {
+      const res = await apiClient.post("/events", event);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["events"] });
     },
   });
-
-  return useMutationState({});
 }

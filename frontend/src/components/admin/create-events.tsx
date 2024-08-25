@@ -1,3 +1,6 @@
+import { useCreateEvent } from "@/api/event/use-create-event";
+import { useEventTags } from "@/api/event/use-event-types";
+import { EventConstruct, zEventConstruct } from "@/api/types/event";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -18,28 +21,20 @@ import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
+import { formatDateWithWeekdayWithTime } from "@/utils/date";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { add, format } from "date-fns";
+import { add, max } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-const eventSchema = z.object({
-  eventName: z.string(),
-  eventDate: z.date(),
-  eventLocation: z.string(),
-  eventDescription: z.string(),
-  numberOfParticipantsNeeded: z.preprocess((v) => Number(v), z.number()),
-  numberOfVolunteersNeeded: z.preprocess((v) => Number(v), z.number()),
-  eventType: z.enum(["<PENDING_MEETING>"]),
-});
+import { TimePicker } from "../ui/time-picker";
 
 export const CreateEvent = () => {
-  const form = useForm<z.infer<typeof eventSchema>>({
-    resolver: zodResolver(eventSchema),
+  const form = useForm<EventConstruct>({
+    resolver: zodResolver(zEventConstruct),
     defaultValues: {
       eventName: "",
-      eventDate: add(new Date(), { weeks: 1 }),
+      eventStartDate: add(new Date(), { days: 1 }),
+      eventEndDate: add(new Date(), { days: 1, hours: 2 }),
       eventLocation: `Zubin's Family Centre
 Shop 201G
 Austin MTR Station
@@ -49,10 +44,16 @@ Hong Kong`,
       numberOfParticipantsNeeded: 1,
       eventType: "<PENDING_MEETING>",
       numberOfVolunteersNeeded: 1,
+      eventImageUrl: "https://google.com",
     },
   });
 
-  function onSubmit(data: z.infer<typeof eventSchema>) {
+  const { mutate } = useCreateEvent();
+
+  const { data: eventTags } = useEventTags();
+
+  function onSubmit(data: EventConstruct) {
+    mutate(data);
     toast({
       title: "You submitted the following values:",
       description: (
@@ -88,52 +89,23 @@ Hong Kong`,
             />
 
             <FormField
-              control={form.control}
-              name="eventDate"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Date of the event</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground",
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              name="eventDescription"
+              name="eventType"
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col items-start">
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Event Type</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <ToggleGroup
+                      className="flex flex-wrap"
+                      type="single"
+                      onValueChange={(e) => field.onChange(e)}
+                    >
+                      {eventTags?.map((tag) => (
+                        <ToggleGroupItem value={tag} className="capitalize">
+                          {tag}
+                        </ToggleGroupItem>
+                      ))}
+                    </ToggleGroup>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -169,6 +141,147 @@ Hong Kong`,
             />
 
             <FormField
+              name="eventStartDate"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel className="text-left">Start of Event</FormLabel>
+                  <Popover>
+                    <FormControl>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "justify-start text-left font-normal",
+                            !field.value && "text-muted-foreground",
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value ? (
+                            formatDateWithWeekdayWithTime(field.value)
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                    </FormControl>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={(d) => {
+                          if (!d) return;
+
+                          // Prevent resetting time on date selection
+                          field.onChange(
+                            new Date(
+                              d.getFullYear(),
+                              d.getMonth(),
+                              d.getDate(),
+                              field.value.getHours(),
+                              field.value.getMinutes(),
+                            ),
+                          );
+                        }}
+                        initialFocus
+                        disabled={{
+                          before: new Date(),
+                        }}
+                      />
+                      <div className="border-t border-border p-3">
+                        <TimePicker
+                          setDate={field.onChange}
+                          date={field.value}
+                        />
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="eventEndDate"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel className="text-left">End of Event</FormLabel>
+                  <Popover>
+                    <FormControl>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "justify-start text-left font-normal",
+                            !field.value && "text-muted-foreground",
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value ? (
+                            formatDateWithWeekdayWithTime(field.value)
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                    </FormControl>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={(d) => {
+                          if (!d) return;
+
+                          // Prevent resetting time on date selection
+                          field.onChange(
+                            new Date(
+                              d.getFullYear(),
+                              d.getMonth(),
+                              d.getDate(),
+                              field.value.getHours(),
+                              field.value.getMinutes(),
+                            ),
+                          );
+                        }}
+                        initialFocus
+                        disabled={{
+                          before: max([
+                            new Date(),
+                            form.getValues("eventStartDate"),
+                          ]),
+                        }}
+                      />
+                      <div className="border-t border-border p-3">
+                        <TimePicker
+                          setDate={field.onChange}
+                          date={field.value}
+                        />
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="eventDescription"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="flex w-full flex-col items-start">
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      // placeholder="Tell us a little bit about yourself"
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
               name="eventLocation"
               control={form.control}
               render={({ field }) => (
@@ -187,20 +300,13 @@ Hong Kong`,
             />
 
             <FormField
-              name="eventType"
+              name="eventImageUrl"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex w-full flex-col items-start">
-                  <FormLabel>Event Type</FormLabel>
+                <FormItem className="col-span-2 flex w-full flex-col items-start">
+                  <FormLabel>Image URL</FormLabel>
                   <FormControl>
-                    <ToggleGroup
-                      type="single"
-                      onValueChange={(e) => field.onChange(e)}
-                    >
-                      <ToggleGroupItem value="a">AAAAA</ToggleGroupItem>
-                      <ToggleGroupItem value="b">BBBBB</ToggleGroupItem>
-                      <ToggleGroupItem value="c">CCCCC</ToggleGroupItem>
-                    </ToggleGroup>
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

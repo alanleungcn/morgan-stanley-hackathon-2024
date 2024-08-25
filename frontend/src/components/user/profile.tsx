@@ -61,8 +61,8 @@ export const Profile = () => {
   }
 
   return (
-    <div className="flex justify-center">
-      <div className="max-w-[800px] p-8">
+    <div className="flex">
+      <div className="w-full p-8">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}

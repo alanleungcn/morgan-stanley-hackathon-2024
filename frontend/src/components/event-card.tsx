@@ -1,4 +1,4 @@
-import { Event } from "@/api/event/use-events";
+import { Event } from "@/api/types/event";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -30,7 +30,7 @@ export default function EventCard({
   return (
     <Card className={cn(className, "flex flex-row")}>
       <CardHeader className="w-1/3 overflow-hidden p-0">
-        <img src={event.imageURL} className="h-full w-full object-contain" />
+        <img src={event.eventImageUrl} className="h-full w-full object-contain" />
       </CardHeader>
       <div className="w-2/3">
         <CardTitle className="p-4 text-sm sm:p-6 sm:text-xl">

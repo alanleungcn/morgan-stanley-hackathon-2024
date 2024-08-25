@@ -17,6 +17,10 @@ export const formatDateWithWeekday = (d: Date) => {
   return format(d, "d MMM yyyy (eee)");
 };
 
+export const formatDateWithWeekdayWithTime = (d: Date) => {
+  return format(d, "d MMM yyyy (eee) HH:mm");
+};
+
 export const formatTime = (d: Date) => {
   return format(d, "h:mm aaa");
 };

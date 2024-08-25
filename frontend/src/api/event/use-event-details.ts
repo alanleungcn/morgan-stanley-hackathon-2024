@@ -1,12 +1,12 @@
 // import { apiClient } from "@/api";
 // import { useQuery } from "@tanstack/react-query";
 import { add } from "date-fns";
-import { Event } from "./use-events";
+import { Event } from "@/api/types/event";
 
 export function useEventDetails(): { data: Event } {
   const dummy: { data: Event } = {
     data: {
-      imageURL:
+      eventImageUrl:
         "https://scontent.fhkg4-2.fna.fbcdn.net/v/t39.30808-6/456482713_517800687288809_586040857118645296_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_ohc=pOOrEOQe-78Q7kNvgG2Wz8v&_nc_ht=scontent.fhkg4-2.fna&oh=00_AYDa4SivfQLn7bmQRJ9Udtkng8YL6xw_es-laxlvXXB7yQ&oe=66CF58A7",
       eventId: 0,
       eventName:

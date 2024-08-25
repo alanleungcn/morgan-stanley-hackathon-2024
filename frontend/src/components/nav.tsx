@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { buttonVariants } from "./ui/button";
 
 export const Nav = () => {
-  const { data: user } = useUser();
+  const { data: user, isSuccess } = useUser();
 
   return (
     <div className="ml-8 hidden w-full justify-start gap-4 sm:flex md:gap-8">
@@ -33,7 +33,7 @@ export const Nav = () => {
         Leaderboard
       </Link>
 
-      {user?.isAdmin && (
+      {isSuccess && user.isAdmin && (
         <Link
           to="/admin"
           className={cn(buttonVariants({ variant: "link" }), "px-0 text-black")}

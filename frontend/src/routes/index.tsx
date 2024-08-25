@@ -12,7 +12,9 @@ function Index() {
     <div className="flex flex-col gap-4">
       <Hero />
       <EventTags />
-      <EventsList />
+      <div className="mx-auto max-w-[1000px]">
+        <EventsList />
+      </div>
     </div>
   );
 }

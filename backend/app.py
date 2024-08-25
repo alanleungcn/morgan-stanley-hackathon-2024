@@ -57,7 +57,6 @@ def login():
     identifier = json_data['identifier']
     password = json_data['password']
     user = User.query.filter(
-        (User.username == identifier) | 
         (User.email == identifier) | 
         (User.phone_number == identifier)
     ).filter_by(password=password).first()

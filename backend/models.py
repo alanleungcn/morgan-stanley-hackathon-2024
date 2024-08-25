@@ -130,8 +130,8 @@ class Event(db.Model):
     
     def __init__(self,event_start_date, event_end_date,event_name, event_location, event_description, number_of_participants_needed, number_of_volunteers_needed, event_type, event_image_url):
         self.event_name = event_name
-        self.event_start_date = datetime.strptime(event_start_date, '%Y-%m-%d %H:%M:%S')
-        self.event_end_date = datetime.strptime(event_end_date, '%Y-%m-%d %H:%M:%S')
+        self.event_start_date = datetime.fromisoformat(event_start_date)
+        self.event_end_date = datetime.fromisoformat(event_end_date)
         self.event_location = event_location
         self.event_description = event_description
         self.number_of_participants = 0
@@ -145,8 +145,8 @@ class Event(db.Model):
         return {
             "eventId": self.event_id,
             "eventName": self.event_name,
-            "eventStartDate": str(self.event_start_date),
-            "eventEndDate": str(self.event_end_date),
+            "eventStartDate": self.event_start_date.isoformat(),
+            "eventEndDate": self.event_end_date.isoformat(),
             "eventLocation": self.event_location,
             "eventDescription": self.event_description,
             "numberOfParticipants": self.number_of_participants,

@@ -269,6 +269,63 @@ def get_all_event_tags():
 
     return jsonify({"event_tags": event_tag_list}), 200
 
+@app.route('/event_tag', methods=['POST'])
+def add_tag_to_event():
+    data = request.get_json()
+
+    if 'event_id' not in data or 'tag_id' not in data:
+        return jsonify({"error": "Both event_id and tag_id are required"}), 400
+
+    event_id = data['event_id']
+    tag_id = data['tag_id']
+
+    event = Event.query.get(event_id)
+    if not event:
+        return jsonify({"error": "Event not found"}), 404
+
+    tag = Tag.query.get(tag_id)
+    if not tag:
+        return jsonify({"error": "Tag not found"}), 404
+
+    event.tags.append(tag)
+    db.session.commit()
+
+    return jsonify({"message": "Tag added to event successfully"}), 201
+
+@app.route('/event_tag/<int:event_id>', methods=['GET'])
+def get_event_tags(event_id):
+    event = Event.query.get(event_id)
+
+    if not event:
+        return jsonify({"error": "Event not found"}), 404
+
+    tags = [tag.tag_name for tag in event.tags]
+
+    return jsonify({"event_id": event_id, "event_name": event.event_name, "tags": tags}), 200
+
+@app.route('/course_tag', methods=['POST'])
+def add_tag_to_course():
+    data = request.get_json()
+
+    if 'course_id' not in data or 'tag_id' not in data:
+        return jsonify({"error": "Both course_id and tag_id are required"}), 400
+
+    course_id = data['course_id']
+    tag_id = data['tag_id']
+
+    course = Course.query.get(course_id)
+    if not course:
+        return jsonify({"error": "Course not found"}), 404
+
+    tag = Tag.query.get(tag_id)
+    if not tag:
+        return jsonify({"error": "Tag not found"}), 404
+
+    course.tags.append(tag)
+    db.session.commit()
+
+    return jsonify({"message": "Tag added to course successfully"}), 201
+
 @app.route('/course_tag', methods=['GET'])
 def get_all_course_tags():
     course_tags = CourseTag.query.all()
@@ -300,33 +357,6 @@ def get_course_tags(course_id):
 
     return jsonify({"course_id": course_id, "course_name": course.course_name, "tags": tags}), 200
 
-@app.route('/events', methods=['POST'])
-def create_event():
-    data = request.get_json()
-
-    event_tags = data.get('tags', [])
-
-    event = Event(
-        event_name=data['eventName'],
-        event_start_date=data['eventStartDate'],
-        event_end_date=data['eventEndDate'],
-        event_location=data['eventLocation'],
-        event_description=data['eventDescription'],
-        number_of_participants_needed=data['numberOfParticipantsNeeded'],
-        number_of_volunteers_needed=data['numberOfVolunteersNeeded'],
-        event_type = EventType(data['eventType']),
-        event_image_url = data['eventImageUrl']
-    )
-
-    for tag_id in event_tags:
-        tag = Tag.query.get(tag_id)
-        if tag:
-            event.tags.append(tag)
-            
-    db.session.add(event)
-    db.session.commit()
-    return jsonify(event.to_json()), 201
-
 @app.route('/search_events', methods=['GET'])
 def search_events():
     try:
@@ -357,6 +387,34 @@ def search_events():
     finally:
         db.session.close()
 
+@app.route('/events', methods=['POST'])
+def create_event():
+    data = request.get_json()
+
+    event_tags = data.get('tags', [])
+
+    event = Event(
+        event_name=data['eventName'],
+        event_start_date=data['eventStartDate'],
+        event_end_date=data['eventEndDate'],
+        event_location=data['eventLocation'],
+        event_description=data['eventDescription'],
+        number_of_participants_needed=data['numberOfParticipantsNeeded'],
+        number_of_volunteers_needed=data['numberOfVolunteersNeeded'],
+        event_type = EventType(data['eventType']),
+        event_image_url = data['eventImageUrl']
+    )
+
+    for tag_id in event_tags:
+        tag = Tag.query.get(tag_id)
+        if tag:
+            event.tags.append(tag)
+            
+    db.session.add(event)
+    db.session.commit()
+    return jsonify(event.to_json()), 201
+
+
 @app.route('/events', methods=['GET'])
 def get_all_events():
     events = Event.query.all()
@@ -386,9 +444,9 @@ def update_event(event_id):
     if 'eventName' in data:
         event.event_name = data['eventName']
     if 'eventStartDate' in data:
-        event.event_start_date = datetime.strptime(data['eventStartDate'], '%Y-%m-%d %H:%M:%S')
+        event.event_start_date = datetime.fromisoformat(data['eventStartDate'])
     if 'eventEndDate' in data:
-        event.event_end_date = datetime.strptime(data['eventEndDate'], '%Y-%m-%d %H:%M:%S')
+        event.event_end_date = datetime.fromisoformat(data['eventEndDate'])
     if 'eventLocation' in data:
         event.event_location = data['eventLocation']
     if 'eventDescription' in data:

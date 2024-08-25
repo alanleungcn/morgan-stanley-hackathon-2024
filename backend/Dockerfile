@@ -10,4 +10,4 @@ COPY . /app
 
 ENV FLASK_RUN_PORT=${FLASK_RUN_POR}
 
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["flask", "run", "--host=0.0.0.0", "--cert=adhoc"]

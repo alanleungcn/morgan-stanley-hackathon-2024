@@ -6,17 +6,16 @@ import { Progress } from "@/components/user/progress";
 import { Volunteered } from "@/components/user/volunteer";
 
 import { cn } from "@/lib/utils";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
-  BarChart,
   Calendar,
+  GraduationCap,
   HandHelping,
   LucideIcon,
   User2,
 } from "lucide-react";
-import { useState } from "react";
 
-export const Route = createFileRoute("/user/")({
+export const Route = createFileRoute("/user/$tab")({
   component: User,
 });
 
@@ -36,23 +35,11 @@ const tabs: TabItem[] = [
     label: "Profile",
     render: Profile,
   },
-  // {
-  //   tab: "wellbeing",
-  //   icon: HeartHandshake,
-  //   label: "Wellbeing",
-  //   render: Wellbeing,
-  // },
   {
     tab: "myevents",
     icon: Calendar,
-    label: "Myevents",
+    label: "My Events",
     render: Myevents,
-  },
-  {
-    tab: "progress",
-    icon: BarChart,
-    label: "Progress",
-    render: Progress,
   },
   {
     tab: "volunteered",
@@ -60,17 +47,24 @@ const tabs: TabItem[] = [
     label: "Volunteered",
     render: Volunteered,
   },
+  {
+    tab: "progress",
+    icon: GraduationCap,
+    label: "Training Progress",
+    render: Progress,
+  },
 ];
 
 function User() {
-  const [tab, setTab] = useState<Tab>("profile");
+  const { tab } = Route.useParams();
+  const navigate = useNavigate();
 
   return (
     <div className="flex flex-wrap justify-center">
-      <div className="flex flex-col w-full gap-8 p-4 md:w-72">
+      <div className="flex w-full flex-col gap-8 p-4 md:w-72">
         <h1 className="pt-4 text-4xl font-bold">Settings</h1>
 
-        <div className="flex flex-col w-full gap-2">
+        <div className="flex w-full flex-col gap-2">
           {tabs.map((t: TabItem) => (
             <div
               key={t.tab}
@@ -85,7 +79,8 @@ function User() {
                   "w-full !justify-start gap-4 truncate",
                   tab === t.tab && "bg-secondary/50",
                 )}
-                onClick={() => setTab(t.tab)}
+                // onClick={() => setTab(t.tab)}
+                onClick={() => navigate({ to: `/user/${t.tab}` })}
               >
                 <t.icon size={20} />
                 {t.label}

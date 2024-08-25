@@ -9,7 +9,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
-import { CalendarDays, Cog, LogOut } from "lucide-react";
+import {
+  Calendar,
+  GraduationCap,
+  HandHelping,
+  LogOut,
+  UserRound,
+} from "lucide-react";
 import { buttonVariants } from "./ui/button";
 
 export default function NavUser() {
@@ -36,27 +42,60 @@ export default function NavUser() {
             <AvatarFallback>AA</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Name</DropdownMenuLabel>
+        <DropdownMenuContent align="end" className="w-48">
+          <DropdownMenuLabel>A Name</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <Link to="/user">
+            <Link
+              to="/user/$tab"
+              params={{ tab: "profile" }}
+              className="w-full"
+            >
               <div className="flex items-center gap-2">
-                <Cog size={16} />
-                Settings
+                <UserRound className="h-4 w-4" />
+                Profile
               </div>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <div className="flex items-center gap-2">
-              <CalendarDays size={16} />
-              My Events
-            </div>
+            <Link
+              to="/user/$tab"
+              params={{ tab: "myevents" }}
+              className="w-full"
+            >
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                My Events
+              </div>
+            </Link>
           </DropdownMenuItem>
-          {/* <DropdownMenuItem>Volunteer Account</DropdownMenuItem> */}
           <DropdownMenuItem>
-            <div className="flex items-center gap-2">
-              <LogOut size={16} />
+            <Link
+              to="/user/$tab"
+              params={{ tab: "volunteered" }}
+              className="w-full"
+            >
+              <div className="flex items-center gap-2">
+                <HandHelping className="h-4 w-4" />
+                Volunteered
+              </div>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link
+              to="/user/$tab"
+              params={{ tab: "progress" }}
+              className="w-full"
+            >
+              <div className="flex items-center gap-2">
+                <GraduationCap className="h-4 w-4" />
+                Training Progress
+              </div>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <div className="flex w-full items-center gap-2">
+              <LogOut className="h-4 w-4" />
               Logout
             </div>
           </DropdownMenuItem>

@@ -42,7 +42,7 @@ export const Profile = () => {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: "Alicia W. Briseno",
-      phone: "+852 12345678",
+      phone: "+85262345678",
       email: "test@test.com",
       birthday: new Date("2000-01-01"),
       password: "",

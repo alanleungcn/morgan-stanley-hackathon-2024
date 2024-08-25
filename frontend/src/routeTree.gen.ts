@@ -12,11 +12,11 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
-import { Route as UserIndexImport } from './routes/user/index'
 import { Route as TrainingsIndexImport } from './routes/trainings/index'
 import { Route as LeaderboardIndexImport } from './routes/leaderboard/index'
 import { Route as EventsIndexImport } from './routes/events/index'
 import { Route as AdminIndexImport } from './routes/admin/index'
+import { Route as UserTabImport } from './routes/user/$tab'
 import { Route as AuthRegisterImport } from './routes/auth/register'
 import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as EventsEventDetailsEventIdImport } from './routes/events/event-details.$event-id'
@@ -25,11 +25,6 @@ import { Route as EventsEventDetailsEventIdImport } from './routes/events/event-
 
 const IndexRoute = IndexImport.update({
   path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const UserIndexRoute = UserIndexImport.update({
-  path: '/user/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -50,6 +45,11 @@ const EventsIndexRoute = EventsIndexImport.update({
 
 const AdminIndexRoute = AdminIndexImport.update({
   path: '/admin/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const UserTabRoute = UserTabImport.update({
+  path: '/user/$tab',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -93,6 +93,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRegisterImport
       parentRoute: typeof rootRoute
     }
+    '/user/$tab': {
+      id: '/user/$tab'
+      path: '/user/$tab'
+      fullPath: '/user/$tab'
+      preLoaderRoute: typeof UserTabImport
+      parentRoute: typeof rootRoute
+    }
     '/admin/': {
       id: '/admin/'
       path: '/admin'
@@ -121,13 +128,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrainingsIndexImport
       parentRoute: typeof rootRoute
     }
-    '/user/': {
-      id: '/user/'
-      path: '/user'
-      fullPath: '/user'
-      preLoaderRoute: typeof UserIndexImport
-      parentRoute: typeof rootRoute
-    }
     '/events/event-details/$event-id': {
       id: '/events/event-details/$event-id'
       path: '/events/event-details/$event-id'
@@ -144,11 +144,11 @@ export const routeTree = rootRoute.addChildren({
   IndexRoute,
   AuthLoginRoute,
   AuthRegisterRoute,
+  UserTabRoute,
   AdminIndexRoute,
   EventsIndexRoute,
   LeaderboardIndexRoute,
   TrainingsIndexRoute,
-  UserIndexRoute,
   EventsEventDetailsEventIdRoute,
 })
 
@@ -163,11 +163,11 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/auth/login",
         "/auth/register",
+        "/user/$tab",
         "/admin/",
         "/events/",
         "/leaderboard/",
         "/trainings/",
-        "/user/",
         "/events/event-details/$event-id"
       ]
     },
@@ -180,6 +180,9 @@ export const routeTree = rootRoute.addChildren({
     "/auth/register": {
       "filePath": "auth/register.tsx"
     },
+    "/user/$tab": {
+      "filePath": "user/$tab.tsx"
+    },
     "/admin/": {
       "filePath": "admin/index.tsx"
     },
@@ -191,9 +194,6 @@ export const routeTree = rootRoute.addChildren({
     },
     "/trainings/": {
       "filePath": "trainings/index.tsx"
-    },
-    "/user/": {
-      "filePath": "user/index.tsx"
     },
     "/events/event-details/$event-id": {
       "filePath": "events/event-details.$event-id.tsx"

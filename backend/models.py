@@ -82,7 +82,7 @@ class UserEvent(db.Model):
     __tablename__ = "user_event"
     user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), primary_key=True)
     event_id = db.Column(db.Integer, db.ForeignKey("event.event_id"), primary_key=True)
-    
+    user_role = db.Column(db.String(50), nullable=True, default="Participant")
     
     user = db.relationship("User", back_populates="events")
     event = db.relationship("Event", back_populates="users")

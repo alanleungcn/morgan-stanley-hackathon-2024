@@ -145,6 +145,32 @@ def register():
     
     return jsonify({"message": "User registered successfully"}), 201
 
+@app.route("/register_event/<int:event_id>", methods=['POST'])
+def reg_event(event_id):
+    user_id = current_user.user_id
+    existing_user_event = UserEvent.query.filter_by(event_id=event_id,user_id=user_id).first()
+    if existing_user_event:
+            return jsonify({'message': 'User is already registered for the event'}), 400 
+    
+    new_user_event = UserEvent(user_id=user_id, event_id=event_id)
+    db.session.add(new_user_event)
+    db.session.commit()
+
+    return jsonify({'message': 'User registered for the event successfully'}), 200
+
+@app.route("/register_event_volunteer/<int:event_id>", methods=['POST'])
+def reg_event_volunteer(event_id):
+    user_id = current_user.user_id
+    existing_user_event = UserEvent.query.filter_by(event_id=event_id,user_id=user_id).first()
+    if existing_user_event:
+            return jsonify({'message': 'User is already registered for the event'}), 400 
+    
+    new_user_event = UserEvent(user_id=user_id, event_id=event_id, user_role="Volunteer")
+    db.session.add(new_user_event)
+    db.session.commit()
+
+    return jsonify({'message': 'User registered for the event successfully'}), 200
+
 @app.route("/send_mail", methods=['POST'])
 def send():
     
@@ -481,6 +507,25 @@ def get_event_tags(event_id):
     tags = [tag.tag_name for tag in event.tags]
 
     return jsonify({"event_id": event_id, "event_name": event.event_name, "tags": tags}), 200
+
+@app.route('/recommended_courses/<int:event_id>', methods=['GET'])
+def get_recommended_current_user(event_id):
+
+    user_courses = UserEvent.query.filter_by(user_id=current_user.user_id).all()
+
+    event = Event.query.get(event_id)
+    if not event:
+        return jsonify({"error": "Event not found"}), 404
+
+    event_tags = set([tag.tag_id for tag in event.tags])
+
+    course_tags = set()
+    for user_course in user_courses:
+        course_tags_ = CourseTag.query.filter_by(course_id=user_course.course_id).all()
+        course_tags.update([tag.tag_id for tag in course_tags_])
+        
+    recommended_courses = list(event_tags - course_tags)
+    return jsonify({"recommended_courses": recommended_courses}), 200
 
 @app.route('/recommended_courses/<int:user_id>/<int:event_id>', methods=['GET'])
 def get_recommended(user_id, event_id):

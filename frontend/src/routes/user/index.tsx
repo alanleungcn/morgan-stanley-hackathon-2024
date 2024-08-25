@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { Myevents } from "@/components/user/myevents";
 import { Profile } from "@/components/user/profile";
 import { Progress } from "@/components/user/progress";
@@ -65,15 +66,16 @@ function User() {
   const [tab, setTab] = useState<Tab>("profile");
 
   return (
-    <div className="flex justify-center">
-      <div className="flex w-72 flex-col gap-12 p-8">
-        <h1 className="text-4xl font-bold">Settings</h1>
+    <div className="flex flex-wrap justify-center">
+      <div className="flex w-full flex-col gap-8 p-4 md:w-72">
+        <h1 className="text-4xl pt-4 font-bold">Settings</h1>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex w-full flex-col gap-2">
           {tabs.map((t: TabItem) => (
             <div
+              key={t.tab}
               className={cn(
-                "flex w-64 flex-col overflow-y-auto",
+                "flex w-full flex-col overflow-y-auto",
                 tab === t.tab && "border-l-4 border-primary",
               )}
             >
@@ -93,10 +95,12 @@ function User() {
         </div>
       </div>
 
-      <div className="w-full max-w-[800px]">
+      <Separator className="sm:hidden" />
+
+      <div className="w-full md:w-3/5">
         {tabs.map((t: TabItem) => {
           if (tab === t.tab) {
-            return <t.render />;
+            return <t.render key={t.tab} />;
           }
         })}
       </div>

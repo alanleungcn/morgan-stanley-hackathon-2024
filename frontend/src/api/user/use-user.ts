@@ -6,10 +6,10 @@ export function useUser() {
   return useQuery<UserInfo>({
     queryKey: ["user"],
     queryFn: async () => {
-      const response = await apiClient.get(`/user_info`, {
+      const res = await apiClient.get(`/user_info`, {
         withCredentials: true,
       });
-      return response.data;
+      return res.data;
     },
   });
 }

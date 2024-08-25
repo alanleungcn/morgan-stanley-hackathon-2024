@@ -1,3 +1,4 @@
+import { useLogout } from "@/api/user/use-logout";
 import { useUser } from "@/api/user/use-user";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -18,9 +19,11 @@ import {
   UserRound,
 } from "lucide-react";
 import { buttonVariants } from "./ui/button";
+import { Separator } from "./ui/separator";
 
 export default function NavUser() {
   const { data: user } = useUser();
+  const { mutate: logout } = useLogout();
 
   return (
     <div className="mr-4 flex gap-2">
@@ -87,25 +90,34 @@ export default function NavUser() {
                 </div>
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <div className="flex w-full items-center gap-2">
-                <LogOut className="h-4 w-4" />
-                Logout
-              </div>
+
+            <Separator />
+
+            <DropdownMenuItem className="mt-1 gap-2" onClick={() => logout()}>
+              {/* <div className="flex w-full items-center gap-2"> */}
+              <LogOut className="h-4 w-4" />
+              Logout
+              {/* </div> */}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
-        <div>
+        <div className="flex gap-2">
           <Link
             to="/auth/login"
-            className={cn("!text-black", buttonVariants({ variant: "link" }))}
+            className={cn(
+              "px-0 !text-black",
+              buttonVariants({ variant: "link" }),
+            )}
           >
             Login
           </Link>
           <Link
             to="/auth/register"
-            className={cn("!text-black", buttonVariants({ variant: "link" }))}
+            className={cn(
+              "px-0 !text-black",
+              buttonVariants({ variant: "link" }),
+            )}
           >
             Register
           </Link>

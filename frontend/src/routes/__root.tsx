@@ -1,11 +1,11 @@
 import AiChat from "@/components/AiChat/AiChat";
 import MobileNav from "@/components/mobile-nav";
 import NavUser from "@/components/nav-user";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
-import { cn } from "@/lib/utils";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Nav } from "@/components/nav";
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { Menu } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -67,53 +67,7 @@ function Root() {
           <img src="/zubin.svg" className="h-16 w-16" />
         </Link>
 
-        <div className="ml-8 hidden w-full justify-start gap-4 sm:flex md:gap-8">
-          <Link
-            to="/"
-            className={cn(
-              buttonVariants({ variant: "link" }),
-              "px-0 text-black",
-            )}
-          >
-            Home
-          </Link>
-          <Link
-            to="/events"
-            className={cn(
-              buttonVariants({ variant: "link" }),
-              "px-0 text-black",
-            )}
-          >
-            Events
-          </Link>
-          <Link
-            to="/trainings"
-            className={cn(
-              buttonVariants({ variant: "link" }),
-              "px-0 text-black",
-            )}
-          >
-            Trainings
-          </Link>
-          <Link
-            to="/leaderboard"
-            className={cn(
-              buttonVariants({ variant: "link" }),
-              "px-0 text-black",
-            )}
-          >
-            Leaderboard
-          </Link>
-          <Link
-            to="/admin"
-            className={cn(
-              buttonVariants({ variant: "link" }),
-              "px-0 text-black",
-            )}
-          >
-            Admin Portal
-          </Link>
-        </div>
+        <Nav />
 
         <NavUser />
       </div>

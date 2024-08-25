@@ -280,13 +280,15 @@ def seed_DB():
 
         db.session.commit()  # Commit users to get their IDs
         
-        for _ in range(50):
+        tags_l = ["chai", "storytelling", "elderly","children", "adult", "women&girls", "jobs", "internships", 
+                                    "scholarships", "coding", "programming", "development"]
+        for i in range(10):
             tag = Tag(
-                tag_name=random.choice(["chai", "storytelling", "elderly","children", "adult", "women&girls", "jobs", "internships", 
-                                    "scholarships", "coding", "programming", "development"])
+                tag_name=tags_l[i]
             )
-            tags.append(tag)
-            db.session.add(tag)
+            if tag not in tags:
+                tags.append(tag)
+                db.session.add(tag)
 
         db.session.commit()
 

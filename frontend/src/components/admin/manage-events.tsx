@@ -53,13 +53,12 @@ export const ManageEvents = () => {
               >
                 Details
               </Button>
-              <Button className="mb-2 w-full lg:w-32" disabled>
+              {/* <Button className="mb-2 w-full lg:w-32" disabled>
                 Edit
-              </Button>
+              </Button> */}
               <Button
                 className="w-full lg:w-32"
                 variant="destructive"
-                disabled
                 onClick={() => deleteEvent(e.eventId)}
               >
                 Delete

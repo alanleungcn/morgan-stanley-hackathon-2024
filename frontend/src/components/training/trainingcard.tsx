@@ -7,6 +7,7 @@ type TrainingCardProps = {
   description: string;
   videoSrc: string;
   tags: string[];
+  children?: JSX.Element;
 };
 
 export const TrainingCard = ({
@@ -14,6 +15,7 @@ export const TrainingCard = ({
   description,
   videoSrc,
   tags,
+  children,
 }: TrainingCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -60,6 +62,7 @@ export const TrainingCard = ({
                 </span>
               ))}
             </div>
+            <div>{children}</div>
           </CardContent>
         </div>
       </Card>

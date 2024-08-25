@@ -76,7 +76,7 @@ export const CreateTraining = () => {
                   <FormLabel>Training Tags</FormLabel>
                   <FormControl>
                     <ToggleGroup
-                      className="flex h-64 flex-wrap justify-start gap-2 overflow-y-scroll"
+                      className="flex max-h-64 flex-wrap justify-start gap-2 overflow-y-scroll p-2"
                       type="multiple"
                       onValueChange={(e) => field.onChange(e)}
                     >

@@ -262,7 +262,20 @@ def seed_DB():
                      "https://w7.pngwing.com/pngs/843/694/png-transparent-avatar-female-cartoon-avatar-purple-face-black-hair-thumbnail.png",
                      "https://w7.pngwing.com/pngs/555/703/png-transparent-computer-icons-avatar-woman-user-avatar-face-heroes-service-thumbnail.png",
                      "https://w7.pngwing.com/pngs/954/328/png-transparent-computer-icons-user-profile-avatar-heroes-head-recruiter-thumbnail.png"]
- 
+        
+        user = User(
+                email="user@user.com",
+                password="user",
+                name="Adam Smith",
+                avatar_url="https://img.freepik.com/premium-photo/man-with-dark-hair-goatee-poses-against-blue-circle-background_96461-13314.jpg?w=1480",
+                date_of_birth=fake.date_of_birth(),
+                phone_number=f"+852{fake.msisdn()[3:]}",
+                is_admin=False,
+                is_volunteer=False,
+                preferred_event_type=EventType.TRAINING.value
+            )
+        users.append(user)
+        db.session.add(user)
         for _ in range(50):
             user = User(
                 email=fake.email(),
@@ -810,6 +823,39 @@ def get_courses():
     courses = Course.query.all()
     courses_json = [course.to_json() for course in courses]
     return jsonify(courses_json), 200
+
+@app.route('/courses/<int:course_id>', methods=['DELETE'])
+def delete_course(course_id):
+    course = Course.query.get(course_id)
+    if not course:
+        return jsonify({'message': 'Course not found'}), 404
+
+    db.session.delete(course)
+    db.session.commit()
+
+    return jsonify({'message': 'Course deleted'}), 200
+
+
+@app.route('/courses/<int:course_id>', methods=['PUT'])
+def update_course(course_id):
+    course = Course.query.get(course_id)
+    if not course:
+        return jsonify({'message': 'Course not found'}), 404
+
+    data = request.get_json()
+    if 'courseName' in data:
+        course.course_name = data['courseName']
+    if 'courseDescription' in data:
+        course.course_description = data['courseDescription']
+    if 'courseUrl' in data:
+        course.course_url = data['courseUrl']
+
+    db.session.commit()
+
+    return jsonify(course.to_json()), 200
+
+
+
 
 @app.route('/reviews', methods=['POST'])
 def create_review():

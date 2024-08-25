@@ -130,10 +130,10 @@ class Event(db.Model):
     event_type = db.Column(Enum(EventType), nullable=False)
     event_image_url = db.Column(db.String(255), nullable=True)
     
-    users = db.relationship("UserEvent", back_populates="event")
+    users = db.relationship("UserEvent", back_populates="event",cascade="all, delete-orphan")
     
     tags = db.relationship('Tag', secondary='event_tags', backref='events')
-    reviews = db.relationship("Reviews", backref="event", lazy=True)
+    reviews = db.relationship("Reviews", backref="event", lazy=True, cascade="all, delete-orphan")
     
     def __init__(self,event_start_date, event_end_date,event_name, event_location, event_description, number_of_participants_needed, number_of_volunteers_needed, event_type, event_image_url):
         self.event_name = event_name

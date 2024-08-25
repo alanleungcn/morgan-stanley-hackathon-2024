@@ -22,24 +22,41 @@ type Props = {
 
 export default function EventCard({
   event,
-  // layout,
+  layout,
   className,
   buttonText,
   buttonAction,
 }: Props) {
   return (
-    <Card className={cn(className, "flex flex-row")}>
-      <CardHeader className="w-1/3 overflow-hidden p-0">
-        <img src={event.eventImageUrl} className="h-full w-full object-contain" />
+    <Card
+      className={cn(
+        className,
+        layout === "grid" ? "flex h-96 flex-col" : "flex h-64 flex-row",
+      )}
+    >
+      <CardHeader
+        className={cn(
+          "overflow-hidden p-0",
+          layout === "grid" ? "h-1/3" : "w-1/3",
+        )}
+      >
+        <img src={event.eventImageUrl} className="h-full w-full object-cover" />
       </CardHeader>
-      <div className="w-2/3">
-        <CardTitle className="p-4 text-sm sm:p-6 sm:text-xl">
+
+      <div
+        className={cn(
+          layout === "grid"
+            ? "flex h-2/3 flex-col"
+            : "flex w-2/3 flex-col justify-between",
+        )}
+      >
+        <CardTitle className="p-4 text-sm sm:px-6 sm:text-xl">
           {event.eventName}
         </CardTitle>
-        <CardContent className="p-4 pt-0 text-sm sm:text-base">
+        <CardContent className="p-4 pt-0 text-sm sm:px-6 sm:text-base">
           {event.eventDescription}
         </CardContent>
-        <CardFooter className="px-4">
+        <CardFooter className="px-4 sm:px-6">
           <div className="flex w-full flex-col items-start justify-between gap-4 lg:flex-row">
             <div className="flex flex-col">
               {isSameDay(event.eventStartDate, event.eventEndDate) ? (
@@ -75,7 +92,7 @@ export default function EventCard({
                 volunteers
               </div>
             </div>
-            <div className="w-full lg:w-32">
+            <div className="mt-auto w-full lg:w-32">
               <Button className="w-full lg:w-32" onClick={buttonAction}>
                 {buttonText}
               </Button>

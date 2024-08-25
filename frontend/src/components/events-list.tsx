@@ -21,14 +21,7 @@ type Filter = "all" | "today" | "weekend";
 export const EventsList = () => {
   const [filter, setFilter] = useState<Filter>("all");
 
-  // const { data, isSuccess } = useQuery({
-  //   queryKey: ["root"],
-  //   queryFn: () => apiClient.get("/").then((res) => res.data),
-  // });
-
-  // const { data } = useEvents();
-
-  const { data, isLoading, isSuccess } = useEvents();
+  const { data, isSuccess } = useEvents();
 
   const [layout, setLayout] = useState<"grid" | "list">("list");
 
@@ -85,7 +78,7 @@ export const EventsList = () => {
 
       <div
         className={cn(
-          "grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3",
+          "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3",
           layout === "list" && "!grid-cols-1",
         )}
       >

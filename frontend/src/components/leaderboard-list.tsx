@@ -73,6 +73,7 @@ export const LeaderboardList = () => {
         {["Participants", "Volunteers"].map((f) => {
           return (
             <Button
+              key={f}
               variant="ghost"
               className={cn(
                 filter === f && "rounded-none border-b-4 border-primary",

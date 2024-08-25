@@ -1,8 +1,8 @@
 import {
   BriefcaseBusiness,
+  Coffee,
   Dices,
   HandHeart,
-  PartyPopper,
   PencilRuler,
 } from "lucide-react";
 import { Button } from "./ui/button";
@@ -14,7 +14,7 @@ export const EventTags = () => {
         variant="ghost"
         className="flex h-16 w-16 flex-col gap-2 sm:h-24 sm:w-24"
       >
-        <PartyPopper className="h-6 w-6 sm:h-8 sm:w-8" />
+        <Coffee className="h-6 w-6 sm:h-8 sm:w-8" />
         <p className="text-xs sm:text-sm">Gathering</p>
       </Button>
 

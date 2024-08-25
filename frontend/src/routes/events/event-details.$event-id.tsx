@@ -30,6 +30,9 @@ function EventDetails() {
 
   const event = events?.find((e) => e.eventId === parseInt(eventId));
 
+  // const { mutate: registerEvent } = useRegisterEvent();
+  // const { mutate: registerEventVolunteer } = useRegisterEventVolunteer();
+
   return event ? (
     <div className="container mx-auto space-y-8 px-24 py-4 pb-24 pt-16">
       <div className="flex">
@@ -85,7 +88,16 @@ function EventDetails() {
             <h2 className="text-2xl font-semibold">About this event</h2>
             <p className="text-lg">{event.eventDescription}</p>
           </div>
-          <Register onRegister={() => {}} event={event} />
+          <Register
+            onRegister={(role) => {
+              if (role === "participant") {
+                // registerEvent(event.eventId);
+              } else {
+                // registerEventVolunteer(event.eventId);
+              }
+            }}
+            event={event}
+          />
         </div>
       </div>
     </div>

@@ -8,8 +8,6 @@
 docker compose up -d
 ```
 
-> Please note volume persistenting haven't been set up
-
 2. Locally run
 
 Refer to the [development](#development) section

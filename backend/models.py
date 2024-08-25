@@ -23,15 +23,14 @@ class UserMixin:
     __table_args__ = {"extend_existing": True}
     
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
     is_volunteer = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
     avatar_url = db.Column(db.String(255), nullable=True)
-    email = db.Column(db.String(100), unique=True, nullable=True)
+    email = db.Column(db.String(100), unique=True, nullable=False)
     name = db.Column(db.String(100), nullable=True)
     date_of_birth = db.Column(db.DateTime, nullable=True)
-    phone_number = db.Column(db.String(100), nullable=True)
+    phone_number = db.Column(db.String(100),unique=True, nullable=True)
     preferred_event_type = db.Column(db.String(100), nullable=True)
     
     

@@ -77,25 +77,30 @@ def logout():
 
 @app.route("/register", methods=['POST'])
 def register():
+    
     data = request.get_json()
-    username = data.get('username')
+    email = data.get('email')
     password = data.get('password')
     email = data.get('email')
-    date_of_birth = data.get('date_of_birth')
-    phone_number = data.get('phone_number')
-    
-    if not username or not password or not email or not date_of_birth :
+
+    if not email or not password:
         return jsonify({"message": "Missing required fields"}), 400
     
-    existing_user = User.query.filter_by(username=username).first()
+    new_user = User(
+        email=email,
+        password=password
+    )
+    if 'name' in data:
+        new_user.name = data['name']
+    if 'date_of_birth' in data:
+        new_user.date_of_birth = datetime.date.fromisoformat(data['date_of_birth'])
+    if 'phone_number' in data:
+        new_user.phone_number = data['phone_number']  
+    
+    existing_user = User.query.filter_by(email=email).first()
     
     if existing_user:
         return jsonify({"message": "Username already exists"}), 400
-
-    new_user = User(
-        username=username,
-        password=password
-    )
 
     db.session.add(new_user)
     db.session.commit()
@@ -134,7 +139,7 @@ def seed_DB():
         # Create 50 users
 
         admin = User(
-            username="admin",
+            email="admin@mail.ru",
             password="admin_password",
             is_admin=True
         )
@@ -143,7 +148,7 @@ def seed_DB():
 
         for _ in range(50):
             user = User(
-                username=fake.user_name(),
+                email=fake.user_name(),
                 password="password",
                 avatar_url=fake.image_url()
             )

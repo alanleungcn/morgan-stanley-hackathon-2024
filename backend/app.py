@@ -221,10 +221,11 @@ def send():
     recipients = []
     for item in data['recipients']:
         recipients.append(item['email']) 
+    subject = "Well Being Assessment"
+    body = "Hello, hope you are doing good! Please, let us know about your well being by the link: https://mshack.alanleungcn.com/, cause we care about you!"
+    send_email(subject, body, recipients)
 
-    send_email(data['subject'], data['body'], recipients)
-
-    return "Email sent successfully!"
+    return jsonify({"message": "Email sent successfully!"}), 201
 
 
 fake = Faker()
@@ -780,19 +781,26 @@ def get_event_types():
     return jsonify(event_types), 200
 
 @app.route('/courses', methods=['POST'])
-#@admin_required
+# @admin_required
 def create_course():
     data = request.get_json()
+
+    course_tags = data.get('tags', [])
 
     new_course = Course(
         course_name=data.get('courseName'),
         course_description=data.get('courseDescription'),
-        course_type=data.get('courseType'),
         course_url=data.get('courseUrl')
     )
 
+    for tag_id in course_tags:
+        tag = Tag.query.get(tag_id)
+        if tag:
+            new_course.tags.append(tag)
+            
     db.session.add(new_course)
     db.session.commit()
+
     return jsonify({"message": "Course created successfully"}), 201
 
 @app.route('/courses', methods=['GET'])

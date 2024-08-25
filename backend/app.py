@@ -809,20 +809,28 @@ def create_course():
         course_description=data.get('courseDescription'),
         course_url=data.get('courseUrl')
     )
-
+    db.session.add(new_course)
+    # course_tags = []
+    
     for tag_id in course_tags:
         tag = Tag.query.get(tag_id)
+        # course_tag = CourseTag(
+        #     course_id = data['course_id'],
+        #     tag_id = data['tag_id'])
         if tag:
             new_course.tags.append(tag)
-            
-    db.session.add(new_course)
+            # Creating and associating CourseTag objects
+            # course_tag = CourseTag(course_id=new_course.course_id, tag_id=tag.tag_id)
+            # db.session.add(course_tag)
+
+    # db.session.add(new_course)
     db.session.commit()
 
     return jsonify({"message": "Course created successfully"}), 201
 
 @app.route('/courses', methods=['GET'])
 def get_courses():
-    courses = Course.query.order_by(Course.course_id.desc()).all()
+    courses = Course.query.order_by(Course.course_start_date.desc()).all()
     courses_json = [course.to_json() for course in courses]
     return jsonify(courses_json), 200
 

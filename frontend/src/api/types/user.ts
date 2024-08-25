@@ -17,18 +17,14 @@ export const zUser = z.object({
 
 export const zLogin = zUser
   .pick({
+    phoneNumber: true,
     email: true,
+    password: true,
   })
-  .or(
-    zUser.pick({
-      phoneNumber: true,
-    }),
-  )
-  .and(
-    zUser.pick({
-      password: true,
-    }),
-  );
+  .extend({
+    phoneNumber: z.string().optional(),
+    email: z.string().optional(),
+  });
 
 export const zRegister = zUser.pick({
   phoneNumber: true,

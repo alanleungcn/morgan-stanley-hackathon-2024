@@ -23,6 +23,7 @@ import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { z } from "zod";
@@ -64,9 +65,16 @@ function Register() {
     });
   }
 
+  const [background] = useState(
+    "linear-gradient(to bottom right,#FDED1B,#81D2F5,#E6E6E6)",
+  );
+
   return (
-    <div className="flex flex-col items-center">
-      <div className="my-16 flex w-1/3 max-w-[800px] flex-col gap-8 rounded-md p-8 shadow-lg">
+    <div
+      className="grid h-[calc(100%-4rem)] w-full place-items-center"
+      style={{ background }}
+    >
+      <div className="my-16 flex w-1/3 max-w-[800px] flex-col gap-8 rounded-md bg-background p-8 shadow-lg">
         <h1 className="text-4xl font-bold">Registration</h1>
 
         <Form {...form}>

@@ -1,13 +1,12 @@
 import { apiClient } from "@/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Event } from "../types/event";
 
-export function useCreateEvent() {
+export function useDeleteEvent() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (event: Event) => {
-      const res = await apiClient.delete(`/events/${event.eventId}`);
+    mutationFn: async (eventId: number) => {
+      const res = await apiClient.delete(`/events/${eventId}`);
       return res.data;
     },
     onSuccess: () => {

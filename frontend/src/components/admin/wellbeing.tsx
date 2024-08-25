@@ -1,40 +1,63 @@
-import { useCharts } from "@/api/chart/use-charts";
-
-import { VegaLite } from "react-vega";
+import { useSendMail } from "@/api/mail/use-send-mail";
+import { useUsers } from "@/api/user/use-users";
+import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { Mail, Phone } from "lucide-react";
+import { Avatar } from "../ui/avatar";
+import { Button } from "../ui/button";
 
 export const Wellbeing = () => {
-  const { data, isSuccess } = useCharts();
-
-  return isSuccess ? (
+  const { data: users, isSuccess } = useUsers();
+  const { mutate: sendMail } = useSendMail();
+  return (
     <div className="flex justify-center">
       <div className="flex w-full flex-col gap-5 p-8">
-        <h1 className="text-4xl font-bold">Statistics</h1>
+        <h1 className="text-4xl font-bold">Wellbeing</h1>
 
-        <div className="space-y-4">
-          <div className="flex space-x-4">
-            <div className="rounded-md bg-primary/30 p-6 shadow">
-              <div className="font-mono text-xl font-black">150</div>
-              Emails Sent (+18%)
-            </div>
-            <div className="rounded-md bg-primary/30 p-6 shadow">
-              <div className="font-mono text-xl font-black">90</div>
-              Event Reviews (+12%)
-            </div>
-            <div className="rounded-md bg-primary/30 p-6 shadow">
-              <div className="font-mono text-xl font-black">130</div>
-              Wellbeing Received (+15%)
-            </div>
-          </div>
+        <div className="flex flex-col gap-2">
+          {isSuccess &&
+            users.map(
+              (user) =>
+                !user.isAdmin && (
+                  <div
+                    className="flex items-center gap-4 rounded-md p-4 shadow"
+                    key={user.userId}
+                  >
+                    <Avatar>
+                      <AvatarImage src={user.avatarUrl} alt="" />
+                      <AvatarFallback>{user.name}</AvatarFallback>
+                    </Avatar>
 
-          <h1 className="text-2xl font-bold">Event Review</h1>
-          <VegaLite spec={data.reviewCharts} />
-          <VegaLite spec={data.eventTypesChart} />
+                    <div className="w-32 text-ellipsis">{user.name}</div>
 
-          <h1 className="text-2xl font-bold">Wellbeing Review</h1>
-          <VegaLite spec={data.wellbeingDistributionChart} />
-          <VegaLite spec={data.wellbeingCharts} />
+                    <div className="ml-auto space-x-4">
+                      <Button className="ml-auto" size="icon" variant="outline">
+                        <Phone className="h-4 w-4" />
+                      </Button>
+
+                      <Button
+                        className="ml-auto"
+                        size="icon"
+                        variant="outline"
+                        onClick={() =>
+                          sendMail({
+                            subject: "Wellbeing Health Check",
+                            body: "Please fill out this form to check in on your wellbeing",
+                            recipients: [
+                              {
+                                email: user.email,
+                              },
+                            ],
+                          })
+                        }
+                      >
+                        <Mail className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ),
+            )}
         </div>
       </div>
     </div>
-  ) : null;
+  );
 };

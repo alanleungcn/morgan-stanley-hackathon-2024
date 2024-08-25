@@ -35,7 +35,6 @@ export function useLogin() {
       toast({
         title: "Login Failed",
       });
-      navigate({ to: "/" });
     },
   });
 }

@@ -2,6 +2,7 @@ import { CreateEvent } from "@/components/admin/create-events";
 import { CreateTraining } from "@/components/admin/create-training";
 import { ManageEvents } from "@/components/admin/manage-events";
 import { ManageTrainings } from "@/components/admin/manage-trainings";
+import { Statistics } from "@/components/admin/statistics";
 import { Wellbeing } from "@/components/admin/wellbeing";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -13,6 +14,7 @@ import {
   CalendarPlus,
   CalendarRange,
   ChartColumn,
+  HeartHandshake,
   LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
@@ -26,6 +28,7 @@ type Tab =
   | "createTraining"
   | "manageEvents"
   | "manageTrainings"
+  | "statistics"
   | "wellbeing";
 
 type TabItem = {
@@ -61,9 +64,15 @@ const tabs: TabItem[] = [
     render: ManageTrainings,
   },
   {
-    tab: "wellbeing",
+    tab: "statistics",
     icon: ChartColumn,
     label: "Statistics",
+    render: Statistics,
+  },
+  {
+    tab: "wellbeing",
+    icon: HeartHandshake,
+    label: "Wellbeing",
     render: Wellbeing,
   },
 ];

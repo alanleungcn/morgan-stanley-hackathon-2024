@@ -1,3 +1,4 @@
+import { useDeleteEvent } from "@/api/event/use-delete-event";
 import { useEvents } from "@/api/event/use-events";
 import { useNavigate } from "@tanstack/react-router";
 import EventCard from "../event-card";
@@ -10,6 +11,8 @@ export const ManageEvents = () => {
   // const [layout, setLayout] = useState<"grid" | "list">("list");
 
   const navigate = useNavigate();
+
+  const { mutate: deleteEvent } = useDeleteEvent();
 
   return (
     <div className="flex justify-center">
@@ -50,8 +53,15 @@ export const ManageEvents = () => {
               >
                 Details
               </Button>
-              <Button className="mb-2 w-full lg:w-32">Edit</Button>
-              <Button className="w-full lg:w-32" variant="destructive">
+              <Button className="mb-2 w-full lg:w-32" disabled>
+                Edit
+              </Button>
+              <Button
+                className="w-full lg:w-32"
+                variant="destructive"
+                disabled
+                onClick={() => deleteEvent(e.eventId)}
+              >
                 Delete
               </Button>
             </EventCard>

@@ -53,7 +53,6 @@ def login():
 
     json_data = request.get_json()
     #data = json.loads(json_data)
-    
     identifier = json_data['identifier']
     password = json_data['password']
     user = User.query.filter(
@@ -222,13 +221,20 @@ def seed_DB():
                 db.session.add(review)
 
 
-        for _ in range(50):
-            event_user = user_event(
-                user_id=random.choice([user.user_id for user in users if not user.is_admin]),
-                event_id=random.choice([event.event_id for event in events])
-            )
 
-            db.session.add(event_user)
+        existing_pairs = set()
+
+        for _ in range(50):
+            while True:
+                user_id = random.choice([user.user_id for user in users if not user.is_admin])
+                event_id = random.choice([event.event_id for event in events])
+                pair = (user_id, event_id)
+        
+                if pair not in existing_pairs:
+                    existing_pairs.add(pair)
+                    event_user = user_event(user_id=user_id, event_id=event_id)
+                    db.session.add(event_user)
+                    break
 
         # Create 50 wellbeings
         for _ in range(50):

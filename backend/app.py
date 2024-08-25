@@ -188,6 +188,7 @@ def get_users():
 
 
 @app.route("/register_event/<int:event_id>", methods=['POST'])
+@login_required
 def reg_event(event_id):
     user_id = current_user.user_id
     existing_user_event = UserEvent.query.filter_by(event_id=event_id,user_id=user_id).first()
@@ -201,6 +202,7 @@ def reg_event(event_id):
     return jsonify({'message': 'User registered for the event successfully'}), 200
 
 @app.route("/register_event_volunteer/<int:event_id>", methods=['POST'])
+@login_required
 def reg_event_volunteer(event_id):
     user_id = current_user.user_id
     existing_user_event = UserEvent.query.filter_by(event_id=event_id,user_id=user_id).first()

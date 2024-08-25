@@ -25,7 +25,7 @@ type TabItem = {
   tab: Tab;
   icon: LucideIcon;
   label: string;
-  render: () => JSX.Element;
+  render: () => JSX.Element | null;
 };
 
 const tabs: TabItem[] = [

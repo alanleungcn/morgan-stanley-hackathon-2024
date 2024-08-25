@@ -20,7 +20,7 @@ login_manager = LoginManager(app)
 
 @app.route("/", methods=['GET'])
 def main():
-    return redirect("/seed_DB")
+    # return redirect("/seed_DB")
     return jsonify({"message": "test"})
 
 @login_manager.user_loader

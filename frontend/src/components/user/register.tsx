@@ -147,7 +147,7 @@ export function Register({ event, onRegister }: Props) {
                       <Printer className="h-5 w-5" />
                     </Button>
                     <Button
-                      variant="secondary"
+                      variant="outline"
                       onClick={() => {
                         setStep(1);
                         setDialogOpen(false);

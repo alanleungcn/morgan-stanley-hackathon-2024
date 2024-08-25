@@ -5,13 +5,14 @@ import altair as alt
 import json
 import datetime as datetime
 import random
-
+from random import sample
+from sqlalchemy import func
 
 from flask import request, jsonify, send_file, redirect
 from config import app, db, mail
 from flask_mail import Mail, Message
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
-from models import User, Participant, Volunteer, Course, Wellbeing, Event, Reviews, takes,EventType
+from models import User, Participant, Volunteer, Course, Wellbeing, Event, Reviews, takes,EventType, Tag, EventTag, CourseTag
 
 from faker import Faker
 
@@ -93,6 +94,7 @@ def seed_DB():
 
         users = []
         participants = []
+        tags = []
         events = []
         volunteers = []
         courses = []
@@ -119,6 +121,16 @@ def seed_DB():
             db.session.add(user)
 
         db.session.commit()  # Commit users to get their IDs
+        
+        for _ in range(50):
+            tag = Tag(
+                tag_name=random.choice(["chai", "storytelling", "elderly","children", "adult", "women&girls", "jobs", "internships", 
+                                    "scholarships", "coding", "programming", "development"])
+            )
+            tags.append(tag)
+            db.session.add(tag)
+
+        db.session.commit()
 
         # Create 35 participants
         for _ in range(35):
@@ -150,6 +162,18 @@ def seed_DB():
                 event_type=random.choice(list(EventType)),
                 event_image_url=fake.image_url()
             )
+            # num_tags = random.randint(1, 3)     
+            # ktags = sample(tags, num_tags)
+            
+            # for tag_name in ktags:
+            #     tag = Tag.query.filter_by(tag_name=tag_name).first()
+            #     if tag is None:
+            #         tag = Tag(tag_name=tag_name)
+            #         db.session.add(tag)
+            #     event.tags.append(tag)
+            random_tag = Tag.query.order_by(func.random()).first()
+            if random_tag:
+                event.tags.append(random_tag)
             events.append(event)
             db.session.add(event)
 
@@ -217,9 +241,33 @@ def seed_DB():
         db.session.close()
     return jsonify({"message": "exited"})
 
+@app.route('/tags', methods=['GET'])
+def get_all_tags():
+    tags = Tag.query.all()
+    tag_list = [tag.tag_name for tag in tags]
+
+    return jsonify({"tags": tag_list}), 200
+
+@app.route('/event_tags', methods=['GET'])
+def get_all_event_tags():
+    event_tags = EventTag.query.all()
+
+    event_tag_list = []
+    for event_tag in event_tags:
+        event_tag_data = {
+            "event_id": event_tag.event_id,
+            "tag_id": event_tag.tag_id
+        }
+        event_tag_list.append(event_tag_data)
+
+    return jsonify({"event_tags": event_tag_list}), 200
+
 @app.route('/events', methods=['POST'])
 def create_event():
     data = request.get_json()
+
+    event_tags = data.get('tags', [])
+
     event = Event(
         event_name=data['eventName'],
         event_start_date=data['eventStartDate'],
@@ -231,6 +279,12 @@ def create_event():
         event_type = EventType(data['eventType']),
         event_image_url = data['eventImageUrl']
     )
+
+    for tag_id in event_tags:
+        tag = Tag.query.get(tag_id)
+        if tag:
+            event.tags.append(tag)
+            
     db.session.add(event)
     db.session.commit()
     return jsonify(event.to_json()), 201
@@ -269,12 +323,9 @@ def search_events():
 def get_all_events():
     events = Event.query.all()
     event_list = [event.to_json() for event in events]
-    
-    event_type_tags = {event_type.name: event_type.value[1] for event_type in EventType}
 
     response_data = {
-        "events": event_list,
-        "event_type_tags": event_type_tags
+        "events": event_list
     }
 
     return jsonify(response_data), 200

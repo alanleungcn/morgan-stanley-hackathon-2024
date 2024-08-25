@@ -86,12 +86,29 @@ class takes(db.Model):
             "progress": self.progress,
             "completed": self.completed
         }
+
+class Tag(db.Model):
+    __tablename__ = "tag"
+    tag_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    tag_name = db.Column(db.String(50), nullable=False)
+
+class EventTag(db.Model):
+    __tablename__ = 'event_tags'
+    event_id = db.Column(db.Integer, db.ForeignKey('event.event_id'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tag.tag_id'), primary_key=True)
+
+# class EventType(enum.Enum):
+#     SOCIAL_GATHERING = ("Social Gathering", ["chai", "storytelling", "elderly"])
+#     COUNSELLING = ("Counselling", ["children", "adult", "women&girls", "jobs", "internships", "scholarships"])
+#     TRAINING = ("Training", ["training"])
+#     WORKSHOP = ("Workshop", ["parent", "mental health"])
+#     OTHER = ("Other", ["helpline", "urgent", "limited period", "one-time"])
 class EventType(enum.Enum):
-    SOCIAL_GATHERING = ("Social Gathering", ["chai", "storytelling", "elderly"])
-    COUNSELLING = ("Counselling", ["children", "adult", "women&girls", "jobs", "internships", "scholarships"])
-    TRAINING = ("Training", ["training"])
-    WORKSHOP = ("Workshop", ["parent", "mental health"])
-    OTHER = ("Other", ["helpline", "urgent", "limited period", "one-time"])
+    SOCIAL_GATHERING = ("Social Gathering")
+    COUNSELLING = ("Counselling")
+    TRAINING = ("Training")
+    WORKSHOP = ("Workshop")
+    OTHER = ("Other")
 
 class Event(db.Model):
     __tablename__ = "event"
@@ -107,6 +124,7 @@ class Event(db.Model):
     number_of_volunteers_needed = db.Column(db.Integer, nullable=False)
     event_type = db.Column(Enum(EventType), nullable=False)
     event_image_url = db.Column(db.String(255), nullable=True)
+    tags = db.relationship('Tag', secondary='event_tags', backref='events')
     
     reviews = db.relationship("Reviews", backref="event", lazy=True)
     
@@ -136,8 +154,10 @@ class Event(db.Model):
             "numberOfParticipantsNeeded": self.number_of_participants_needed,
             "numberOfVolunteersNeeded": self.number_of_volunteers_needed,
             "eventType": self.event_type.value,
-            "eventImageUrl": self.event_image_url
+            "eventImageUrl": self.event_image_url,
+            "tags": [tag.tag_name for tag in self.tags]
         }
+    
         
 class Participant(UserMixin, db.Model):
     __tablename__ = "participant"
@@ -202,8 +222,8 @@ class Course(db.Model):
     course_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     course_name = db.Column(db.String(100), nullable=False)
     course_description = db.Column(db.String(100), nullable=False)
-    course_type = db.Column(db.String(100), nullable=False)
     course_url = db.Column(db.String(100), nullable=False)
+
     
     def to_json(self):
         return {

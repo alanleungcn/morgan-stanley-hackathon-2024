@@ -1,9 +1,12 @@
 import { apiClient } from "@/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "@/components/ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { Register } from "../types/user";
 
 export function useRegister() {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   return useMutation({
     mutationFn: async (cred: Register) => {
@@ -14,7 +17,17 @@ export function useRegister() {
       return res.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+      toast({
+        title: "Registration Successful",
+      });
+      navigate({ to: "/auth/login" });
+      // queryClient.
+      // queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+    onError: () => {
+      toast({
+        title: "Registration Failed",
+      });
     },
   });
 }

@@ -1,9 +1,12 @@
 import { apiClient } from "@/api";
+import { toast } from "@/components/ui/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { Login } from "../types/user";
 
 export function useLogin() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   return useMutation({
     mutationFn: async (cred: Login) => {
@@ -22,6 +25,10 @@ export function useLogin() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
+      toast({
+        title: "Login Successful",
+      });
+      navigate({ to: "/" });
     },
   });
 }

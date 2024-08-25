@@ -75,7 +75,6 @@ def logout():
     return jsonify({"message": "Logged out successfully"}), 200
 
 
-
 @app.route("/register", methods=['POST'])
 def register():
     data = request.get_json()
@@ -218,9 +217,14 @@ def seed_DB():
                 reviews.append(review)
                 db.session.add(review)
 
-        take = user_event(user_id='1',event_id='1')
-        db.session.add(take)
-        db.session.add(user_event(user_id='1',event_id='2'))
+
+        for _ in range(50):
+            event_user = user_event(
+                user_id=random.choice([user.user_id for user in users if not user.is_admin]),
+                event_id=random.choice([event.event_id for event in events])
+            )
+
+            db.session.add(event_user)
 
         # Create 50 wellbeings
         for _ in range(50):

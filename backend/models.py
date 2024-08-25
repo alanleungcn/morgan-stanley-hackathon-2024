@@ -164,11 +164,11 @@ class Participant(UserMixin, db.Model):
     username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
-    name = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100), nullable=True)
     date_of_birth = db.Column(db.DateTime, nullable=False)
     phone_number = db.Column(db.String(100), nullable=True)
     number_of_participated_events = db.Column(db.Integer, nullable=False)
-    preferred_event_type = db.Column(db.String(100), nullable=False)
+    preferred_event_type = db.Column(db.String(100), nullable=True)
     
     events = db.relationship("Event", secondary=user_event_joins, backref="participants")
   

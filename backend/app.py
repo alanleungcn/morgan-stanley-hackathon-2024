@@ -54,9 +54,13 @@ def login():
     json_data = request.get_json()
     #data = json.loads(json_data)
     
-    username = json_data['username']
+    identifier = json_data['identifier']
     password = json_data['password']
-    user = User.query.filter_by(username=username, password=password).first()
+    user = User.query.filter(
+        (User.username == identifier) | 
+        (User.email == identifier) | 
+        (User.phone_number == identifier)
+    ).filter_by(password=password).first()
 
     if user:
         login_user(user)
@@ -69,6 +73,45 @@ def login():
 def logout():
     logout_user()
     return jsonify({"message": "Logged out successfully"}), 200
+
+
+
+@app.route("/register", methods=['POST'])
+def register():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    email = data.get('email')
+    date_of_birth = data.get('date_of_birth')
+    phone_number = data.get('phone_number')
+    
+    if not username or not password or not email or not date_of_birth :
+        return jsonify({"message": "Missing required fields"}), 400
+    
+    existing_user = User.query.filter_by(username=username).first()
+    existing_participant = Participant.query.filter_by(username=username).first()
+    if existing_user or existing_participant:
+        return jsonify({"message": "Username already exists"}), 400
+
+    new_user = User(
+        username=username,
+        password=password
+    )
+
+    new_participant = Participant(
+        username=username,
+        password=password,
+        email=email,
+        date_of_birth=datetime.date.fromisoformat(date_of_birth),
+        phone_number=phone_number,
+        number_of_participated_events=0,
+    )
+    
+    db.session.add(new_user)
+    db.session.add(new_participant)
+    db.session.commit()
+    
+    return jsonify({"message": "User registered successfully"}), 201
 
 @app.route("/send_mail", methods=['POST'])
 def send():

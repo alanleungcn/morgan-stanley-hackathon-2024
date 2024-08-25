@@ -26,7 +26,9 @@ export const EventsList = () => {
   //   queryFn: () => apiClient.get("/").then((res) => res.data),
   // });
 
-  const { data } = useEvents();
+  // const { data } = useEvents();
+
+  const { data, isLoading, isSuccess } = useEvents();
 
   const [layout, setLayout] = useState<"grid" | "list">("list");
 
@@ -87,19 +89,22 @@ export const EventsList = () => {
           layout === "list" && "!grid-cols-1",
         )}
       >
-        {data?.map((e) => {
-          return (
-            <EventCard
-              key={e.eventId}
-              event={e}
-              buttonAction={() =>
-                router.navigate({ to: `/events/event-details/${e.eventId}` })
-              }
-              buttonText="Details"
-              layout={layout}
-            />
-          );
-        })}
+        {isSuccess &&
+          data.map((e) => {
+            return (
+              <EventCard
+                key={e.eventId}
+                event={e}
+                buttonAction={() =>
+                  router.navigate({
+                    to: `/events/event-details/${e.eventId}`,
+                  })
+                }
+                buttonText="Details"
+                layout={layout}
+              />
+            );
+          })}
       </div>
     </div>
   );

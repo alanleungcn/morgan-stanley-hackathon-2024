@@ -12,7 +12,7 @@ from flask import request, jsonify, send_file, redirect
 from config import app, db, mail
 from flask_mail import Mail, Message
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
-from models import User,Course, Wellbeing, Event, Reviews, user_event,EventType, Tag, EventTag, CourseTag
+from models import User,Course, Wellbeing, Event, Reviews, UserEvent,EventType, Tag, EventTag, CourseTag
 
 from faker import Faker
 
@@ -62,7 +62,21 @@ def login():
 
     if user:
         login_user(user)
-        return jsonify({"message": "Login successful"}), 200
+        #events = db.session.query(Event).join(UserEvent).filter(UserEvent.user_id == user.user_id).all()
+        #events_list = [event.to_json() for event in events]
+        return jsonify({"message": "Login successful", "user": {
+            "id": user.user_id,
+            "email": user.email,
+            "name": user.name,
+            "dateOfBirth": user.date_of_birth,
+            "phoneNumber": user.phone_number,
+            "avatarUrl": user.avatar_url,
+            "isAdmin": user.is_admin,
+            "isVolunteer": user.is_volunteer,
+            "preferredEventType": user.preferred_event_type,
+            #"events": events_list
+
+        }}), 200
     else:
         return jsonify({"message": "Invalid credentials"}), 401
 
@@ -71,6 +85,23 @@ def login():
 def logout():
     logout_user()
     return jsonify({"message": "Logged out successfully"}), 200
+
+
+@app.route('/user_info', methods=['GET'])
+@login_required
+def get_user_info():
+    user_info = {
+        "id": current_user.user_id,
+        "email": current_user.email,
+        "name": current_user.name,
+        "dateOfBirth": current_user.date_of_birth,
+        "phoneNumber": current_user.phone_number,
+        "avatarUrl": current_user.avatar_url,
+        "isAdmin": current_user.is_admin,
+        "isVolunteer": current_user.is_volunteer,
+        "preferredEventType": current_user.preferred_event_type
+    }
+    return jsonify(user_info), 200
 
 
 @app.route("/register", methods=['POST'])
@@ -147,7 +178,12 @@ def seed_DB():
             user = User(
                 email=fake.email(),
                 password="password",
-                avatar_url=fake.image_url()
+                avatar_url=fake.image_url(),
+                date_of_birth=fake.date_of_birth(),
+                phone_number=fake.phone_number(),
+                is_admin=False,
+                is_volunteer=False,
+                preferred_event_type=random.choice([e.value for e in EventType])
             )
             users.append(user)
             db.session.add(user)
@@ -346,7 +382,7 @@ def seed_DB():
         
                 if pair not in existing_pairs:
                     existing_pairs.add(pair)
-                    event_user = user_event(user_id=user_id, event_id=event_id)
+                    event_user = UserEvent(user_id=user_id, event_id=event_id)
                     db.session.add(event_user)
                     break
 
@@ -439,7 +475,7 @@ def get_event_tags(event_id):
 @app.route('/recommended_courses/<int:user_id>/<int:event_id>', methods=['GET'])
 def get_recommended(user_id, event_id):
 
-    user_courses = user_event.query.filter_by(user_id=user_id).all()
+    user_courses = UserEvent.query.filter_by(user_id=user_id).all()
 
     event = Event.query.get(event_id)
     if not event:

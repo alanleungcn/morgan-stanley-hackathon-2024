@@ -24,7 +24,7 @@ class UserMixin:
     
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     password = db.Column(db.String(100), nullable=False)
-    is_volunteer = db.Column(db.Boolean, default=False)
+    is_volunteer = db .Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
     avatar_url = db.Column(db.String(255), nullable=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
@@ -32,7 +32,9 @@ class UserMixin:
     date_of_birth = db.Column(db.DateTime, nullable=True)
     phone_number = db.Column(db.String(100),unique=True, nullable=True)
     preferred_event_type = db.Column(db.String(100), nullable=True)
-    
+    @declared_attr
+    def events(cls):
+        return db.relationship("UserEvent", back_populates="user")
     
 class User(UserMixin, db.Model):
     __tablename__ = "user"
@@ -64,7 +66,6 @@ class User(UserMixin, db.Model):
     def to_json(self):
         return {
             "userId": self.user_id,
-            "username": self.username,
             "password": self.password,
             "isVolunteer": self.is_volunteer,
             "isAdmin": self.is_admin,
@@ -77,11 +78,14 @@ class User(UserMixin, db.Model):
         }
 
 
-class user_event(db.Model):
+class UserEvent(db.Model):
     __tablename__ = "user_event"
     user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), primary_key=True)
     event_id = db.Column(db.Integer, db.ForeignKey("event.event_id"), primary_key=True)
-
+    
+    
+    user = db.relationship("User", back_populates="events")
+    event = db.relationship("Event", back_populates="users")
     
     @property
     def is_completed(self):
@@ -125,8 +129,10 @@ class Event(db.Model):
     number_of_volunteers_needed = db.Column(db.Integer, nullable=False)
     event_type = db.Column(Enum(EventType), nullable=False)
     event_image_url = db.Column(db.String(255), nullable=True)
-    tags = db.relationship('Tag', secondary='event_tags', backref='events')
     
+    users = db.relationship("UserEvent", back_populates="event")
+    
+    tags = db.relationship('Tag', secondary='event_tags', backref='events')
     reviews = db.relationship("Reviews", backref="event", lazy=True)
     
     def __init__(self,event_start_date, event_end_date,event_name, event_location, event_description, number_of_participants_needed, number_of_volunteers_needed, event_type, event_image_url):
@@ -156,6 +162,7 @@ class Event(db.Model):
             "numberOfVolunteersNeeded": self.number_of_volunteers_needed,
             "eventType": self.event_type.value,
             "eventImageUrl": self.event_image_url,
+            "users": [user.user_id for user in self.users],
             "tags": [tag.tag_name for tag in self.tags]
         }
     

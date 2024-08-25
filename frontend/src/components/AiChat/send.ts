@@ -1,8 +1,29 @@
+import { useEvents } from "@/api/event/use-events";
 import { StreamSend, StreamingAdapterObserver } from "@nlux/react";
-
 // A demo API by NLUX that connects to OpenAI
 // and returns a stream of Server-Sent events
 const demoProxyServerUrl = "https://gptalks.api.nlux.dev/openai/chat/stream";
+
+const getEventDetailsString = () => {
+  const { data, isSuccess } = useEvents();
+
+  if (!isSuccess) {
+    return "Failed to fetch event data.";
+  }
+
+  const eventDetails = data
+    ?.map((event, index) => {
+      return `
+    ${index + 1}. Event information:
+        Name: ${event.eventName}
+        Description: ${event.eventDescription}
+        Start Date: ${event.eventStartDate.toDateString()}
+        End Date: ${event.eventEndDate.toDateString()}`;
+    })
+    .join("\n");
+
+  return eventDetails;
+};
 
 // Function to send query to the server and receive a stream of chunks as response
 export const send: StreamSend = async (
@@ -10,26 +31,23 @@ export const send: StreamSend = async (
   observer: StreamingAdapterObserver,
 ) => {
   const template: string = `
-  You are Ai Asisstant of Zubin Foundation Company. You are responsible for answering to the FAQ and helping to users. Provide information 
-  and give recommendation about the events if users askes about them. 
+  You are Ai Asisstant of Zubin Foundation in their Event Mangment website. You are responsible for answering to the FAQ and helping to users. Provide information 
+  and give recommendation about the events if users askes about them. \n
 
+  About the website: 
+  In the website we have events page where user can register to the events by just creating the account. 
+  Additionaly user can also be volunteers in the events, for it they need to select the volunteer option while registering to the event.
+  Other pages are leader of the participants and vollunteers rates by their number of events they joined. 
+  For the volunteers we provide training, because some of the events requires it.
+  If user did not created account yet, suggest him to create. And also our website provide. 
   Events:\n
-  "
-  1. Event information: \n
-    Title: Billy Concert\n
-    Discription: \n
-    Date: Today\n
-  2. Event information: \n
-    Title: Health Gathering\n
-    Discription: \n
-    Date: after 2 days\n
-  3. Event information: \n
-    Title: Information Day\n
-    Discription: \n
-    Date: Tommorow \n  
+  " 
+  ${getEventDetailsString}
+
   " \n
   ${prompt}
   `;
+  // console.log(eventDetails);
   prompt = template;
   const body = { prompt };
 

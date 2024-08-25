@@ -86,6 +86,40 @@ def logout():
     logout_user()
     return jsonify({"message": "Logged out successfully"}), 200
 
+@app.route('/update_user_info', methods=['PUT'])
+@login_required
+def update_user_info():
+    data = request.get_json()
+    user = current_user
+
+    if 'name' in data:
+        user.name = data['name']
+    if 'dateOfBirth' in data:
+        user.date_of_birth = datetime.datetime.fromisoformat(data['dateOfBirth'])
+    if 'phoneNumber' in data:
+        user.phone_number = data['phoneNumber']
+    if 'avatarUrl' in data:
+        user.avatar_url = data['avatarUrl']
+    if 'isVolunteer' in data:
+        user.is_volunteer = data['isVolunteer']
+    if 'preferredEventType' in data:
+        user.preferred_event_type = data['preferredEventType']
+
+    if 'email' in data:
+        new_email = data['email']
+        existing_user = User.query.filter(User.email == new_email).first()
+        if existing_user and existing_user != user:
+            return jsonify({"message": "Email already exists"}), 400
+        user.email = new_email
+
+    db.session.commit()
+    return jsonify({"message": "User info updated successfully"}), 200
+
+
+
+
+
+
 
 @app.route('/user_info', methods=['GET'])
 @login_required
@@ -186,6 +220,7 @@ def send():
 
 
 fake = Faker()
+phone_number = f"+852{fake.msisdn()[3:]}"
 
 @app.route("/seed_DB", methods=['POST'])
 def seed_DB():
@@ -210,13 +245,23 @@ def seed_DB():
         users.append(admin)
         db.session.add(admin)
 
+        avatar_urls=["https://img.freepik.com/premium-photo/simple-smile-happy-man-digital-portrait-bright-red-background_96461-13322.jpg?w=1480",
+                     "https://img.freepik.com/premium-photo/mans-profile-red-circle-digital-illustration_96461-13196.jpg?w=1480",
+                     "https://img.freepik.com/premium-photo/youthful-smile-digital-portrait_96461-13744.jpg?w=1480",
+                     "https://img.freepik.com/premium-photo/man-with-dark-hair-goatee-poses-against-blue-circle-background_96461-13314.jpg?w=1480",
+                     "https://w7.pngwing.com/pngs/193/660/png-transparent-computer-icons-woman-avatar-avatar-girl-thumbnail.png",
+                     "https://w7.pngwing.com/pngs/843/694/png-transparent-avatar-female-cartoon-avatar-purple-face-black-hair-thumbnail.png",
+                     "https://w7.pngwing.com/pngs/555/703/png-transparent-computer-icons-avatar-woman-user-avatar-face-heroes-service-thumbnail.png",
+                     "https://w7.pngwing.com/pngs/954/328/png-transparent-computer-icons-user-profile-avatar-heroes-head-recruiter-thumbnail.png"]
+ 
         for _ in range(50):
             user = User(
                 email=fake.email(),
                 password="password",
-                avatar_url=fake.image_url(),
+                name=fake.name(),
+                avatar_url=random.choice(avatar_urls),
                 date_of_birth=fake.date_of_birth(),
-                phone_number=fake.phone_number(),
+                phone_number=f"+852{fake.msisdn()[3:]}",
                 is_admin=False,
                 is_volunteer=False,
                 preferred_event_type=random.choice([e.value for e in EventType])
@@ -245,7 +290,7 @@ def seed_DB():
             ]
         for _ in range(2):
             event_start = fake.date_time_this_year()
-            event_end = fake.date_time_between_dates(datetime_start=event_start)
+            event_end = event_start + datetime.timedelta(hours=2)
 
             event = Event(
                 event_name=social_event_names.pop(),
@@ -278,7 +323,7 @@ def seed_DB():
             ]
         for _ in range(3):
             event_start = fake.date_time_this_year()
-            event_end = fake.date_time_between_dates(datetime_start=event_start)
+            event_end = event_start + datetime.timedelta(hours=2)
 
             event = Event(
                 event_name=counseling_event_names.pop(),
@@ -312,7 +357,7 @@ def seed_DB():
         ]
         for _ in range(2):
             event_start = fake.date_time_this_year()
-            event_end = fake.date_time_between_dates(datetime_start=event_start)
+            event_end = event_start + datetime.timedelta(hours=2)
 
             event = Event(
                 event_name=training_event_names.pop(),
@@ -345,7 +390,7 @@ def seed_DB():
         ]
         for _ in range(2):
             event_start = fake.date_time_this_year()
-            event_end = fake.date_time_between_dates(datetime_start=event_start)
+            event_end = event_start + datetime.timedelta(hours=2)
 
             event = Event(
                 event_name=workshop_event_names.pop(),

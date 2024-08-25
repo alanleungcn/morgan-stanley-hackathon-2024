@@ -1,3 +1,6 @@
+import { useCreateTrainings } from "@/api/training/use-create-trainings";
+import { useTags } from "@/api/training/use-tags";
+import { TrainingConstruct, zTrainingConstruct } from "@/api/types/training";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -8,38 +11,37 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-const trainingSchema = z.object({
-  trainingName: z.string(),
-  trainingDescription: z.string(),
-  trainingType: z.string(),
-  trainingURL: z.string().url(),
-});
+import { badgeVariants } from "../ui/badge";
+import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 
 export const CreateTraining = () => {
-  const form = useForm<z.infer<typeof trainingSchema>>({
-    resolver: zodResolver(trainingSchema),
+  const { mutate: createTraining } = useCreateTrainings();
+  const { data: tags } = useTags();
+
+  const form = useForm<TrainingConstruct>({
+    resolver: zodResolver(zTrainingConstruct),
     defaultValues: {
-      trainingName: "",
-      trainingDescription: "",
-      trainingType: "",
-      trainingURL: "",
+      courseName: "",
+      courseDescription: "",
+      courseUrl: "",
+      tags: [],
     },
   });
 
-  function onSubmit(data: z.infer<typeof trainingSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-full rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+  function onSubmit(data: TrainingConstruct) {
+    createTraining(data);
+
+    // toast({
+    //   title: "You submitted the following values:",
+    //   description: (
+    //     <pre className="mt-2 w-full rounded-md bg-slate-950 p-4">
+    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+    //     </pre>
+    //   ),
+    // });
   }
 
   return (
@@ -53,7 +55,7 @@ export const CreateTraining = () => {
             className="grid grid-cols-1 gap-8 sm:grid-cols-2"
           >
             <FormField
-              name="trainingName"
+              name="courseName"
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col items-start">
@@ -67,7 +69,39 @@ export const CreateTraining = () => {
             />
 
             <FormField
-              name="trainingDescription"
+              name="tags"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="flex w-full flex-col items-start">
+                  <FormLabel>Training Tags</FormLabel>
+                  <FormControl>
+                    <ToggleGroup
+                      className="flex h-64 flex-wrap justify-start gap-2 overflow-y-scroll"
+                      type="multiple"
+                      onValueChange={(e) => field.onChange(e)}
+                    >
+                      {tags?.map((tag, i) => (
+                        <ToggleGroupItem
+                          key={`${i}-${tag}`}
+                          value={tag}
+                          className={cn(
+                            badgeVariants({ variant: "outline" }),
+                            field.value.includes(tag) &&
+                              "border-2 !border-primary !bg-primary/50",
+                          )}
+                        >
+                          {tag}
+                        </ToggleGroupItem>
+                      ))}
+                    </ToggleGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="courseDescription"
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col items-start">
@@ -80,8 +114,8 @@ export const CreateTraining = () => {
               )}
             />
 
-            <FormField
-              name="trainingType"
+            {/* <FormField
+              name="cour"
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col items-start">
@@ -92,10 +126,10 @@ export const CreateTraining = () => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <FormField
-              name="trainingURL"
+              name="courseUrl"
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex w-full flex-col items-start">

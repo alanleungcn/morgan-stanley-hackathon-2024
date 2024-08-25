@@ -1,9 +1,9 @@
+import { useTrainings } from "@/api/training/use-trainings";
 import { TrainingCard } from "../training/trainingcard";
 import { Input } from "../ui/input";
-// import { useTrainings } from "@/api/event/use-trainings";
 
 export const ManageTrainings = () => {
-  // const {  } = useTrainings();
+  const { data: trainings, isSuccess } = useTrainings();
 
   return (
     <div className="flex justify-center">
@@ -13,23 +13,17 @@ export const ManageTrainings = () => {
           <Input placeholder="Search" />
         </div>
 
-        <div>
-          {/* {data?.map((e) => (
-            <EventCard
-              key={e.eventId}
-              event={e}
-              buttonText="Edit"
-              buttonAction={() => {}}
-              layout={layout}
-            />
-          ))} */}
-          <TrainingCard
-            description="asdfasdf"
-            tags={["asdffsdf", "afsdf"]}
-            title="asdfasdf"
-            videoSrc="https://www.youtube.com/embed/xDPL-_Op87o"
-            key={1}
-          />
+        <div className="space-y-4">
+          {isSuccess &&
+            trainings?.map((t) => (
+              <TrainingCard
+                key={t.courseId}
+                description={t.courseDescription}
+                tags={t.tags}
+                title={t.courseName}
+                videoSrc={t.courseUrl}
+              />
+            ))}
         </div>
       </div>
     </div>

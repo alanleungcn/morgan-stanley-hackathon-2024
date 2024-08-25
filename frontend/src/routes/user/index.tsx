@@ -67,10 +67,10 @@ function User() {
 
   return (
     <div className="flex flex-wrap justify-center">
-      <div className="flex w-full flex-col gap-8 p-4 md:w-72">
-        <h1 className="text-4xl pt-4 font-bold">Settings</h1>
+      <div className="flex flex-col w-full gap-8 p-4 md:w-72">
+        <h1 className="pt-4 text-4xl font-bold">Settings</h1>
 
-        <div className="flex w-full flex-col gap-2">
+        <div className="flex flex-col w-full gap-2">
           {tabs.map((t: TabItem) => (
             <div
               key={t.tab}

@@ -1,5 +1,6 @@
 import { CheckCircle } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface Training {
   title: string;
@@ -35,9 +36,7 @@ const useCompletedTrainings = () => {
   useEffect(() => {
     const fetchCompletedTrainings = () => {
       const completed = allTrainings.filter((training) => {
-        const completedStatus = localStorage.getItem(
-          `completed-${training.title}`,
-        );
+        const completedStatus = localStorage.getItem(`completed-${training.title}`);
         return completedStatus === "true";
       });
       setCompletedTrainings(completed);
@@ -53,33 +52,32 @@ export const Progress = () => {
   const completedTrainings = useCompletedTrainings();
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <div className="grid grid-cols-2 gap-2 overflow-y-auto">
+    <div className="min-h-screen p-4 bg-gray-100">
+      <div className="grid grid-cols-2 gap-4 overflow-y-auto">
         {completedTrainings.length > 0 ? (
-          completedTrainings.map((training) => (
-            <div
-              key={training.title}
-              className="relative flex flex-col overflow-hidden rounded-lg bg-white shadow-md"
-              style={{ height: "210px" }}
-            >
-              <iframe
-                src={training.videoSrc}
-                className="h-32 w-full"
-                title={training.title}
-                allowFullScreen
-              />
-              <div className="flex-1 p-2">
-                <h2 className="truncate text-lg font-semibold text-gray-800">
+          completedTrainings.map((training, index) => (
+            <Card key={index} className="w-full bg-white shadow-md">
+              <CardHeader>
+                <iframe
+                  src={training.videoSrc}
+                  className="object-cover w-full h-32 rounded-t-lg"
+                  title={training.title}
+                  loading="lazy"
+                  allowFullScreen
+                />
+              </CardHeader>
+              <CardContent>
+                <CardTitle>
                   {training.title}
-                </h2>
-              </div>
-              <div className="absolute bottom-4 right-4 text-2xl text-green-500">
-                <CheckCircle />
-              </div>
-            </div>
+                </CardTitle>
+              </CardContent>
+              <CardFooter className="p-2 m-3">
+                <CheckCircle className="text-2xl text-green-500" />
+              </CardFooter>
+            </Card>
           ))
         ) : (
-          <p className="col-span-2 text-center text-gray-600">
+          <p className="col-span-1 text-center text-gray-600">
             No completed trainings yet.
           </p>
         )}

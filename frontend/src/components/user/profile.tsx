@@ -149,7 +149,7 @@ export const Profile = () => {
                           <Button
                             variant={"outline"}
                             className={cn(
-                              "w-[240px] pl-3 text-left font-normal",
+                              "w-full pl-3 text-left font-normal",
                               !field.value && "text-muted-foreground",
                             )}
                           >
@@ -178,6 +178,14 @@ export const Profile = () => {
                   </FormItem>
                 )}
               />
+
+              <FormItem className="flex w-full flex-col items-start">
+                <FormLabel className="text-left">Ethnicity</FormLabel>
+                <FormControl className="w-full">
+                  <Input />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
 
               <FormField
                 name="password"

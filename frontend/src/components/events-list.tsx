@@ -1,5 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { LayoutGrid, LayoutList } from "lucide-react";
+import {
+  BriefcaseBusiness,
+  Coffee,
+  Dices,
+  HandHeart,
+  LayoutGrid,
+  LayoutList,
+  PencilRuler,
+} from "lucide-react";
 
 import { useEventTags } from "@/api/event/use-event-types";
 import { useEvents } from "@/api/event/use-events";
@@ -22,7 +30,7 @@ type Filter = "all" | "today" | "weekend";
 export const EventsList = () => {
   const [filter, setFilter] = useState<Filter>("all");
 
-  const { data, isSuccess } = useEvents();
+  const { data } = useEvents();
 
   const [layout, setLayout] = useState<"grid" | "list">("list");
 
@@ -46,8 +54,38 @@ export const EventsList = () => {
   }, [eventTag, data, search]);
 
   return (
-    <div className="flex flex-col gap-8 p-4">
-      <div className="flex gap-4">
+    <div className="flex flex-col p-4">
+      <div className="scrollbar-hide mb-4 flex w-[calc(100vw-2rem)] gap-2 overflow-x-scroll sm:w-full sm:justify-between">
+        {[
+          "All",
+          "Social Gathering",
+          "Counselling",
+          "Training",
+          "Workshop",
+          "Other",
+        ].map((tag) => (
+          <Button
+            variant="ghost"
+            className={cn(
+              "flex h-20 w-20 flex-shrink-0 flex-grow-0 flex-col gap-2 rounded-xl",
+              eventTag === tag && "bg-primary/50",
+            )}
+            onClick={() => setEventTag(tag)}
+          >
+            {tag === "All" && <LayoutGrid className="h-6 w-6" />}
+            {tag === "Social Gathering" && <Coffee className="h-6 w-6" />}
+            {tag === "Counselling" && <HandHeart className="h-6 w-6" />}
+            {tag === "Training" && <BriefcaseBusiness className="h-6 w-6" />}
+            {tag === "Workshop" && <PencilRuler className="h-6 w-6" />}
+            {tag === "Other" && <Dices className="h-6 w-6" />}
+            <p className="text-xs">
+              {tag === "Social Gathering" ? "Gathering" : tag}
+            </p>
+          </Button>
+        ))}
+      </div>
+
+      <div className="mb-4 flex w-full gap-4">
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -55,7 +93,7 @@ export const EventsList = () => {
         />
 
         <Select value={eventTag} onValueChange={(v) => setEventTag(v)}>
-          <SelectTrigger className="w-[320px]">
+          <SelectTrigger className="w-2/5">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -83,7 +121,7 @@ export const EventsList = () => {
         </ToggleGroup>
       </div>
 
-      <div className="flex">
+      <div className="mb-4 flex">
         {["all", "today", "weekend"].map((f) => {
           return (
             <Button

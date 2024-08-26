@@ -12,7 +12,7 @@ export const Podium: FC<{ users: User[] }> = ({ users }) => {
   const podiumColors = ["bg-[#C0C0C0]", "bg-yellow-400", "bg-[#CD7F32]"];
   return (
     <div className="mb-8 flex h-[330px] justify-center gap-4">
-      <div className="flex w-[130px] flex-col items-end justify-end gap-3">
+      <div className="flex w-[25%] flex-col items-center justify-end gap-3">
         <Avatar className="mx-auto flex h-24 w-24 items-end">
           <AvatarImage src={users[1].imageUrl} alt={users[1].name} />
           <AvatarFallback>{users[1].name.charAt(0)}</AvatarFallback>
@@ -28,7 +28,7 @@ export const Podium: FC<{ users: User[] }> = ({ users }) => {
           </p>
         </div>
       </div>
-      <div className="flex w-[130px] flex-col items-end justify-end gap-3">
+      <div className="flex w-[25%] flex-col items-center justify-end gap-3">
         <Avatar className="mx-auto flex h-24 w-24 items-end">
           <AvatarImage src={users[0].imageUrl} alt={users[0].name} />
           <AvatarFallback>{users[0].name.charAt(0)}</AvatarFallback>
@@ -44,7 +44,7 @@ export const Podium: FC<{ users: User[] }> = ({ users }) => {
           </p>
         </div>
       </div>
-      <div className="flex w-[130px] flex-col items-end justify-end gap-3">
+      <div className="flex w-[25%] flex-col items-center justify-end gap-3">
         <Avatar className="mx-auto flex h-24 w-24 items-end">
           <AvatarImage src={users[2].imageUrl} alt={users[2].name} />
           <AvatarFallback>{users[2].name.charAt(0)}</AvatarFallback>

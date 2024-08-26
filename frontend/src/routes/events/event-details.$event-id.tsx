@@ -2,10 +2,14 @@ import { Card } from "@/components/ui/card";
 import { createFileRoute } from "@tanstack/react-router";
 
 import { useEvents } from "@/api/event/use-events";
+import { useUser } from "@/api/user/use-user";
+import { useUsers } from "@/api/user/use-users";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
 import { Register } from "@/components/user/register";
 import { formatDateWithWeekday, formatTime } from "@/utils/date";
 import { isSameDay } from "date-fns";
-import { Calendar, Clock } from "lucide-react";
+import { Calendar, Clock, HandHeart, User } from "lucide-react";
 
 // interface Event {
 //   event_id: number;
@@ -30,6 +34,9 @@ function EventDetails() {
 
   const event = events?.find((e) => e.eventId === parseInt(eventId));
 
+  const { data: users } = useUsers();
+  const { data: user, isSuccess } = useUser();
+
   // const { mutate: registerEvent } = useRegisterEvent();
   // const { mutate: registerEventVolunteer } = useRegisterEventVolunteer();
 
@@ -49,7 +56,7 @@ function EventDetails() {
           <h1 className="text-4xl font-bold">{event.eventName}</h1>
           <div>
             <h2 className="mb-2 text-2xl font-semibold">Date and Time</h2>
-            <p className="text-lg font-medium text-gray-700">
+            <div className="text-lg font-medium text-gray-700">
               {isSameDay(event.eventStartDate, event.eventEndDate) ? (
                 <div>
                   <div className="flex items-center gap-2">
@@ -70,7 +77,7 @@ function EventDetails() {
                   {formatDateWithWeekday(event.eventEndDate)}
                 </div>
               )}
-            </p>
+            </div>
           </div>
           <div>
             <h2 className="text-2xl font-semibold">Location</h2>
@@ -98,6 +105,45 @@ function EventDetails() {
             }}
             event={event}
           />
+
+          {isSuccess && user && user.isAdmin && (
+            <div className="space-y-4">
+              <Separator />
+              <h2 className="text-2xl font-semibold">
+                Participants & Volunteers
+              </h2>
+              <div className="flex flex-col gap-2">
+                {users?.slice(0, 10).map(
+                  (u) =>
+                    !u.isAdmin && (
+                      <div
+                        key={u.userId}
+                        className="flex items-center gap-4 rounded-md p-4 shadow"
+                      >
+                        <Avatar>
+                          <AvatarImage src={u.avatarUrl} alt="" />
+                          <AvatarFallback>{u.name}</AvatarFallback>
+                        </Avatar>
+
+                        <div className="w-32 text-ellipsis">{u.name}</div>
+
+                        {Math.random() >= 0.5 ? (
+                          <span className="ml-auto flex items-center gap-2">
+                            <HandHeart className="h-4 w-4" />
+                            Volunteer
+                          </span>
+                        ) : (
+                          <span className="ml-auto flex items-center gap-2">
+                            <User className="h-4 w-4" />
+                            Participant
+                          </span>
+                        )}
+                      </div>
+                    ),
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -44,7 +44,7 @@ function EventDetails() {
   const router = useRouter();
 
   return event ? (
-    <div className="container mx-auto space-y-8 px-24 py-4 pb-24 pt-8">
+    <div className="mx-auto space-y-8 px-4 py-4 pb-24 pt-8">
       <Button
         variant="outline"
         className="gap-2"
@@ -53,8 +53,8 @@ function EventDetails() {
         <ChevronLeft className="h-4 w-4" />
         Back
       </Button>
-      <div className="flex">
-        <div className="w-1/2 pr-4">
+      <div className="flex flex-col gap-8 sm:flex-row sm:gap-2">
+        <div className="w-full pr-4 sm:w-1/2">
           <Card className="overflow-hidden">
             <img
               src={event.eventImageUrl}
@@ -63,7 +63,7 @@ function EventDetails() {
             />
           </Card>
         </div>
-        <div className="w-1/2 space-y-12 pl-4">
+        <div className="w-full space-y-12 pl-4 sm:w-1/2">
           <h1 className="text-4xl font-bold">{event.eventName}</h1>
           <div>
             <h2 className="mb-2 text-2xl font-semibold">Date and Time</h2>

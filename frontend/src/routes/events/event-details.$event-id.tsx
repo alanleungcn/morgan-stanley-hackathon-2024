@@ -44,7 +44,7 @@ function EventDetails() {
   const router = useRouter();
 
   return event ? (
-    <div className="mx-auto space-y-8 px-4 py-4 pb-24 pt-8">
+    <div className="mx-auto space-y-8 px-4 py-4 pb-24 pt-8 sm:px-12">
       <Button
         variant="outline"
         className="gap-2"

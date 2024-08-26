@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { LayoutGrid, LayoutList } from "lucide-react";
 
+import { useEventTags } from "@/api/event/use-event-types";
 import { useEvents } from "@/api/event/use-events";
 import {
   Select,
@@ -11,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { useRouter } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import EventCard from "./event-card";
 import { Input } from "./ui/input";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
@@ -27,19 +28,43 @@ export const EventsList = () => {
 
   const router = useRouter();
 
+  const { data: eventTags, isSuccess: isSuccessEventTags } = useEventTags();
+
+  const [eventTag, setEventTag] = useState("All");
+
+  const [search, setSearch] = useState("");
+
+  const events = useMemo(() => {
+    if (!data) return [];
+
+    return data.filter((e) => {
+      return (
+        (eventTag === "All" || e.eventType === eventTag) &&
+        e.eventName.toLowerCase().includes(search.toLowerCase())
+      );
+    });
+  }, [eventTag, data, search]);
+
   return (
     <div className="flex flex-col gap-8 p-4">
       <div className="flex gap-4">
-        <Input type="email" placeholder="Search" />
+        <Input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search"
+        />
 
-        <Select>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Event Type" />
+        <Select value={eventTag} onValueChange={(v) => setEventTag(v)}>
+          <SelectTrigger className="w-[320px]">
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="mental">Mental</SelectItem>
-            <SelectItem value="gathering">Gathering</SelectItem>
-            <SelectItem value="...">...</SelectItem>
+            {isSuccessEventTags &&
+              ["All"].concat(eventTags).map((tag) => (
+                <SelectItem key={tag} value={tag}>
+                  {tag}
+                </SelectItem>
+              ))}
           </SelectContent>
         </Select>
 
@@ -82,33 +107,32 @@ export const EventsList = () => {
           layout === "list" && "!grid-cols-1",
         )}
       >
-        {isSuccess &&
-          data.map((e) => {
-            return (
-              <EventCard
-                key={e.eventId}
-                event={e}
-                buttonAction={() =>
+        {events.map((e) => {
+          return (
+            <EventCard
+              key={e.eventId}
+              event={e}
+              buttonAction={() =>
+                router.navigate({
+                  to: `/events/event-details/${e.eventId}`,
+                })
+              }
+              buttonText="Details"
+              layout={layout}
+            >
+              <Button
+                className="w-full lg:w-32"
+                onClick={() =>
                   router.navigate({
                     to: `/events/event-details/${e.eventId}`,
                   })
                 }
-                buttonText="Details"
-                layout={layout}
               >
-                <Button
-                  className="w-full lg:w-32"
-                  onClick={() =>
-                    router.navigate({
-                      to: `/events/event-details/${e.eventId}`,
-                    })
-                  }
-                >
-                  Details
-                </Button>
-              </EventCard>
-            );
-          })}
+                Details
+              </Button>
+            </EventCard>
+          );
+        })}
       </div>
     </div>
   );

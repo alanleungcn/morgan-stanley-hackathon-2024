@@ -1,15 +1,16 @@
 import { Card } from "@/components/ui/card";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 
 import { useEvents } from "@/api/event/use-events";
 import { useUser } from "@/api/user/use-user";
 import { useUsers } from "@/api/user/use-users";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Register } from "@/components/user/register";
 import { formatDateWithWeekday, formatTime } from "@/utils/date";
 import { isSameDay } from "date-fns";
-import { Calendar, Clock, HandHeart, User } from "lucide-react";
+import { Calendar, ChevronLeft, Clock, HandHeart, User } from "lucide-react";
 
 // interface Event {
 //   event_id: number;
@@ -40,8 +41,18 @@ function EventDetails() {
   // const { mutate: registerEvent } = useRegisterEvent();
   // const { mutate: registerEventVolunteer } = useRegisterEventVolunteer();
 
+  const router = useRouter();
+
   return event ? (
-    <div className="container mx-auto space-y-8 px-24 py-4 pb-24 pt-16">
+    <div className="container mx-auto space-y-8 px-24 py-4 pb-24 pt-8">
+      <Button
+        variant="outline"
+        className="gap-2"
+        onClick={() => router.history.back()}
+      >
+        <ChevronLeft className="h-4 w-4" />
+        Back
+      </Button>
       <div className="flex">
         <div className="w-1/2 pr-4">
           <Card className="overflow-hidden">

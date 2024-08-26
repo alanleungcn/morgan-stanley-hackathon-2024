@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { formatDateWithWeekday, formatTime } from "@/utils/date";
 import { isSameDay } from "date-fns";
-import { Calendar, Clock, Printer, Terminal } from "lucide-react";
+import { BadgeCheck, Printer, Terminal } from "lucide-react";
 import { useState } from "react";
 
 interface Props {
@@ -64,7 +64,7 @@ export function Register({ event, onRegister }: Props) {
               : "Register"}
           </Button>
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="rounded-md sm:max-w-[500px]">
               {step === 1 ? (
                 <>
                   <DialogHeader>
@@ -104,37 +104,51 @@ export function Register({ event, onRegister }: Props) {
               ) : (
                 <>
                   <DialogHeader>
+                    <div className="flex items-center justify-center py-6">
+                      <BadgeCheck className="h-12 w-12 text-green-500" />
+                    </div>
                     <DialogTitle>Confirm Your Registration</DialogTitle>
                     <DialogDescription>
                       Please confirm your registration details below.
                     </DialogDescription>
                   </DialogHeader>
+
                   <div className="grid gap-4 py-4">
-                    <p className="text-lg">{`Event: ${event.eventName}`}</p>
+                    <p className="">
+                      <span className="text-sm font-bold">Event:</span>{" "}
+                      {event.eventName}
+                    </p>
+
+                    <p className="">
+                      <span className="text-sm font-bold">Role:</span>{" "}
+                      {selectedRole}
+                    </p>
 
                     {isSameDay(event.eventStartDate, event.eventEndDate) ? (
                       <div>
                         <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4" />
+                          <span className="text-sm font-bold">Date:</span>
                           {formatDateWithWeekday(event.eventStartDate)}
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <Clock className="h-4 w-4" />
+                          <span className="text-sm font-bold">Time:</span>
                           {formatTime(event.eventStartDate)} -{" "}
                           {formatTime(event.eventEndDate)}
                         </div>
                       </div>
                     ) : (
                       <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4" />
+                        <span className="text-sm font-bold">Date:</span>
                         {formatDateWithWeekday(event.eventStartDate)} -{" "}
                         {formatDateWithWeekday(event.eventEndDate)}
                       </div>
                     )}
 
-                    <p className="text-lg">{`Location: ${event.eventLocation}`}</p>
-                    <p className="text-lg">{`Role: ${selectedRole}`}</p>
+                    <p className="">
+                      <span className="text-sm font-bold">Location:</span>{" "}
+                      {event.eventLocation}
+                    </p>
                   </div>
                   <DialogFooter>
                     <Button

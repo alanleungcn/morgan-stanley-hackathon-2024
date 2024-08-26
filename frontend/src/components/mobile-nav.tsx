@@ -51,18 +51,13 @@ const routes: RouteItem[] = [
     icon: Crown,
     label: "Leaderboard",
   },
-  {
-    route: "/admin",
-    icon: LockKeyhole,
-    label: "Admin Portal",
-  },
 ];
 
 export default function MobileNav({ open, setOpen }: Props) {
   // const { commitLocation: basepath } = useRouter();
   const { pathname } = useLocation();
 
-  const { data: user } = useUser();
+  const { data: user, isSuccess } = useUser();
 
   const { mutate: logout } = useLogout();
 
@@ -109,6 +104,28 @@ export default function MobileNav({ open, setOpen }: Props) {
                 </Link>
               </div>
             ))}
+
+            {isSuccess && user && user.isAdmin && (
+              <div
+                className={cn(
+                  "flex h-12 w-full flex-col overflow-y-auto",
+                  "/admin" === pathname && "border-l-8 border-primary",
+                )}
+              >
+                <Link
+                  to="/admin"
+                  className={cn(
+                    buttonVariants({ variant: "ghost" }),
+                    "h-full w-full !justify-start gap-4 truncate",
+                    // tab === t.tab && "bg-secondary/50",
+                  )}
+                  // onClick={() => setTab(t.tab)}
+                >
+                  {<LockKeyhole className="h-5 w-5" />}
+                  Admin Portal
+                </Link>
+              </div>
+            )}
           </div>
 
           <Separator className="my-4" />
